@@ -17,7 +17,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   },
   global: {
     headers: {
-      'X-Client-Info': 'stealth-writer'
+      'X-Client-Info': 'stealth-text'
     }
   }
 });

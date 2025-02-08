@@ -9,6 +9,7 @@ import { Signup } from './pages/Signup';
 import { ResetPassword } from './pages/ResetPassword';
 import { Pricing } from './pages/Pricing';
 import { Account } from './pages/Account';
+import { useSubscriptionStore } from './store/subscriptionStore';
 
 function App() {
   const setUser = useAuthStore((state) => state.setUser);
@@ -23,12 +24,15 @@ function App() {
         setUser(session?.user ?? null);
 
         const {
-          data: { subscription },
-        } = supabase.auth.onAuthStateChange((_event, session) => {
+          data: { subscription: authSub },
+        } = supabase.auth.onAuthStateChange(async (_event, session) => {
           setUser(session?.user ?? null);
+          if (session?.user) {
+            await useSubscriptionStore.getState().fetchSubscription();
+          }
         });
 
-        return () => subscription.unsubscribe();
+        return () => authSub.unsubscribe();
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to initialize authentication');
       } finally {

@@ -11,7 +11,7 @@ export const Sidebar = () => {
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center gap-2">
           <Brain className="w-6 h-6" />
-          <span className="font-semibold text-xl">StealthWriter</span>
+          <span className="font-semibold text-xl">StealthText</span>
         </div>
       </div>
       

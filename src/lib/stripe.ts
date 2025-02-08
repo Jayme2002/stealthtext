@@ -12,6 +12,7 @@ export const PLANS = {
   FREE: {
     name: 'Free',
     price: 0,
+    priceId: undefined,
     features: [
       'Up to 1,000 words per month',
       'Basic AI detection',
@@ -22,7 +23,7 @@ export const PLANS = {
   PREMIUM: {
     name: 'StealthText Premium',
     price: 10,
-    priceId: 'price_1Qq5TsFfiJfL6EMi4Wog6LRx',
+    priceId: "price_1Qq5NqFfiJfL6EMieNtdAzFk",
     productId: 'prod_RjYUNTzdWRIChO',
     features: [
       'Up to 10,000 words per month',
@@ -35,6 +36,7 @@ export const PLANS = {
   PREMIUM_PLUS: {
     name: 'StealthText Premium+',
     price: 20,
+    priceId: 'price_1Qq5TAFfiJfL6EMiBcQHGdUx',
     productId: 'prod_RjYaNSCSSf4pEb',
     features: [
       'Up to 50,000 words per month',
@@ -48,6 +50,7 @@ export const PLANS = {
   PRO: {
     name: 'StealthText Pro',
     price: 30,
+    priceId: 'price_1Qq5TsFfiJfL6EMi4Wog6LRx',
     productId: 'prod_RjYbe5FxvDSN9K',
     features: [
       'Unlimited words',

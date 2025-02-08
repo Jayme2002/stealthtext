@@ -25,6 +25,8 @@ export const Pricing = () => {
     try {
       console.log('Starting subscription process for plan:', priceId);
       await createCheckoutSession(priceId);
+      // Refresh subscription data after successful checkout
+      useSubscriptionStore.getState().fetchSubscription();
     } catch (error) {
       console.error('Subscription Error:', {
         message: error instanceof Error ? error.message : 'Unknown error',

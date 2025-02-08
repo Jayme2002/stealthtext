@@ -22,7 +22,7 @@ export const Navbar = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-2">
               <Brain className="w-6 h-6" />
-              <span className="font-semibold text-xl">StealthWriter</span>
+              <span className="font-semibold text-xl">StealthText</span>
             </Link>
             
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
@@ -50,7 +50,18 @@ export const Navbar = () => {
                 >
                   Dashboard
                 </Link>
-                {subscription?.plan === 'free' && (
+                {subscription?.plan === 'free' ? (
+                  <Link
+                    to="/pricing"
+                    className="px-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800"
+                  >
+                    Upgrade
+                  </Link>
+                ) : subscription?.status === 'active' ? (
+                  <span className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg">
+                    {subscription.plan.charAt(0).toUpperCase() + subscription.plan.slice(1)} Plan
+                  </span>
+                ) : (
                   <Link
                     to="/pricing"
                     className="px-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800"

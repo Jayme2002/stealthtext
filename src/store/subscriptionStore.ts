@@ -7,6 +7,8 @@ interface Subscription {
   status: string;
   current_period_end: string;
   cancel_at?: string;
+  stripe_subscription_id?: string;
+  stripe_customer_id?: string;
 }
 
 interface SubscriptionState {
@@ -30,10 +32,19 @@ export const useSubscriptionStore = create<SubscriptionState>((set) => ({
         .from('subscriptions')
         .select('*')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
-      if (error) throw error;
-      set({ subscription });
+      if (error) {
+        console.error('Error fetching subscription:', error);
+        throw error;
+      }
+
+      // Only set active subscription if it has required fields
+      if (subscription && subscription.plan && subscription.status) {
+        set({ subscription });
+      } else {
+        set({ subscription: null });
+      }
     } catch (error) {
       console.error('Error fetching subscription:', error);
       set({ subscription: null });

@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Sidebar } from '../components/Sidebar';
 import { Copy, Loader2, Brain, Check } from 'lucide-react';
 import { humanizeText, checkForAI } from '../lib/openai';
+import { useSubscriptionStore } from '../store/subscriptionStore';
 
 interface HumanizedResult {
   text: string;
@@ -9,6 +11,15 @@ interface HumanizedResult {
 }
 
 const Dashboard = () => {
+  const [searchParams] = useSearchParams();
+  const fetchSubscription = useSubscriptionStore((state) => state.fetchSubscription);
+  
+  useEffect(() => {
+    if (searchParams.get('success') === 'true') {
+      // Refresh subscription data after successful checkout
+      fetchSubscription();
+    }
+  }, [searchParams, fetchSubscription]);
   const [text, setText] = useState('');
   const [isHumanizing, setIsHumanizing] = useState(false);
   const [humanizedResult, setHumanizedResult] = useState<HumanizedResult | null>(null);
