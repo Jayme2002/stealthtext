@@ -17,29 +17,32 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  console.log("Supabase URL:", process.env.VITE_SUPABASE_URL);
+
   useEffect(() => {
     const initializeAuth = async () => {
+      console.time('AuthInit');
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        console.log('🔵 [1] Starting auth initialization');
+        const { data: { session }, error } = await supabase.auth.getSession();
+        console.log('🔵 [2] Auth session result:', { session, error });
+        
         setUser(session?.user ?? null);
+        console.log('🔵 [3] User state updated');
 
-        const {
-          data: { subscription: authSub },
-        } = supabase.auth.onAuthStateChange(async (_event, session) => {
-          setUser(session?.user ?? null);
-          if (session?.user) {
-            await useSubscriptionStore.getState().fetchSubscription();
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(
+          async (_event, session) => {
+            console.log('🟢 Auth state changed:', session);
+            setUser(session?.user ?? null);
           }
-        });
-
-        return () => authSub.unsubscribe();
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to initialize authentication');
+        );
+        
+        return () => subscription.unsubscribe();
       } finally {
+        console.timeEnd('AuthInit');
         setIsLoading(false);
       }
     };
-
     initializeAuth();
   }, [setUser]);
 

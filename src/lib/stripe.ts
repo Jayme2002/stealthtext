@@ -50,7 +50,7 @@ export const PLANS = {
   PRO: {
     name: 'StealthText Pro',
     price: 30,
-    priceId: 'price_1Qq5TsFfiJfL6EMi4Wog6LRx',
+    priceId: 'price_1QqMstFfiJfL6EMinLoK8xcj',
     productId: 'prod_RjYbe5FxvDSN9K',
     features: [
       'Unlimited words',
@@ -103,20 +103,15 @@ export async function createCheckoutSession(priceId: string) {
     
     const response = await fetch('/api/create-checkout-session', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody),
     });
 
+    console.log('🔵 [4] API response status:', response.status);
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Client: Checkout Session Error:', {
-        status: response.status,
-        statusText: response.statusText,
-        data: errorData
-      });
-      throw new Error(errorData.error || 'Failed to create checkout session');
+      const errorText = await response.text();
+      console.error('🔴 [5] API Error:', errorText);
+      throw new Error(`API Error: ${response.statusText}`);
     }
 
     const responseData = await response.json();

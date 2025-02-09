@@ -82,7 +82,7 @@ BEGIN
     plan = CASE
       WHEN NEW.plan = 'price_1Qq5NqFfiJfL6EMieNtdAzFk' THEN 'premium'
       WHEN NEW.plan = 'price_1Qq5TAFfiJfL6EMiBcQHGdUx' THEN 'premium_plus'
-      WHEN NEW.plan = 'price_1Qq5TsFfiJfL6EMi4Wog6LRx' THEN 'pro'
+      WHEN NEW.plan = 'price_1QqMstFfiJfL6EMinLoK8xcj' THEN 'pro'
       ELSE 'free'
     END,
     status = NEW.status,

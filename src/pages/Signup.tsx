@@ -20,7 +20,7 @@ export const Signup = () => {
       await signUp(email, password);
       navigate('/dashboard');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to sign up');
+      setError(err instanceof Error ? err.message : JSON.stringify(err));
     } finally {
       setIsLoading(false);
     }
