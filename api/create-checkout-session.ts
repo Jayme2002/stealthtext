@@ -89,13 +89,13 @@ export default async function handler(req: Request) {
       customer: stripeCustomerId,
       line_items: [{ price: priceId, quantity: 1 }],
       mode: 'subscription',
-      success_url: `${process.env.VITE_APP_URL}/dashboard?success=true&session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${process.env.VITE_APP_URL}/dashboard?success=true`,
       cancel_url: `${process.env.VITE_APP_URL}/pricing?canceled=true`,
       payment_method_types: ['card'],
       billing_address_collection: 'required',
       allow_promotion_codes: true,
       metadata: {
-        userId: userId
+        user_id: userId
       }
     });
 

@@ -1,5 +1,9 @@
 {
   "imports": {
-    "stripe": "https://esm.sh/stripe@12.6.0?target=deno"
+    "stripe": "https://esm.sh/stripe@17.6.0?target=deno",
+    "call-bound": "https://esm.sh/call-bound@1.0.3",
+    "get-intrinsic": "https://esm.sh/get-intrinsic@1.2.7",
+    "es-object-atoms": "https://esm.sh/es-object-atoms@1.1.1",
+    "math-intrinsics": "https://esm.sh/math-intrinsics@1.1.0"
   }
 }
