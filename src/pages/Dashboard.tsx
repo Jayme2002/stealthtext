@@ -4,6 +4,7 @@ import { Sidebar } from '../components/Sidebar';
 import { Copy, Loader2, Brain, Check } from 'lucide-react';
 import { humanizeText, checkForAI } from '../lib/openai';
 import { useSubscriptionStore } from '../store/subscriptionStore';
+import { getPlanName } from '../utils/subscriptionPlanMapping';
 
 interface HumanizedResult {
   text: string;
@@ -13,13 +14,20 @@ interface HumanizedResult {
 const Dashboard = () => {
   const [searchParams] = useSearchParams();
   const fetchSubscription = useSubscriptionStore((state) => state.fetchSubscription);
+  const subscription = useSubscriptionStore((state) => state.subscription);
   
+  // Always fetch subscription on mount
+  useEffect(() => {
+    fetchSubscription();
+  }, [fetchSubscription]);
+
   useEffect(() => {
     if (searchParams.get('success') === 'true') {
       // Refresh subscription data after successful checkout
       fetchSubscription();
     }
   }, [searchParams, fetchSubscription]);
+
   const [text, setText] = useState('');
   const [isHumanizing, setIsHumanizing] = useState(false);
   const [humanizedResult, setHumanizedResult] = useState<HumanizedResult | null>(null);
@@ -67,8 +75,9 @@ const Dashboard = () => {
                 <span className="ml-2 text-xl font-semibold">StealthWriter</span>
               </div>
               <div className="flex items-center gap-4">
-                <span className="text-sm text-gray-500">Limited</span>
-                <span className="text-sm text-gray-500">Free Plan</span>
+                <span className="text-sm text-gray-500">
+                  {subscription ? getPlanName(subscription.plan) : 'Free Plan'}
+                </span>
                 <button className="px-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800">
                   Upgrade
                 </button>

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Brain } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useSubscriptionStore } from '../store/subscriptionStore';
+import { getPlanName } from '../utils/subscriptionPlanMapping';
 
 export const Navbar = () => {
   const user = useAuthStore((state) => state.user);
@@ -59,7 +60,7 @@ export const Navbar = () => {
                   </Link>
                 ) : subscription?.status === 'active' ? (
                   <span className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg">
-                    {subscription.plan.charAt(0).toUpperCase() + subscription.plan.slice(1)} Plan
+                    {getPlanName(subscription.plan)} Plan
                   </span>
                 ) : (
                   <Link

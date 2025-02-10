@@ -2,7 +2,7 @@ import React from 'react';
 import { Sidebar } from '../components/Sidebar';
 import { Brain, CreditCard } from 'lucide-react';
 import { useSubscriptionStore } from '../store/subscriptionStore';
-import { PLANS } from '../lib/stripe';
+import { getPlanName } from '../utils/subscriptionPlanMapping';
 
 export const Account = () => {
   const subscription = useSubscriptionStore((state) => state.subscription);
@@ -20,7 +20,7 @@ export const Account = () => {
     }
   };
 
-  const currentPlan = PLANS[subscription?.plan.toUpperCase() as keyof typeof PLANS];
+  const currentPlan = subscription ? getPlanName(subscription.plan) : 'Free';
 
   return (
     <div className="h-screen flex">
@@ -52,7 +52,7 @@ export const Account = () => {
                       <CreditCard className="w-5 h-5 text-gray-500" />
                       <div className="ml-3">
                         <p className="text-sm font-medium text-gray-900">Current Plan</p>
-                        <p className="text-sm text-gray-500">{currentPlan?.name || 'Free'}</p>
+                        <p className="text-sm text-gray-500">{currentPlan}</p>
                       </div>
                     </div>
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">

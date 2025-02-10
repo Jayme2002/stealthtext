@@ -1,8 +1,18 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Navbar } from '../components/Navbar';
+import { useAuthStore } from '../store/authStore';
 
 export const Home = () => {
+  const user = useAuthStore((state) => state.user);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard');
+    }
+  }, [user, navigate]);
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
