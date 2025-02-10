@@ -10,6 +10,7 @@ import { ResetPassword } from './pages/ResetPassword';
 import { Pricing } from './pages/Pricing';
 import { Account } from './pages/Account';
 import { useSubscriptionStore } from './store/subscriptionStore';
+import Humanizer from './pages/Humanizer';
 
 function App() {
   const setUser = useAuthStore((state) => state.setUser);
@@ -17,29 +18,22 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  console.log("Supabase URL:", process.env.VITE_SUPABASE_URL);
-
   useEffect(() => {
     const initializeAuth = async () => {
-      console.time('AuthInit');
       try {
-        console.log('🔵 [1] Starting auth initialization');
         const { data: { session }, error } = await supabase.auth.getSession();
-        console.log('🔵 [2] Auth session result:', { session, error });
-        
         setUser(session?.user ?? null);
-        console.log('🔵 [3] User state updated');
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
           async (_event, session) => {
-            console.log('🟢 Auth state changed:', session);
             setUser(session?.user ?? null);
           }
         );
         
         return () => subscription.unsubscribe();
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
       } finally {
-        console.timeEnd('AuthInit');
         setIsLoading(false);
       }
     };
@@ -84,8 +78,12 @@ function App() {
           element={!user ? <ResetPassword /> : <Navigate to="/dashboard" />}
         />
         <Route
-          path="/dashboard/*"
+          path="/dashboard"
           element={user ? <Dashboard /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/humanizer"
+          element={user ? <Humanizer /> : <Navigate to="/login" />}
         />
         <Route path="/pricing" element={<Pricing />} />
         <Route

@@ -38,6 +38,18 @@ export const Pricing = () => {
     }
   };
 
+  const getCurrentPlanKey = () => {
+    if (!subscription) return null;
+    const planMapping = {
+      'price_1Qq5NqFfiJfL6EMieNtdAzFk': 'PREMIUM',
+      'price_1Qq5TAFfiJfL6EMiBcQHGdUx': 'PREMIUM_PLUS',
+      'price_1QqMstFfiJfL6EMinLoK8xcj': 'PRO',
+    };
+    return subscription.plan === 'free' ? 'FREE' : planMapping[subscription.plan] || null;
+  };
+
+  const currentPlanKey = getCurrentPlanKey();
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -62,12 +74,12 @@ export const Pricing = () => {
 
         <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {Object.entries(PLANS).map(([key, plan]) => {
-            const isCurrentPlan = subscription?.plan.toLowerCase() === key.toLowerCase();
+            const isCurrentPlan = currentPlanKey === key;
             
             return (
               <div
                 key={key}
-                className={`bg-white rounded-2xl shadow-sm ring-1 ring-gray-200 ${
+                className={`bg-white rounded-2xl shadow-sm ring-1 ring-gray-200 flex flex-col ${
                   key === 'PREMIUM_PLUS' ? 'relative' : ''
                 }`}
               >
@@ -79,7 +91,7 @@ export const Pricing = () => {
                   </div>
                 )}
 
-                <div className="p-8">
+                <div className="p-8 flex-1">
                   <h2 className="text-lg font-semibold text-gray-900">{plan.name}</h2>
                   
                   <p className="mt-4 flex items-baseline">
@@ -99,31 +111,29 @@ export const Pricing = () => {
                       </li>
                     ))}
                   </ul>
+                </div>
 
+                <div className="p-8 pt-0">
                   {isCurrentPlan ? (
-                    <div className="mt-8">
-                      <span className="block w-full rounded-lg bg-gray-100 px-6 py-3 text-center text-sm font-semibold text-gray-900">
-                        Current Plan
-                      </span>
+                    <div className="block w-full rounded-lg bg-gray-100 px-6 py-3 text-center text-sm font-semibold text-gray-900">
+                      Current Plan
                     </div>
                   ) : (
-                    <div className="mt-8">
-                      <button
-                        onClick={() => plan.priceId && handleSubscribe(plan.priceId)}
-                        disabled={isLoading === plan.priceId || !plan.priceId}
-                        className={`block w-full rounded-lg px-6 py-3 text-center text-sm font-semibold ${
-                          key === 'FREE'
-                            ? 'bg-gray-100 text-gray-900 hover:bg-gray-200'
-                            : 'bg-black text-white hover:bg-gray-800'
-                        } disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200`}
-                      >
-                        {isLoading === plan.priceId
-                          ? 'Processing...'
-                          : plan.price === 0
-                          ? 'Get Started'
-                          : 'Subscribe'}
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => plan.priceId && handleSubscribe(plan.priceId)}
+                      disabled={isLoading === plan.priceId || !plan.priceId}
+                      className={`block w-full rounded-lg px-6 py-3 text-center text-sm font-semibold ${
+                        key === 'FREE'
+                          ? 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                          : 'bg-black text-white hover:bg-gray-800'
+                      } disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200`}
+                    >
+                      {isLoading === plan.priceId
+                        ? 'Processing...'
+                        : plan.price === 0
+                        ? 'Get Started'
+                        : 'Subscribe'}
+                    </button>
                   )}
                 </div>
               </div>
