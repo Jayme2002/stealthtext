@@ -15,8 +15,20 @@ export default async function handler(req: Request) {
   }
 
   try {
-    // Get the authenticated user
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    // Get the authenticated user by extracting the token from the Authorization header or cookies
+    let token;
+    const authHeader = req.headers.get('Authorization');
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.replace('Bearer ', '');
+    } else {
+      const cookieHeader = req.headers.get('cookie') || "";
+      token = cookieHeader.split('sb:token=')[1]?.split(';')[0];
+    }
+    if (!token) {
+      console.error('No token found in either Authorization header or cookie');
+      return new Response(JSON.stringify({ error: 'Unauthorized'}), { status: 401, headers: { 'Content-Type': 'application/json' } });
+    }
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
     
     if (authError || !user) {
       console.error('Auth error:', authError);

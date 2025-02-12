@@ -4,6 +4,7 @@ import { Brain, CreditCard, Loader2 } from 'lucide-react';
 import { useSubscriptionStore } from '../store/subscriptionStore';
 import { getPlanName } from '../utils/subscriptionPlanMapping';
 import { Navbar } from '../components/Navbar';
+import { supabase } from '../lib/supabase';
 
 export const Account = () => {
   const subscription = useSubscriptionStore((state) => state.subscription);
@@ -15,11 +16,20 @@ export const Account = () => {
       setIsLoading(true);
       setError(null);
       
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        setError("No active session found. Please log in.");
+        setIsLoading(false);
+        return;
+      }
+      const token = session.access_token;
       const response = await fetch('/api/create-portal-session', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
+        credentials: 'include'
       });
 
       const data = await response.json();
@@ -53,10 +63,7 @@ export const Account = () => {
       <div className="flex-1 ml-64">
         <div className="fixed top-0 right-0 left-64 bg-white border-b border-gray-200 z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between h-16 items-center">
-              <div className="flex items-center">
-                <h1 className="text-xl font-semibold">Account Settings</h1>
-              </div>
+            <div className="flex justify-end h-16 items-center">
               <Navbar />
             </div>
           </div>

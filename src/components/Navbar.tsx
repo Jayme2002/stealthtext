@@ -5,7 +5,7 @@ import { useAuthStore } from '../store/authStore';
 import { useSubscriptionStore } from '../store/subscriptionStore';
 import { getPlanName } from '../utils/subscriptionPlanMapping';
 
-export const Navbar = () => {
+export const Navbar: React.FC<{ pageTitle?: string }> = ({ pageTitle }) => {
   const user = useAuthStore((state) => state.user);
   const signOut = useAuthStore((state) => state.signOut);
   const subscription = useSubscriptionStore((state) => state.subscription);
@@ -25,33 +25,28 @@ export const Navbar = () => {
 
   const isFreePlan = !subscription || subscription.plan === 'free';
 
-  if (!user) {
-    return (
-      <div className="flex items-center gap-3">
-        <Link
-          to="/login"
-          className="px-4 py-2 text-sm font-medium text-gray-900 hover:text-gray-700"
-        >
-          Login
-        </Link>
-        <Link
-          to="/signup"
-          className="px-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800"
-        >
-          Try For Free
-        </Link>
-      </div>
-    );
-  }
-
-  return (
+  const navControls = !user ? (
+    <div className="flex items-center gap-3">
+      <Link
+        to="/login"
+        className="px-4 py-2 text-sm font-medium text-gray-900 hover:text-gray-700"
+      >
+        Login
+      </Link>
+      <Link
+        to="/signup"
+        className="px-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800"
+      >
+        Try For Free
+      </Link>
+    </div>
+  ) : (
     <div className="flex items-center gap-3">
       <span className={`px-2.5 py-1 text-xs font-medium rounded-full ${
         isFreePlan ? 'bg-gray-100 text-gray-700' : 'bg-black text-white'
       }`}>
         {subscription ? getPlanName(subscription.plan) : 'Free Plan'}
       </span>
-      
       {isFreePlan && (
         <Link
           to="/pricing"
@@ -66,7 +61,6 @@ export const Navbar = () => {
           </span>
         </Link>
       )}
-
       <div className="relative" ref={dropdownRef}>
         <button
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -84,7 +78,7 @@ export const Navbar = () => {
                 {user.email}
               </p>
             </div>
-            
+
             <Link
               to="/account"
               className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
@@ -93,7 +87,7 @@ export const Navbar = () => {
               <Settings className="w-4 h-4 mr-2" />
               Account Settings
             </Link>
-            
+
             <button
               onClick={() => {
                 signOut();
@@ -108,5 +102,11 @@ export const Navbar = () => {
         )}
       </div>
     </div>
+  );
+
+  return (
+    <header className="flex items-center justify-end pl-0 pr-4 py-2">
+      {navControls}
+    </header>
   );
 };

@@ -67,10 +67,7 @@ const Humanizer = () => {
       <div className="flex-1 ml-64">
         <div className="fixed top-0 right-0 left-64 bg-white border-b border-gray-200 z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between h-16 items-center">
-              <div className="flex items-center">
-                <h1 className="text-xl font-semibold">Humanizer</h1>
-              </div>
+            <div className="flex justify-end h-16 items-center">
               <Navbar />
             </div>
           </div>
