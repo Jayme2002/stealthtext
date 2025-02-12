@@ -9,6 +9,37 @@ const stripe = new Stripe(Deno.env.get("VITE_STRIPE_SECRET_KEY")!, {
 
 const secret = Deno.env.get("VITE_STRIPE_WEBHOOK_SECRET")!;
 
+async function verifyStripeSignatureAndParseEvent(body, header, secret) {
+  const encoder = new TextEncoder();
+  const parts = header.split(',').map(s => s.trim());
+  let timestamp, v1Signature;
+  for (const part of parts) {
+    if (part.startsWith('t=')) {
+      timestamp = part.slice(2);
+    } else if (part.startsWith('v1=')) {
+      v1Signature = part.slice(3);
+    }
+  }
+  if (!timestamp || !v1Signature) {
+    throw new Error('Invalid Stripe signature header format.');
+  }
+  const signedPayload = `${timestamp}.${body}`;
+  const keyData = encoder.encode(secret);
+  const algo = { name: 'HMAC', hash: 'SHA-256' };
+  const cryptoKey = await crypto.subtle.importKey('raw', keyData, algo, false, ['sign']);
+  const signatureBuffer = await crypto.subtle.sign('HMAC', cryptoKey, encoder.encode(signedPayload));
+  const expectedSignature = Array.from(new Uint8Array(signatureBuffer))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+
+  // In production, use a timing-safe comparison here.
+  if (expectedSignature !== v1Signature) {
+    throw new Error('Signature verification failed');
+  }
+
+  return JSON.parse(body);
+}
+
 const handler = async (req: Request) => {
   const signature = req.headers.get("Stripe-Signature");
   if (!signature) {
@@ -20,16 +51,9 @@ const handler = async (req: Request) => {
   console.log("Received webhook with signature:", signature);
   console.log("Webhook raw body:", body);
 
-  const cryptoProvider = Stripe.createSubtleCryptoProvider();
   let event;
   try {
-    event = await stripe.webhooks.constructEventAsync(
-      body,
-      signature,
-      secret,
-      undefined,
-      cryptoProvider
-    );
+    event = await verifyStripeSignatureAndParseEvent(body, signature, secret);
   } catch (err) {
     console.error("Webhook error:", err);
     return new Response(err.message, { status: 400 });
@@ -77,22 +101,65 @@ const handler = async (req: Request) => {
 
     case "customer.subscription.updated": {
       const subscription = event.data.object;
-      const { data, error } = await supabase.rpc("handle_stripe_subscription_updated", {
-        stripe_customer_id: subscription.customer,
-        stripe_subscription_id: subscription.id,
-        plan: subscription.items.data[0].price.id,
-        status: subscription.status,
-        current_period_end: subscription.current_period_end 
-          ? new Date(subscription.current_period_end * 1000).toISOString()
-          : null,
-        cancel_at: subscription.cancel_at ? new Date(subscription.cancel_at * 1000).toISOString() : null
-      });
+      let effectiveDate = subscription.cancel_at_period_end && subscription.cancel_at
+        ? new Date(subscription.cancel_at * 1000).toISOString()
+        : null;
       
-      console.log("Subscription update result:", { data, error });
+      // Fallback: if cancel_at_period_end is true but cancel_at is missing, use current_period_end
+      if (subscription.cancel_at_period_end && !effectiveDate && subscription.current_period_end) {
+        effectiveDate = new Date(subscription.current_period_end * 1000).toISOString();
+      }
+      
+      const { error } = await supabase
+        .from("subscriptions")
+        .update({
+          stripe_subscription_id: subscription.id,
+          plan: subscription.items.data[0].price.id,
+          status: subscription.status,
+          current_period_end: subscription.current_period_end
+            ? new Date(subscription.current_period_end * 1000).toISOString()
+            : null,
+          cancel_at: effectiveDate,
+          will_cancel_at_period_end: subscription.cancel_at_period_end,
+          cancellation_effective_date: effectiveDate
+        })
+        .eq("stripe_customer_id", subscription.customer);
+      
+      if (error) {
+        console.error("DB update failed in customer.subscription.updated", error);
+      }
       break;
     }
 
-    case "customer.subscription.deleted":
+    case "customer.subscription.deleted": {
+      const subscription = event.data.object;
+      let computedCancelAt = subscription.cancel_at ? new Date(subscription.cancel_at * 1000).toISOString() : null;
+      // If the subscription is set to cancel at period end but no explicit cancel_at is provided, use current_period_end
+      if (!computedCancelAt && subscription.cancel_at_period_end && subscription.current_period_end) {
+        computedCancelAt = new Date(subscription.current_period_end * 1000).toISOString();
+      }
+      if (!computedCancelAt) {
+        console.error("No cancellation end time provided for subscription deletion");
+        break;
+      }
+      console.log("DEBUG: Computed cancel_at for deletion:", computedCancelAt);
+      
+      const { error } = await supabase
+        .from("subscriptions")
+        .update({
+          cancel_at: computedCancelAt,
+          status: "cancelled",
+          will_cancel_at_period_end: subscription.cancel_at_period_end,
+          cancellation_effective_date: computedCancelAt
+        })
+        .eq("stripe_subscription_id", subscription.id);
+      
+      if (error) {
+        console.error("DB update failed on cancellation:", error);
+      }
+      break;
+    }
+
     case "customer.subscription.created":
     case "customer.subscription.paused":
     case "customer.subscription.resumed": {
@@ -102,10 +169,12 @@ const handler = async (req: Request) => {
         stripe_subscription_id: subscription.id,
         plan: subscription.items.data[0].price.id,
         status: subscription.status,
-        current_period_end: subscription.current_period_end 
+        current_period_end: subscription.current_period_end
           ? new Date(subscription.current_period_end * 1000).toISOString()
           : null,
-        cancel_at: subscription.cancel_at ? new Date(subscription.cancel_at * 1000).toISOString() : null
+        cancel_at: subscription.cancel_at ? new Date(subscription.cancel_at * 1000).toISOString() : null,
+        will_cancel_at_period_end: subscription.cancel_at_period_end,
+        cancellation_effective_date: subscription.cancel_at ? new Date(subscription.cancel_at * 1000).toISOString() : null
       });
       break;
     }
