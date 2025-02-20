@@ -9,15 +9,20 @@ if (!supabaseUrl || !supabaseAnonKey) {
   );
 }
 
+console.log('Supabase URL:', supabaseUrl);
+console.log('Supabase Anon Key:', supabaseAnonKey?.slice(0, 6) + '...');
+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
-    detectSessionInUrl: true
+    detectSessionInUrl: false,
+    storage: localStorage
   },
   global: {
     headers: {
-      'X-Client-Info': 'stealth-writer'
+      'X-Client-Info': 'stealth-writer',
+      apikey: supabaseAnonKey
     }
   }
 });

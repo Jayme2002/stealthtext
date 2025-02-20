@@ -93,7 +93,10 @@ export default async function handler(req: Request) {
       cancel_url: `${process.env.VITE_APP_URL}/pricing?canceled=true`,
       payment_method_types: ['card'],
       billing_address_collection: 'required',
-      allow_promotion_codes: true
+      allow_promotion_codes: true,
+      metadata: {
+        user_id: userId
+      }
     });
 
     console.log('API: Checkout session created:', session.id);

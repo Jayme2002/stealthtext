@@ -1,8 +1,18 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Navbar } from '../components/Navbar';
+import { useAuthStore } from '../store/authStore';
 
 export const Home = () => {
+  const user = useAuthStore((state) => state.user);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard');
+    }
+  }, [user, navigate]);
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
@@ -14,7 +24,7 @@ export const Home = () => {
               Humanize AI Generated Content
             </h1>
             <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
-              StealthWriter is an SEO tool that converts AI generated content into human-like content. Get better content & get 100% human score.
+              StealthText is an SEO tool that converts AI generated content into human-like content. Get better content & get 100% human score.
             </p>
             <Link
               to="/signup"

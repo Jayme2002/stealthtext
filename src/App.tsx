@@ -9,6 +9,8 @@ import { Signup } from './pages/Signup';
 import { ResetPassword } from './pages/ResetPassword';
 import { Pricing } from './pages/Pricing';
 import { Account } from './pages/Account';
+import { useSubscriptionStore } from './store/subscriptionStore';
+import Humanizer from './pages/Humanizer';
 
 function App() {
   const setUser = useAuthStore((state) => state.setUser);
@@ -19,25 +21,50 @@ function App() {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session }, error } = await supabase.auth.getSession();
         setUser(session?.user ?? null);
 
-        const {
-          data: { subscription },
-        } = supabase.auth.onAuthStateChange((_event, session) => {
-          setUser(session?.user ?? null);
-        });
-
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(
+          async (_event, session) => {
+            setUser(session?.user ?? null);
+          }
+        );
+        
         return () => subscription.unsubscribe();
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to initialize authentication');
+        setError(err instanceof Error ? err.message : 'An error occurred');
       } finally {
         setIsLoading(false);
       }
     };
-
     initializeAuth();
   }, [setUser]);
+
+  const fetchSubscription = useSubscriptionStore((state) => state.fetchSubscription);
+  const setSubscription = useSubscriptionStore((state) => state.setSubscription);
+
+  useEffect(() => {
+    if (user) {
+      fetchSubscription();
+    } else {
+      setSubscription(null);
+    }
+  }, [user, fetchSubscription, setSubscription]);
+
+  // NEW: Subscribe to realtime updates for the user's subscription
+  useEffect(() => {
+    if (!user) return;
+    const subscriptionChannel = supabase.channel('subscriptions')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'subscriptions', filter: `user_id=eq.${user.id}` }, payload => {
+        console.log('Detected subscription change:', payload);
+        fetchSubscription();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subscriptionChannel);
+    };
+  }, [user, fetchSubscription]);
 
   if (isLoading) {
     return (
@@ -77,8 +104,12 @@ function App() {
           element={!user ? <ResetPassword /> : <Navigate to="/dashboard" />}
         />
         <Route
-          path="/dashboard/*"
+          path="/dashboard"
           element={user ? <Dashboard /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/humanizer"
+          element={user ? <Humanizer /> : <Navigate to="/login" />}
         />
         <Route path="/pricing" element={<Pricing />} />
         <Route

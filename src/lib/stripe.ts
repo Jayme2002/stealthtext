@@ -9,9 +9,11 @@ if (!process.env.VITE_STRIPE_PUBLISHABLE_KEY) {
 const stripePromise = loadStripe(process.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 export const PLANS = {
-  FREE: {
-    name: 'Free',
+  free: {
+    name: 'StealthText Free',
     price: 0,
+    priceId: undefined,
+    monthly_characters: 1000,
     features: [
       'Up to 1,000 words per month',
       'Basic AI detection',
@@ -19,11 +21,12 @@ export const PLANS = {
       'Single user'
     ]
   },
-  PREMIUM: {
+  premium: {
     name: 'StealthText Premium',
     price: 10,
-    priceId: 'price_1Qq5TsFfiJfL6EMi4Wog6LRx',
+    priceId: "price_1Qq5NqFfiJfL6EMieNtdAzFk",
     productId: 'prod_RjYUNTzdWRIChO',
+    monthly_characters: 10000,
     features: [
       'Up to 10,000 words per month',
       'Advanced AI detection',
@@ -32,10 +35,12 @@ export const PLANS = {
       'API access'
     ]
   },
-  PREMIUM_PLUS: {
+  "premium+": {
     name: 'StealthText Premium+',
     price: 20,
+    priceId: 'price_1Qq5TAFfiJfL6EMiBcQHGdUx',
     productId: 'prod_RjYaNSCSSf4pEb',
+    monthly_characters: 50000,
     features: [
       'Up to 50,000 words per month',
       'Enterprise AI detection',
@@ -45,10 +50,12 @@ export const PLANS = {
       'Analytics dashboard'
     ]
   },
-  PRO: {
+  pro: {
     name: 'StealthText Pro',
     price: 30,
+    priceId: 'price_1QqMstFfiJfL6EMinLoK8xcj',
     productId: 'prod_RjYbe5FxvDSN9K',
+    monthly_characters: 10000000,
     features: [
       'Unlimited words',
       'Custom AI detection rules',
@@ -80,7 +87,7 @@ export async function createCheckoutSession(priceId: string) {
     console.log('Client: Fetching subscription data for user:', user.id);
     const { data: subscription, error: subscriptionError } = await supabase
       .from('subscriptions')
-      .select('stripe_customer_id')
+      .select('stripe_customer_id, plan')
       .eq('user_id', user.id)
       .maybeSingle();
 
@@ -100,20 +107,15 @@ export async function createCheckoutSession(priceId: string) {
     
     const response = await fetch('/api/create-checkout-session', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody),
     });
 
+    console.log('🔵 [4] API response status:', response.status);
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Client: Checkout Session Error:', {
-        status: response.status,
-        statusText: response.statusText,
-        data: errorData
-      });
-      throw new Error(errorData.error || 'Failed to create checkout session');
+      const errorText = await response.text();
+      console.error('🔴 [5] API Error:', errorText);
+      throw new Error(`API Error: ${response.statusText}`);
     }
 
     const responseData = await response.json();

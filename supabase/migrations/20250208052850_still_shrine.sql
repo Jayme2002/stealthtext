@@ -6,6 +6,7 @@
     - Ensure proper table permissions
     - Add missing RLS policies
     - Fix subscription creation on user signup
+    - Add Stripe webhook handling
 
   2. Security
     - Maintains RLS
@@ -70,6 +71,39 @@ CREATE TRIGGER create_subscription_after_user_signup
   AFTER INSERT ON auth.users
   FOR EACH ROW
   EXECUTE FUNCTION create_subscription_for_new_user();
+
+-- Add function to handle Stripe webhook events
+CREATE OR REPLACE FUNCTION handle_stripe_subscription_updated()
+RETURNS TRIGGER AS $$
+BEGIN
+  UPDATE subscriptions
+  SET
+    stripe_subscription_id = NEW.stripe_subscription_id,
+    plan = CASE
+      WHEN NEW.plan = 'price_1Qq5NqFfiJfL6EMieNtdAzFk' THEN 'premium'
+      WHEN NEW.plan = 'price_1Qq5TAFfiJfL6EMiBcQHGdUx' THEN 'premium+'
+      WHEN NEW.plan = 'price_1QqMstFfiJfL6EMinLoK8xcj' THEN 'pro'
+      ELSE 'free'
+    END,
+    status = NEW.status,
+    current_period_end = NEW.current_period_end,
+    cancel_at = NEW.cancel_at,
+    updated_at = now()
+  WHERE stripe_customer_id = NEW.stripe_customer_id;
+  
+  RETURN NEW;
+END;
+$$ language 'plpgsql' SECURITY DEFINER;
+
+-- Ensure subscriptions table has correct columns and constraints
+ALTER TABLE subscriptions
+  ADD COLUMN IF NOT EXISTS stripe_subscription_id text,
+  ADD COLUMN IF NOT EXISTS current_period_end timestamptz,
+  ADD COLUMN IF NOT EXISTS cancel_at timestamptz;
+
+-- Add indexes for better query performance
+CREATE INDEX IF NOT EXISTS idx_subscriptions_user_id ON subscriptions(user_id);
+CREATE INDEX IF NOT EXISTS idx_subscriptions_stripe_customer_id ON subscriptions(stripe_customer_id);
 
 -- Ensure all necessary policies exist
 DO $$ BEGIN

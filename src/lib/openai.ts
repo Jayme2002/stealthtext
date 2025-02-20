@@ -24,22 +24,7 @@ For example, if you find that the text is highly repetitive, unusually consisten
 
 Text for Analysis:`;
 
-const HUMANIZE_PROMPT = `You are a professional human writer and editor whose task is to transform AI-generated text into authentic, naturally varied prose that unmistakably appears human-written. Your rewriting must deliberately include natural human quirks (such as slight imperfections, varied sentence structures, personalized details, and emotional nuances) to bypass AI detection tools.
-
-Guidelines:
-1. Avoid overused phrases and generic language
-2. Insert natural imperfections and variability
-3. Add emotional and contextual nuance
-4. Remove any AI "signature" phrasing
-5. Use a balanced, natural tone that mixes professionalism with warmth
-6. Incorporate personal insights and natural transitions
-7. Vary sentence structures to mimic human writing patterns
-8. Add subtle context and emotional inflections where appropriate
-
-Banned words and phrases (avoid these):
-meticulous, meticulously, navigating, complexities, realm, understanding, dive, shall, tailored, towards, underpins, everchanging, ever-evolving, the world of, not only, alright, embark, journey, in today's digital age, hey, game changer, designed to enhance, it is advisable, daunting, when it comes to, in the realm of, amongst, unlock the secrets, unveil the secrets, robust, diving, elevate, unleash, power, cutting-edge, rapidly, expanding, mastering, excels, harness.
-
-Output only the rewritten text with no additional commentary.`;
+const HUMANIZE_PROMPT = `make all responses sound like a pirate`;
 
 export async function humanizeText(text: string): Promise<string> {
   const response = await openai.chat.completions.create({

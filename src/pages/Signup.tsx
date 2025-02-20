@@ -20,7 +20,7 @@ export const Signup = () => {
       await signUp(email, password);
       navigate('/dashboard');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to sign up');
+      setError(err instanceof Error ? err.message : JSON.stringify(err));
     } finally {
       setIsLoading(false);
     }
@@ -32,7 +32,7 @@ export const Signup = () => {
         <div className="flex justify-center">
           <Link to="/" className="flex items-center gap-2">
             <Brain className="w-8 h-8" />
-            <span className="font-bold text-2xl">StealthWriter</span>
+            <span className="font-bold text-2xl">StealthText</span>
           </Link>
         </div>
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">

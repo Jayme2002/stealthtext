@@ -7,7 +7,7 @@
       - `user_id` (uuid, references auth.users)
       - `stripe_customer_id` (text)
       - `stripe_subscription_id` (text)
-      - `plan` (text) - free, premium, premium_plus, pro
+      - `plan` (text) - free, premium, premium+, pro
       - `status` (text) - active, canceled, past_due
       - `current_period_end` (timestamptz)
       - `cancel_at` (timestamptz, nullable)
