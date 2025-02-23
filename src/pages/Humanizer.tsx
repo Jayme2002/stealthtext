@@ -73,7 +73,7 @@ const Humanizer = () => {
 
       <div className="flex-1 ml-64">
         <div className="fixed top-0 right-0 left-64 bg-white border-b border-gray-200 z-10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-[1656px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-end h-16 items-center">
               <Navbar />
             </div>
@@ -81,7 +81,7 @@ const Humanizer = () => {
         </div>
 
         <div className="pt-16 min-h-screen bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="max-w-[1656px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="grid grid-cols-2 gap-8">
               {/* Input Box */}
               <div className="bg-white rounded-xl shadow-sm overflow-hidden">
@@ -90,7 +90,7 @@ const Humanizer = () => {
                     <textarea
                       value={text}
                       onChange={(e) => setText(e.target.value)}
-                      className="w-full h-[500px] p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-gray-200"
+                      className="w-full h-[575px] p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-gray-200"
                       placeholder="Enter your text here..."
                     />
                     <button
@@ -131,7 +131,7 @@ const Humanizer = () => {
                     <textarea
                       value={humanizedResult?.text || ''}
                       readOnly
-                      className="w-full h-[500px] p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-gray-200"
+                      className="w-full h-[575px] p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-gray-200"
                       placeholder="Humanized text will appear here..."
                     />
                     {humanizedResult && (
@@ -162,39 +162,6 @@ const Humanizer = () => {
                 </div>
               </div>
             </div>
-
-            {/* Commented out AI Detection Scale
-            {humanizedResult && (
-              <div className="mt-8 p-6 bg-white border border-green-200 rounded-lg">
-                <h3 className="text-center text-lg font-semibold mb-4">AI Detection Summary</h3>
-                <div className="relative w-48 h-48 mx-auto">
-                  <svg className="w-full h-full transform -rotate-90">
-                    <circle
-                      cx="96"
-                      cy="96"
-                      r="88"
-                      fill="none"
-                      stroke="#e5e7eb"
-                      strokeWidth="12"
-                    />
-                    <circle
-                      cx="96"
-                      cy="96"
-                      r="88"
-                      fill="none"
-                      stroke="#22c55e"
-                      strokeWidth="12"
-                      strokeDasharray={`${(100 - humanizedResult.aiScore) * 5.53}, 553`}
-                    />
-                  </svg>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-4xl font-bold">{humanizedResult.aiScore}%</span>
-                    <span className="text-sm text-gray-500">AI Detected</span>
-                  </div>
-                </div>
-              </div>
-            )}
-            */}
           </div>
         </div>
       </div>

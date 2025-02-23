@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Navbar } from '../components/Navbar';
 import { useAuthStore } from '../store/authStore';
+import { Copy, Check } from 'lucide-react';
+import { LandingHeader } from '../components/LandingHeader';
 
 export const Home = () => {
   const user = useAuthStore((state) => state.user);
   const navigate = useNavigate();
+  const [text, setText] = useState('');
+  const [showCopyTooltip, setShowCopyTooltip] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -13,13 +16,19 @@ export const Home = () => {
     }
   }, [user, navigate]);
 
+  const copyToClipboard = (textToCopy: string) => {
+    navigator.clipboard.writeText(textToCopy);
+    setShowCopyTooltip(true);
+    setTimeout(() => setShowCopyTooltip(false), 2000);
+  };
+
   return (
     <div className="min-h-screen bg-white">
-      <Navbar />
+      <LandingHeader />
       
-      <main className="pt-16">
+      <main className="pt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center py-24">
+          <div className="text-center py-12">
             <h1 className="text-5xl font-bold tracking-tight text-gray-900 mb-8">
               Humanize AI Generated Content
             </h1>
@@ -34,31 +43,61 @@ export const Home = () => {
             </Link>
           </div>
 
-          <div className="mt-8 bg-white rounded-xl shadow-lg overflow-hidden">
-            <div className="p-6">
-              <div className="flex gap-4 mb-4">
-                <button className="px-4 py-2 text-sm font-medium rounded-lg bg-gray-100">ChatGPT</button>
-                <button className="px-4 py-2 text-sm font-medium">Claude</button>
-                <button className="px-4 py-2 text-sm font-medium">Llama</button>
-                <button className="px-4 py-2 text-sm font-medium">Human</button>
-              </div>
-              
-              <textarea
-                className="w-full h-64 p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-gray-200"
-                placeholder="Enter your text here..."
-              />
-              
-              <div className="mt-4 flex items-center justify-between">
-                <div className="text-sm text-gray-500">
-                  0 characters | 0 words
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            {/* Input Box */}
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+              <div className="p-6">
+                <div className="relative">
+                  <textarea
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    className="w-full h-[400px] p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-gray-200"
+                    placeholder="Enter your text here..."
+                  />
+                  <button
+                    onClick={() => copyToClipboard(text)}
+                    className="absolute top-4 right-4 p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                    title="Copy to clipboard"
+                  >
+                    {showCopyTooltip ? <Check className="w-5 h-5 text-green-500" /> : <Copy className="w-5 h-5" />}
+                  </button>
                 </div>
-                <div className="flex gap-4">
-                  <button className="px-6 py-2 text-sm font-medium rounded-lg bg-gray-100 hover:bg-gray-200">
-                    Check for AI
-                  </button>
-                  <button className="px-6 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800">
+                
+                <div className="mt-4 flex items-center justify-between">
+                  <div className="text-sm text-gray-500">
+                    {text.length} characters | {text.split(/\s+/).filter(Boolean).length} words
+                  </div>
+                  <Link
+                    to="/signup"
+                    className="px-6 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800"
+                  >
                     Humanize
-                  </button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Output Box */}
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+              <div className="p-6">
+                <div className="relative">
+                  <textarea
+                    readOnly
+                    className="w-full h-[400px] p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-gray-200 bg-gray-50"
+                    placeholder="Sign up to see your humanized text here..."
+                  />
+                </div>
+                
+                <div className="mt-4 flex items-center justify-between">
+                  <div className="text-sm text-gray-500">
+                    0 characters | 0 words
+                  </div>
+                  <Link
+                    to="/signup"
+                    className="px-6 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800"
+                  >
+                    Try For Free
+                  </Link>
                 </div>
               </div>
             </div>
