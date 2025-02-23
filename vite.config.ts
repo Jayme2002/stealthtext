@@ -70,6 +70,7 @@ export default defineConfig(({ mode }) => {
       'process.env.VITE_STRIPE_SECRET_KEY': JSON.stringify(env.VITE_STRIPE_SECRET_KEY),
       'process.env.VITE_APP_URL': JSON.stringify(env.VITE_APP_URL),
       'process.env.VITE_OPENAI_API_KEY': JSON.stringify(env.VITE_OPENAI_API_KEY),
+      'process.env.HUMANIZED_AI_API_KEY': JSON.stringify(env.HUMANIZED_AI_API_KEY),
     },
   };
 });

@@ -24,22 +24,29 @@ For example, if you find that the text is highly repetitive, unusually consisten
 
 Text for Analysis:`;
 
-const HUMANIZE_PROMPT = `make all responses sound like a pirate`;
+
 
 export async function humanizeText(text: string): Promise<string> {
-  const response = await openai.chat.completions.create({
-    model: "gpt-4",
-    messages: [
-      { role: "system", content: HUMANIZE_PROMPT },
-      { role: "user", content: text }
-    ],
-    temperature: 0.7,
-    max_tokens: 2000,
-    presence_penalty: 0.1,
-    frequency_penalty: 0.2,
+  const url = "https://www.the-ghost-ai-api.com/transformations/humanize-v2/";
+  const payload = {
+    text,
+    humanizerIntensity: "HIGH",
+    purpose: "GENERAL",
+    literacyLevel: "COLLEGE"
+  };
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Api-Key LpJeFybq.CipwgqkHM8zHNUZDcMAZ3Dd9CgmdHXaB"
+    },
+    body: JSON.stringify(payload)
   });
-
-  return response.choices[0]?.message?.content || "Error humanizing text";
+  const json = await response.json();
+  if (!response.ok) {
+    throw new Error(json.error || "Failed to humanize text");
+  }
+  return json.humanizedText;
 }
 
 export async function checkForAI(text: string): Promise<number> {
