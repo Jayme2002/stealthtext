@@ -1,6 +1,6 @@
 import React, { useState, createContext, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Brain, Shield, Settings, CreditCard, LayoutDashboard, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Brain, User, LayoutDashboard, CreditCard, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useUIStore } from '../store/uiStore';
 
 // Create context for sidebar state
@@ -35,6 +35,7 @@ export const Sidebar = () => {
         </div>
         
         <nav className="flex-1 p-4">
+          {/* Dashboard group (no header) */}
           <div className="space-y-1">
             <NavLink
               to="/dashboard"
@@ -45,43 +46,37 @@ export const Sidebar = () => {
               <LayoutDashboard className="w-5 h-5 flex-shrink-0" />
               <span className={`transition-[width,opacity,margin] duration-300 ease-in-out overflow-hidden whitespace-nowrap ${sidebarCollapsed ? 'opacity-0 w-0 ml-0' : 'opacity-100 w-auto ml-2'}`}>Dashboard</span>
             </NavLink>
-
-            <NavLink
-              to="/humanizer"
-              className={({ isActive }) =>
-                `flex items-center px-4 py-2 rounded-lg ${isActive ? 'bg-gray-100' : 'hover:bg-gray-50'}`
-              }
-            >
-              <Brain className="w-5 h-5 flex-shrink-0" />
-              <span className={`transition-[width,opacity,margin] duration-300 ease-in-out overflow-hidden whitespace-nowrap ${sidebarCollapsed ? 'opacity-0 w-0 ml-0' : 'opacity-100 w-auto ml-2'}`}>Humanizer</span>
-            </NavLink>
-            
-            <NavLink
-              to="/ai-detector"
-              className={({ isActive }) =>
-                `flex items-center px-4 py-2 rounded-lg ${isActive ? 'bg-gray-100' : 'hover:bg-gray-50'}`
-              }
-            >
-              <Shield className="w-5 h-5 flex-shrink-0" />
-              <span className={`transition-[width,opacity,margin] duration-300 ease-in-out overflow-hidden whitespace-nowrap ${sidebarCollapsed ? 'opacity-0 w-0 ml-0' : 'opacity-100 w-auto ml-2'}`}>AI Detector</span>
-            </NavLink>
           </div>
 
-          <div className="mt-8">
-            <div className={`text-xs font-semibold text-gray-400 px-4 mb-2 transition-[width,opacity,margin] duration-300 ease-in-out overflow-hidden whitespace-nowrap ${sidebarCollapsed ? 'opacity-0 w-0 ml-0' : 'opacity-100 w-auto'}`}>
-              Settings
-            </div>
+          {/* Features group for Humanizer */}
+          <div className="mt-4">
+            <div className={`text-xs font-semibold text-gray-400 px-4 mb-2 transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 -translate-x-2' : 'opacity-100 translate-x-0'}`}>Features</div>
             <div className="space-y-1">
               <NavLink
-                to="/settings"
+                to="/humanizer"
                 className={({ isActive }) =>
                   `flex items-center px-4 py-2 rounded-lg ${isActive ? 'bg-gray-100' : 'hover:bg-gray-50'}`
                 }
               >
-                <Settings className="w-5 h-5 flex-shrink-0" />
-                <span className={`transition-[width,opacity,margin] duration-300 ease-in-out overflow-hidden whitespace-nowrap ${sidebarCollapsed ? 'opacity-0 w-0 ml-0' : 'opacity-100 w-auto ml-2'}`}>Settings</span>
+                <Brain className="w-5 h-5 flex-shrink-0" />
+                <span className={`transition-[width,opacity,margin] duration-300 ease-in-out overflow-hidden whitespace-nowrap ${sidebarCollapsed ? 'opacity-0 w-0 ml-0' : 'opacity-100 w-auto ml-2'}`}>Humanizer</span>
               </NavLink>
-              
+            </div>
+          </div>
+
+          {/* Settings group for Account and Pricing */}
+          <div className="mt-4">
+            <div className={`text-xs font-semibold text-gray-400 px-4 mb-2 transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 -translate-x-2' : 'opacity-100 translate-x-0'}`}>Settings</div>
+            <div className="space-y-1">
+              <NavLink
+                to="/account"
+                className={({ isActive }) =>
+                  `flex items-center px-4 py-2 rounded-lg ${isActive ? 'bg-gray-100' : 'hover:bg-gray-50'}`
+                }
+              >
+                <User className="w-5 h-5 flex-shrink-0" />
+                <span className={`transition-[width,opacity,margin] duration-300 ease-in-out overflow-hidden whitespace-nowrap ${sidebarCollapsed ? 'opacity-0 w-0 ml-0' : 'opacity-100 w-auto ml-2'}`}>Account</span>
+              </NavLink>
               <NavLink
                 to="/pricing"
                 className={({ isActive }) =>
