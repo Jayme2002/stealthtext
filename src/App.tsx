@@ -11,6 +11,7 @@ import { Pricing } from './pages/Pricing';
 import { Account } from './pages/Account';
 import { useSubscriptionStore } from './store/subscriptionStore';
 import Humanizer from './pages/Humanizer';
+import Footer from './components/Footer';
 
 function App() {
   const setUser = useAuthStore((state) => state.setUser);
@@ -89,34 +90,37 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/login"
-          element={!user ? <Login /> : <Navigate to="/dashboard" />}
-        />
-        <Route
-          path="/signup"
-          element={!user ? <Signup /> : <Navigate to="/dashboard" />}
-        />
-        <Route
-          path="/reset-password"
-          element={!user ? <ResetPassword /> : <Navigate to="/dashboard" />}
-        />
-        <Route
-          path="/dashboard"
-          element={user ? <Dashboard /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/humanizer"
-          element={user ? <Humanizer /> : <Navigate to="/login" />}
-        />
-        <Route path="/pricing" element={<Pricing />} />
-        <Route
-          path="/account"
-          element={user ? <Account /> : <Navigate to="/login" />}
-        />
-      </Routes>
+      <>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/login"
+            element={!user ? <Login /> : <Navigate to="/dashboard" />}
+          />
+          <Route
+            path="/signup"
+            element={!user ? <Signup /> : <Navigate to="/dashboard" />}
+          />
+          <Route
+            path="/reset-password"
+            element={!user ? <ResetPassword /> : <Navigate to="/dashboard" />}
+          />
+          <Route
+            path="/dashboard"
+            element={user ? <Dashboard /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/humanizer"
+            element={user ? <Humanizer /> : <Navigate to="/login" />}
+          />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route
+            path="/account"
+            element={user ? <Account /> : <Navigate to="/login" />}
+          />
+        </Routes>
+        <Footer />
+      </>
     </BrowserRouter>
   );
 }
