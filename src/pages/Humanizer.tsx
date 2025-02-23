@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Sidebar } from '../components/Sidebar';
+import { Sidebar, useSidebar } from '../components/Sidebar';
 import { Copy, Loader2, Check } from 'lucide-react';
 import { humanizeText, checkForAI } from '../lib/openai';
 import { useSubscriptionStore } from '../store/subscriptionStore';
@@ -18,6 +18,7 @@ const Humanizer = () => {
   const fetchSubscription = useSubscriptionStore((state) => state.fetchSubscription);
   const subscription = useSubscriptionStore((state) => state.subscription);
   const user = useAuthStore((state) => state.user);
+  const { width } = useSidebar();
   
   useEffect(() => {
     fetchSubscription();
@@ -37,11 +38,9 @@ const Humanizer = () => {
   const handleHumanize = async () => {
     if (!text.trim() || !user) return;
 
-    // Calculate both metrics
     const charCount = text.length;
     const wordCount = text.split(/\s+/).filter(Boolean).length;
     
-    // Check usage with both values
     const { canProceed, error } = await useSubscriptionStore.getState().checkUsage(
       user.id, 
       charCount,
@@ -53,7 +52,6 @@ const Humanizer = () => {
       return;
     }
 
-    // Proceed with humanization
     setIsHumanizing(true);
     try {
       const humanizedText = await humanizeText(text);
@@ -75,13 +73,11 @@ const Humanizer = () => {
   };
 
   return (
-    <div className="h-screen flex">
-      <div className="fixed left-0 top-0 h-full">
-        <Sidebar />
-      </div>
-
-      <div className="flex-1 ml-64">
-        <div className="fixed top-0 right-0 left-64 bg-white border-b border-gray-200 z-10">
+    <div className="min-h-screen flex bg-gray-50">
+      <Sidebar />
+      
+      <div className="flex-1">
+        <div className="fixed top-0 right-0 bg-white border-b border-gray-200 z-10" style={{ left: width }}>
           <div className="max-w-[1656px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-end h-16 items-center">
               <Navbar />
@@ -89,7 +85,7 @@ const Humanizer = () => {
           </div>
         </div>
 
-        <div className="pt-16 min-h-screen bg-gray-50">
+        <div className="pt-16 min-h-screen" style={{ marginLeft: width }}>
           <div className="max-w-[1656px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="grid grid-cols-2 gap-8">
               {/* Input Box */}

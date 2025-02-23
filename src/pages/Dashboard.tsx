@@ -1,16 +1,16 @@
 import React from 'react';
-import { Sidebar } from '../components/Sidebar';
+import { Sidebar, useSidebar } from '../components/Sidebar';
 import { Navbar } from '../components/Navbar';
 
 const Dashboard = () => {
-  return (
-    <div className="h-screen flex">
-      <div className="fixed left-0 top-0 h-full">
-        <Sidebar />
-      </div>
+  const { width } = useSidebar();
 
-      <div className="flex-1 ml-64">
-        <div className="fixed top-0 right-0 left-64 bg-white border-b border-gray-200 z-10">
+  return (
+    <div className="min-h-screen flex bg-gray-50">
+      <Sidebar />
+
+      <div className="flex-1">
+        <div className="fixed top-0 right-0 bg-white border-b border-gray-200 z-10" style={{ left: width }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-end h-16 items-center">
               <Navbar />
@@ -18,7 +18,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="pt-16 min-h-screen bg-gray-50">
+        <div className="pt-16" style={{ marginLeft: width }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="bg-white rounded-xl shadow-sm overflow-hidden">
               <div className="p-8">
@@ -80,4 +80,4 @@ const Dashboard = () => {
 
 export default Dashboard;
 
-export { Dashboard }
+export { Dashboard };
