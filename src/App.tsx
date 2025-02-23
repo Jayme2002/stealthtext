@@ -90,7 +90,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <>
+      <div className="min-h-screen flex flex-col">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route
@@ -120,7 +120,7 @@ function App() {
           />
         </Routes>
         <Footer />
-      </>
+      </div>
     </BrowserRouter>
   );
 }
