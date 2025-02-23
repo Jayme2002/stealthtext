@@ -10,9 +10,9 @@ const Dashboard = () => {
       <Sidebar />
 
       <div className="flex-1">
-        <div className="fixed top-0 right-0 bg-white border-b border-gray-200 z-10" style={{ left: width }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-end h-16 items-center">
+        <div className="fixed top-0 right-0 left-0 bg-white border-b border-gray-200 z-10">
+          <div className="w-full px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-end h-16 items-center w-full">
               <Navbar />
             </div>
           </div>

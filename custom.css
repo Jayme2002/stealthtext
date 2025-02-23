@@ -1,0 +1,21 @@
+/* custom.css */
+
+/* Override for header container when sidebar is collapsed */
+body.sidebar-collapsed .fixed.top-0.right-0.bg-white {
+  left: 0;
+  right: 0;
+}
+
+/* Make the inner container span full width and remove horizontal offsets */
+body.sidebar-collapsed .fixed.top-0.right-0.bg-white > div {
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+/* Ensure the navbar header has no extra left margin */
+body.sidebar-collapsed .fixed.top-0.right-0.bg-white header {
+  margin-left: 0 !important;
+} 
