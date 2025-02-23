@@ -14,6 +14,7 @@ export const PLANS = {
     price: 0,
     priceId: undefined,
     monthly_characters: 1000,
+    monthly_words: 500,
     features: [
       'Up to 1,000 words per month',
       'Basic AI detection',
@@ -27,6 +28,7 @@ export const PLANS = {
     priceId: "price_1Qq5NqFfiJfL6EMieNtdAzFk",
     productId: 'prod_RjYUNTzdWRIChO',
     monthly_characters: 10000,
+    monthly_words: 5000,
     features: [
       'Up to 10,000 words per month',
       'Advanced AI detection',
@@ -41,6 +43,7 @@ export const PLANS = {
     priceId: 'price_1Qq5TAFfiJfL6EMiBcQHGdUx',
     productId: 'prod_RjYaNSCSSf4pEb',
     monthly_characters: 50000,
+    monthly_words: 25000,
     features: [
       'Up to 50,000 words per month',
       'Enterprise AI detection',
@@ -56,6 +59,7 @@ export const PLANS = {
     priceId: 'price_1QqMstFfiJfL6EMinLoK8xcj',
     productId: 'prod_RjYbe5FxvDSN9K',
     monthly_characters: 10000000,
+    monthly_words: 5000000,
     features: [
       'Unlimited words',
       'Custom AI detection rules',

@@ -37,11 +37,19 @@ const Humanizer = () => {
   const handleHumanize = async () => {
     if (!text.trim() || !user) return;
 
-    // Check usage first
-    const { canProceed, error } = await useSubscriptionStore.getState().checkUsage(user.id, text.length);
+    // Calculate both metrics
+    const charCount = text.length;
+    const wordCount = text.split(/\s+/).filter(Boolean).length;
+    
+    // Check usage with both values
+    const { canProceed, error } = await useSubscriptionStore.getState().checkUsage(
+      user.id, 
+      charCount,
+      wordCount
+    );
     
     if (error || !canProceed) {
-      alert('Character limit exceeded for this month');
+      alert('Monthly limit exceeded for characters or words');
       return;
     }
 

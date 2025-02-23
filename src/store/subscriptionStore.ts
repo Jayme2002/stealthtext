@@ -15,7 +15,9 @@ interface Subscription {
 
 interface UsageMetrics {
   used_chars: number;
+  used_words: number;
   allocated_chars: number;
+  allocated_words: number;
 }
 
 interface SubscriptionState {
@@ -24,7 +26,7 @@ interface SubscriptionState {
   setSubscription: (subscription: Subscription | null) => void;
   fetchSubscription: () => Promise<void>;
   fetchUsage: (userId: string) => Promise<void>;
-  checkUsage: (userId: string, charsNeeded: number) => Promise<{ canProceed: boolean; error?: any }>;
+  checkUsage: (userId: string, charsNeeded: number, wordsNeeded: number) => Promise<{ canProceed: boolean; error?: any }>;
 }
 
 export const useSubscriptionStore = create<SubscriptionState, [['zustand/persist', SubscriptionState]]>(
@@ -66,32 +68,36 @@ export const useSubscriptionStore = create<SubscriptionState, [['zustand/persist
       },
       fetchUsage: async (userId) => {
         const { data, error } = await supabase
-          .rpc('get_usage_metrics', { user_uuid: userId })
-          .returns<UsageMetrics>()
+          .from('usage_metrics')
+          .select('used_chars, used_words, allocated_chars, allocated_words')
+          .eq('user_id', userId)
           .single();
 
         if (!error && data) {
-          const usageData = data as UsageMetrics;
-          const currentSubscription = get().subscription;
-          let allocated_chars = usageData.allocated_chars;
-          if (currentSubscription && currentSubscription.plan) {
-            const planKey = currentSubscription.plan.toLowerCase() as 'free' | 'premium' | 'premium+' | 'pro';
-            if (PLANS[planKey]) {
-              allocated_chars = PLANS[planKey].monthly_characters;
+          set({ 
+            usage: {
+              used_chars: data.used_chars,
+              used_words: data.used_words,
+              allocated_chars: data.allocated_chars,
+              allocated_words: data.allocated_words
             }
-          }
-          set({ usage: { used_chars: usageData.used_chars, allocated_chars } });
+          });
         }
       },
-      checkUsage: async (userId, charsNeeded) => {
+      checkUsage: async (userId, charsNeeded, wordsNeeded) => {
+        console.log('Checking usage for:', userId);
+        console.log('Chars needed:', charsNeeded);
+        console.log('Words needed:', wordsNeeded);
+
         const { data, error } = await supabase
           .rpc('check_and_update_usage', {
             user_uuid: userId,
-            chars_used: charsNeeded
+            chars_used: charsNeeded,
+            words_used: wordsNeeded
           })
-          // Add auth selector for proper RLS handling
-          .select('*')
           .single();
+
+        console.log('RPC Response:', { data, error });
         
         return { 
           canProceed: data ? Boolean(data) : false,

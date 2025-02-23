@@ -38,7 +38,7 @@ export async function humanizeText(text: string): Promise<string> {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": "Api-Key LpJeFybq.CipwgqkHM8zHNUZDcMAZ3Dd9CgmdHXaB"
+      "Authorization": import.meta.env.VITE_HUMANIZED_AI_API_KEY
     },
     body: JSON.stringify(payload)
   });
