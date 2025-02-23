@@ -81,126 +81,120 @@ const Humanizer = () => {
         </div>
 
         <div className="pt-16 min-h-screen bg-gray-50">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            {/* Input Section */}
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
-              <div className="p-6">
-                <div className="relative">
-                  <textarea
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
-                    className="w-full h-64 p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-gray-200"
-                    placeholder="Enter your text here..."
-                  />
-                  <button
-                    onClick={() => copyToClipboard(text)}
-                    className="absolute top-4 right-4 p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                    title="Copy to clipboard"
-                  >
-                    {showCopyTooltip ? <Check className="w-5 h-5 text-green-500" /> : <Copy className="w-5 h-5" />}
-                  </button>
-                </div>
-                
-                <div className="mt-4 flex items-center justify-between">
-                  <div className="text-sm text-gray-500">
-                    {text.length} characters | {text.split(/\s+/).filter(Boolean).length} words
-                  </div>
-                  <button
-                    onClick={handleHumanize}
-                    disabled={isHumanizing || !text.trim()}
-                    className="px-6 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                  >
-                    {isHumanizing ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        Humanizing...
-                      </>
-                    ) : (
-                      'Humanize'
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Output Section */}
-            {humanizedResult && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="grid grid-cols-2 gap-8">
+              {/* Input Box */}
               <div className="bg-white rounded-xl shadow-sm overflow-hidden">
                 <div className="p-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-xl font-semibold">Humanized Text</h2>
+                  <div className="relative">
+                    <textarea
+                      value={text}
+                      onChange={(e) => setText(e.target.value)}
+                      className="w-full h-[500px] p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-gray-200"
+                      placeholder="Enter your text here..."
+                    />
                     <button
-                      onClick={() => copyToClipboard(humanizedResult.text)}
-                      className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex items-center gap-2 text-sm text-gray-700"
+                      onClick={() => copyToClipboard(text)}
+                      className="absolute top-4 right-4 p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                      title="Copy to clipboard"
                     >
-                      {showCopyTooltip ? (
-                        <>
-                          <Check className="w-4 h-4 text-green-500" />
-                          <span>Copied!</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-4 h-4" />
-                          <span>Copy</span>
-                        </>
-                      )}
+                      {showCopyTooltip ? <Check className="w-5 h-5 text-green-500" /> : <Copy className="w-5 h-5" />}
                     </button>
                   </div>
-
-                  <div className="mb-6 p-6 bg-white border border-green-200 rounded-lg">
-                    <h3 className="text-center text-lg font-semibold mb-4">AI Detection Summary</h3>
-                    <div className="relative w-48 h-48 mx-auto">
-                      <svg className="w-full h-full transform -rotate-90">
-                        <circle
-                          cx="96"
-                          cy="96"
-                          r="88"
-                          fill="none"
-                          stroke="#e5e7eb"
-                          strokeWidth="12"
-                        />
-                        <circle
-                          cx="96"
-                          cy="96"
-                          r="88"
-                          fill="none"
-                          stroke="#22c55e"
-                          strokeWidth="12"
-                          strokeDasharray={`${(100 - humanizedResult.aiScore) * 5.53}, 553`}
-                        />
-                      </svg>
-                      <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <span className="text-4xl font-bold">{humanizedResult.aiScore}%</span>
-                        <span className="text-sm text-gray-500">AI Detected</span>
-                      </div>
+                  
+                  <div className="mt-4 flex items-center justify-between">
+                    <div className="text-sm text-gray-500">
+                      {text.length} characters | {text.split(/\s+/).filter(Boolean).length} words
                     </div>
-                  </div>
-
-                  <div className="relative">
-                    <div className="p-4 bg-gray-50 rounded-lg whitespace-pre-wrap">
-                      {humanizedResult.text}
-                    </div>
-                  </div>
-
-                  <div className="mt-6 flex justify-center">
                     <button
                       onClick={handleHumanize}
-                      disabled={isHumanizing}
+                      disabled={isHumanizing || !text.trim()}
                       className="px-6 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                     >
                       {isHumanizing ? (
                         <>
                           <Loader2 className="w-4 h-4 animate-spin" />
-                          Re-Humanizing...
+                          Humanizing...
                         </>
                       ) : (
-                        'Re-Humanize'
+                        'Humanize'
                       )}
                     </button>
                   </div>
                 </div>
               </div>
+
+              {/* Output Box */}
+              <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div className="p-6">
+                  <div className="relative">
+                    <textarea
+                      value={humanizedResult?.text || ''}
+                      readOnly
+                      className="w-full h-[500px] p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-gray-200"
+                      placeholder="Humanized text will appear here..."
+                    />
+                    {humanizedResult && (
+                      <button
+                        onClick={() => copyToClipboard(humanizedResult.text)}
+                        className="absolute top-4 right-4 p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                        title="Copy to clipboard"
+                      >
+                        {showCopyTooltip ? <Check className="w-5 h-5 text-green-500" /> : <Copy className="w-5 h-5" />}
+                      </button>
+                    )}
+                  </div>
+                  
+                  <div className="mt-4 flex items-center justify-between">
+                    <div className="text-sm text-gray-500">
+                      {humanizedResult?.text.length || 0} characters | {humanizedResult?.text.split(/\s+/).filter(Boolean).length || 0} words
+                    </div>
+                    {humanizedResult && (
+                      <button
+                        onClick={handleHumanize}
+                        disabled={isHumanizing}
+                        className="px-6 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Re-Humanize
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Commented out AI Detection Scale
+            {humanizedResult && (
+              <div className="mt-8 p-6 bg-white border border-green-200 rounded-lg">
+                <h3 className="text-center text-lg font-semibold mb-4">AI Detection Summary</h3>
+                <div className="relative w-48 h-48 mx-auto">
+                  <svg className="w-full h-full transform -rotate-90">
+                    <circle
+                      cx="96"
+                      cy="96"
+                      r="88"
+                      fill="none"
+                      stroke="#e5e7eb"
+                      strokeWidth="12"
+                    />
+                    <circle
+                      cx="96"
+                      cy="96"
+                      r="88"
+                      fill="none"
+                      stroke="#22c55e"
+                      strokeWidth="12"
+                      strokeDasharray={`${(100 - humanizedResult.aiScore) * 5.53}, 553`}
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <span className="text-4xl font-bold">{humanizedResult.aiScore}%</span>
+                    <span className="text-sm text-gray-500">AI Detected</span>
+                  </div>
+                </div>
+              </div>
             )}
+            */}
           </div>
         </div>
       </div>
