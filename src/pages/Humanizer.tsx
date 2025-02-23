@@ -59,6 +59,7 @@ const Humanizer = () => {
       const humanizedText = await humanizeText(text);
       const aiScore = await checkForAI(humanizedText);
       setHumanizedResult({ text: humanizedText, aiScore });
+      useSubscriptionStore.getState().fetchUsage(user.id);
     } catch (error) {
       console.error('Humanization failed:', error);
       alert('Humanization failed. Please try again.');

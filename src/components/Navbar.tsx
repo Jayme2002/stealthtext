@@ -4,6 +4,7 @@ import { Settings, LogOut } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useSubscriptionStore } from '../store/subscriptionStore';
 import { getPlanName } from '../utils/subscriptionPlanMapping';
+import { PLANS } from '../lib/stripe';
 
 export const Navbar: React.FC<{ pageTitle?: string }> = ({ pageTitle }) => {
   const user = useAuthStore((state) => state.user);
@@ -48,7 +49,7 @@ export const Navbar: React.FC<{ pageTitle?: string }> = ({ pageTitle }) => {
       }`}>
         {subscription ? getPlanName(subscription.plan) : 'Free Plan'}
         <span className="ml-2 text-xs font-normal">
-          ({usage?.used_chars || 0}/{usage?.allocated_chars || 1000} chars)
+          ({usage?.used_words || 0}/{usage?.allocated_words || PLANS.free.monthly_words} words)
         </span>
       </span>
       {isFreePlan && (
