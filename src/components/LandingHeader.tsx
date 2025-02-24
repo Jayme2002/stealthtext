@@ -9,7 +9,11 @@ export const LandingHeader = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-            <Brain className="w-8 h-8 text-black" />
+            <img 
+              src="src/icons/noun-ninja.svg" 
+              className="w-8 h-8"
+              alt="StealthText Logo"
+            />
             <span className="font-bold text-xl">StealthText</span>
           </Link>
 

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { Brain } from 'lucide-react';
 
 export const ResetPassword = () => {
   const [email, setEmail] = useState('');
@@ -35,7 +34,11 @@ export const ResetPassword = () => {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
           <Link to="/" className="flex items-center gap-2">
-            <Brain className="w-8 h-8" />
+            <img 
+              src="src/icons/noun-ninja.svg" 
+              className="w-8 h-8"
+              alt="StealthText Logo"
+            />
             <span className="font-bold text-2xl">StealthText</span>
           </Link>
         </div>
