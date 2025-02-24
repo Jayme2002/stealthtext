@@ -99,6 +99,10 @@ export const useSubscriptionStore = create<SubscriptionState, [['zustand/persist
 
         console.log('RPC Response:', { data, error });
         
+        if (!error) {
+          await get().fetchUsage(userId);
+        }
+        
         return { 
           canProceed: data ? Boolean(data) : false,
           error
