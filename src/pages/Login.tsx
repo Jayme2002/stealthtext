@@ -32,7 +32,7 @@ export const Login = () => {
         <div className="flex justify-center">
           <Link to="/" className="flex items-center gap-2">
             <img 
-              src="src/icons/noun-ninja.svg" 
+              src="/icons/noun-ninja.svg" 
               className="w-8 h-8"
               alt="StealthText Logo"
             />

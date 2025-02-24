@@ -36,7 +36,7 @@ export const Sidebar = () => {
         <div className="px-3 py-4">
           <div className="flex items-center px-3 py-2.5">
             <img 
-              src="src/icons/noun-ninja.svg" 
+              src="/icons/noun-ninja.svg"
               className="w-8 h-8 flex-shrink-0 transition-all"
               alt="StealthText Logo"
             />

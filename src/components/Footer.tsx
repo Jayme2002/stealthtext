@@ -9,7 +9,7 @@ const Footer: React.FC = () => (
       <div className="footer-section">
         <div className="footer-logo">
           <img 
-            src="src/icons/noun-ninja.svg" 
+            src="icons/noun-ninja.svg"
             className="w-6 h-6"
             alt="StealthText Logo"
           />
