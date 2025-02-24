@@ -24,13 +24,13 @@ For example, if you find that the text is highly repetitive, unusually consisten
 
 Text for Analysis:`;
 
+export type HumanizerIntensity = 'LOW' | 'MEDIUM' | 'HIGH';
 
-
-export async function humanizeText(text: string): Promise<string> {
+export async function humanizeText(text: string, intensity: HumanizerIntensity = 'HIGH'): Promise<string> {
   const url = "https://www.the-ghost-ai-api.com/transformations/humanize-v2/";
   const payload = {
     text,
-    humanizerIntensity: "HIGH",
+    humanizerIntensity: intensity,
     purpose: "GENERAL",
     literacyLevel: "COLLEGE"
   };

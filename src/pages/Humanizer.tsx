@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Sidebar, useSidebar } from '../components/Sidebar';
-import { Copy, Loader2, Check, AlertCircle, Sparkles, FileText, Bot, User } from 'lucide-react';
-import { humanizeText, checkForAI } from '../lib/openai';
+import { Copy, Loader2, Check, AlertCircle, Sparkles, FileText, Bot, User, Sliders } from 'lucide-react';
+import { humanizeText, checkForAI, HumanizerIntensity } from '../lib/openai';
 import { useSubscriptionStore } from '../store/subscriptionStore';
 import { Navbar } from '../components/Navbar';
 import { useAuthStore } from '../store/authStore';
@@ -34,6 +34,7 @@ const Humanizer = () => {
   const [humanizedResult, setHumanizedResult] = useState<HumanizedResult | null>(null);
   const [showCopyTooltip, setShowCopyTooltip] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [intensity, setIntensity] = useState<HumanizerIntensity>('MEDIUM');
 
   const handleHumanize = async () => {
     if (!text.trim() || !user) return;
@@ -55,7 +56,7 @@ const Humanizer = () => {
 
     setIsHumanizing(true);
     try {
-      const humanizedText = await humanizeText(text);
+      const humanizedText = await humanizeText(text, intensity);
       const aiScore = await checkForAI(humanizedText);
       setHumanizedResult({ text: humanizedText, aiScore });
       useSubscriptionStore.getState().fetchUsage(user.id);
@@ -108,6 +109,36 @@ const Humanizer = () => {
                 </div>
               </div>
             )}
+
+            {/* Intensity Selector */}
+            <div className="mb-6 bg-white rounded-xl shadow-sm p-6">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center text-gray-700">
+                  <Sliders className="w-5 h-5 mr-2" />
+                  <span className="font-medium">Humanization Intensity</span>
+                </div>
+                <div className="flex gap-2">
+                  {(['LOW', 'MEDIUM', 'HIGH'] as const).map((level) => (
+                    <button
+                      key={level}
+                      onClick={() => setIntensity(level)}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                        intensity === level
+                          ? 'bg-black text-white'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      {level}
+                    </button>
+                  ))}
+                </div>
+                <div className="ml-4 text-sm text-gray-500">
+                  {intensity === 'LOW' && 'Subtle changes while maintaining original style'}
+                  {intensity === 'MEDIUM' && 'Balanced humanization with moderate adjustments'}
+                  {intensity === 'HIGH' && 'Maximum humanization with significant rewrites'}
+                </div>
+              </div>
+            </div>
 
             <div className="grid grid-cols-2 gap-8">
               {/* Input Box */}
