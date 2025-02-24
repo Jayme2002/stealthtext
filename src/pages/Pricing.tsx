@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Check } from 'lucide-react';
+import { Check, Crown, Star, Zap, User } from 'lucide-react';
 import { PLANS, createCheckoutSession } from '../lib/stripe';
 import { useAuthStore } from '../store/authStore';
 import { useSubscriptionStore } from '../store/subscriptionStore';
@@ -25,7 +25,6 @@ export const Pricing = () => {
     
     try {
       await createCheckoutSession(priceId);
-      // Refresh both subscription and usage data
       const store = useSubscriptionStore.getState();
       await store.fetchSubscription();
       await store.fetchUsage(user.id);
@@ -43,6 +42,25 @@ export const Pricing = () => {
 
   const currentPlanKey = getCurrentPlanKey();
 
+  const getPlanIcon = (key: string) => {
+    switch (key) {
+      case 'free': return <User className="w-6 h-6 text-gray-400" />;
+      case 'premium': return <Crown className="w-6 h-6 text-purple-500" />;
+      case 'premium+': return <Star className="w-6 h-6 text-yellow-500" />;
+      case 'pro': return <Zap className="w-6 h-6 text-blue-500" />;
+      default: return null;
+    }
+  };
+
+  const getPlanGradient = (key: string) => {
+    switch (key) {
+      case 'premium': return 'bg-gradient-to-br from-purple-500 to-pink-500';
+      case 'premium+': return 'bg-gradient-to-br from-yellow-400 to-orange-500';
+      case 'pro': return 'bg-gradient-to-br from-blue-500 to-indigo-500';
+      default: return 'bg-gray-100';
+    }
+  };
+
   return (
     <div className="min-h-screen flex bg-gray-50">
       <Sidebar />
@@ -59,10 +77,10 @@ export const Pricing = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-                Simple, transparent pricing
+                Choose your word limit
               </h1>
               <p className="mt-4 text-xl text-gray-600">
-                Choose the plan that's right for you
+                Scale your content humanization with our flexible plans
               </p>
             </div>
 
@@ -77,6 +95,8 @@ export const Pricing = () => {
             <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {Object.entries(PLANS).map(([key, plan]) => {
                 const isCurrentPlan = currentPlanKey === key;
+                const planIcon = getPlanIcon(key);
+                const gradientClass = getPlanGradient(key);
                 
                 return (
                   <div
@@ -94,16 +114,17 @@ export const Pricing = () => {
                     )}
 
                     <div className="p-8 flex-1">
-                      <h2 className="text-lg font-semibold text-gray-900">{plan.name}</h2>
+                      <div className="flex items-center gap-3 mb-4">
+                        {planIcon}
+                        <h2 className="text-lg font-semibold text-gray-900">{plan.name}</h2>
+                      </div>
                       
-                      <p className="mt-4 flex items-baseline">
-                        <span className="text-4xl font-bold tracking-tight text-gray-900">
+                      <div className={`mt-4 p-4 rounded-lg ${gradientClass} ${key === 'free' ? 'text-gray-900' : 'text-white'}`}>
+                        <div className="text-4xl font-bold tracking-tight">
                           ${plan.price}
-                        </span>
-                        <span className="ml-1 text-sm font-semibold text-gray-500">
-                          /month
-                        </span>
-                      </p>
+                        </div>
+                        <div className="text-sm opacity-90 mt-1">per month</div>
+                      </div>
 
                       <ul className="mt-8 space-y-4">
                         {plan.features.map((feature, index) => (
@@ -125,7 +146,7 @@ export const Pricing = () => {
                           onClick={() => plan.priceId && handleSubscribe(plan.priceId)}
                           disabled={isLoading === plan.priceId || !plan.priceId}
                           className={`block w-full rounded-lg px-6 py-3 text-center text-sm font-semibold ${
-                            key === 'FREE'
+                            key === 'free'
                               ? 'bg-gray-100 text-gray-900 hover:bg-gray-200'
                               : 'bg-black text-white hover:bg-gray-800'
                           } disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200`}

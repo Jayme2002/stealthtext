@@ -10,27 +10,27 @@ const stripePromise = loadStripe(process.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 export const PLANS = {
   free: {
-    name: 'StealthText Free',
+    name: '500 Words',
     price: 0,
     priceId: undefined,
     monthly_characters: 1000,
     monthly_words: 500,
     features: [
-      'Up to 1,000 words per month',
+      '500 words per month',
       'Basic AI detection',
       'Standard support',
       'Single user'
     ]
   },
   premium: {
-    name: 'StealthText Premium',
+    name: '5,000 Words',
     price: 10,
     priceId: "price_1Qq5NqFfiJfL6EMieNtdAzFk",
     productId: 'prod_RjYUNTzdWRIChO',
     monthly_characters: 10000,
     monthly_words: 5000,
     features: [
-      'Up to 10,000 words per month',
+      '5,000 words per month',
       'Advanced AI detection',
       'Priority support',
       'Team collaboration',
@@ -38,14 +38,14 @@ export const PLANS = {
     ]
   },
   "premium+": {
-    name: 'StealthText Premium+',
+    name: '25,000 Words',
     price: 20,
     priceId: 'price_1Qq5TAFfiJfL6EMiBcQHGdUx',
     productId: 'prod_RjYaNSCSSf4pEb',
     monthly_characters: 50000,
     monthly_words: 25000,
     features: [
-      'Up to 50,000 words per month',
+      '25,000 words per month',
       'Enterprise AI detection',
       '24/7 priority support',
       'Advanced team features',
@@ -54,9 +54,8 @@ export const PLANS = {
     ]
   },
   pro: {
-    name: 'StealthText Pro',
+    name: 'Unlimited Words',
     price: 30,
-   
     priceId: 'price_1QvrMxFfiJfL6EMiBTkaRSsP',
     productId: 'prod_RpWPW2K2oaVwqA',
     monthly_characters: 10000000,

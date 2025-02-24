@@ -79,6 +79,23 @@ const Humanizer = () => {
     return 'text-red-500';
   };
 
+  const getIntensityGradient = (level: HumanizerIntensity) => {
+    switch (level) {
+      case 'LOW':
+        return intensity === 'LOW' 
+          ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white'
+          : 'bg-gray-100 text-gray-700 hover:bg-gray-200';
+      case 'MEDIUM':
+        return intensity === 'MEDIUM'
+          ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
+          : 'bg-gray-100 text-gray-700 hover:bg-gray-200';
+      case 'HIGH':
+        return intensity === 'HIGH'
+          ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white'
+          : 'bg-gray-100 text-gray-700 hover:bg-gray-200';
+    }
+  };
+
   return (
     <div className="min-h-screen flex bg-gray-50">
       <Sidebar />
@@ -96,8 +113,15 @@ const Humanizer = () => {
           <div className="max-w-[1656px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
             {/* Header Section */}
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900">AI Text Humanizer</h1>
-              <p className="mt-2 text-gray-600">Transform AI-generated content into natural, human-like text.</p>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg">
+                  <Sparkles className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-3xl font-bold text-gray-900">AI Text Humanizer</h1>
+                  <p className="mt-1 text-gray-600">Transform AI-generated content into natural, human-like text.</p>
+                </div>
+              </div>
             </div>
 
             {error && (
@@ -111,7 +135,7 @@ const Humanizer = () => {
             )}
 
             {/* Intensity Selector */}
-            <div className="mb-6 bg-white rounded-xl shadow-sm p-6">
+            <div className="mb-6 bg-white rounded-xl shadow-sm p-6 border border-gray-200">
               <div className="flex items-center gap-4">
                 <div className="flex items-center text-gray-700">
                   <Sliders className="w-5 h-5 mr-2" />
@@ -122,11 +146,7 @@ const Humanizer = () => {
                     <button
                       key={level}
                       onClick={() => setIntensity(level)}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                        intensity === level
-                          ? 'bg-black text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 shadow-sm ${getIntensityGradient(level)}`}
                     >
                       {level}
                     </button>
@@ -142,12 +162,14 @@ const Humanizer = () => {
 
             <div className="grid grid-cols-2 gap-8">
               {/* Input Box */}
-              <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+              <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center text-gray-700">
-                      <Bot className="w-5 h-5 mr-2" />
-                      <span className="font-medium">AI Text</span>
+                      <div className="p-1.5 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-lg">
+                        <Bot className="w-4 h-4 text-white" />
+                      </div>
+                      <span className="font-medium ml-2">AI Text</span>
                     </div>
                     <div className="text-sm text-gray-500">
                       {text.length} characters | {text.split(/\s+/).filter(Boolean).length} words
@@ -157,7 +179,7 @@ const Humanizer = () => {
                     <textarea
                       value={text}
                       onChange={(e) => setText(e.target.value)}
-                      className="w-full h-[500px] p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-gray-200 bg-white"
+                      className="w-full h-[500px] p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white"
                       placeholder="Paste your AI-generated text here..."
                     />
                     <button
@@ -179,7 +201,7 @@ const Humanizer = () => {
                     <button
                       onClick={handleHumanize}
                       disabled={isHumanizing || !text.trim()}
-                      className="px-6 py-2.5 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 transition-colors"
+                      className="px-6 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 transition-all duration-300 shadow-sm"
                     >
                       {isHumanizing ? (
                         <>
@@ -198,12 +220,14 @@ const Humanizer = () => {
               </div>
 
               {/* Output Box */}
-              <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+              <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center text-gray-700">
-                      <User className="w-5 h-5 mr-2" />
-                      <span className="font-medium">Humanized Text</span>
+                      <div className="p-1.5 bg-gradient-to-br from-green-500 to-emerald-400 rounded-lg">
+                        <User className="w-4 h-4 text-white" />
+                      </div>
+                      <span className="font-medium ml-2">Humanized Text</span>
                     </div>
                     {humanizedResult && (
                       <div className="flex items-center">
@@ -218,7 +242,7 @@ const Humanizer = () => {
                     <textarea
                       value={humanizedResult?.text || ''}
                       readOnly
-                      className="w-full h-[500px] p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-gray-200 bg-gray-50"
+                      className="w-full h-[500px] p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-50"
                       placeholder="Humanized text will appear here..."
                     />
                     {humanizedResult && (
@@ -245,7 +269,7 @@ const Humanizer = () => {
                       <button
                         onClick={handleHumanize}
                         disabled={isHumanizing}
-                        className="px-6 py-2.5 text-sm font-medium text-black bg-gray-100 rounded-lg hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="px-6 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-green-500 to-emerald-400 rounded-lg hover:from-green-600 hover:to-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-sm"
                       >
                         Re-Humanize
                       </button>
