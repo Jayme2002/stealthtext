@@ -1,7 +1,7 @@
 import React from 'react';
 import './Footer.css';
 import { Link } from 'react-router-dom';
-import { MessageSquare, Book, Shield, Sparkles } from 'lucide-react';
+import { MessageSquare, Book, Shield, Sparkles, HelpCircle } from 'lucide-react';
 
 const Footer: React.FC = () => (
   <footer className="footer">
@@ -33,6 +33,12 @@ const Footer: React.FC = () => (
             <Link to="/pricing">
               <Shield className="w-4 h-4" />
               Pricing
+            </Link>
+          </li>
+          <li>
+            <Link to="/faq">
+              <HelpCircle className="w-4 h-4" />
+              FAQ
             </Link>
           </li>
           <li>

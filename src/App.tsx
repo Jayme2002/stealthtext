@@ -9,6 +9,10 @@ import { Signup } from './pages/Signup';
 import { ResetPassword } from './pages/ResetPassword';
 import { Pricing } from './pages/Pricing';
 import { Account } from './pages/Account';
+import { FAQ } from './pages/FAQ';
+import { Contact } from './pages/Contact';
+import { Terms } from './pages/Terms';
+import { Privacy } from './pages/Privacy';
 import { useSubscriptionStore } from './store/subscriptionStore';
 import Humanizer from './pages/Humanizer';
 import Footer from './components/Footer';
@@ -54,7 +58,6 @@ function App() {
     }
   }, [user, fetchSubscription, setSubscription]);
 
-  // NEW: Subscribe to realtime updates for the user's subscription
   useEffect(() => {
     if (!user) return;
     const subscriptionChannel = supabase.channel('subscriptions')
@@ -101,31 +104,17 @@ function App() {
       <div className="min-h-screen flex flex-col">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route
-            path="/login"
-            element={!user ? <Login /> : <Navigate to="/dashboard" />}
-          />
-          <Route
-            path="/signup"
-            element={!user ? <Signup /> : <Navigate to="/dashboard" />}
-          />
-          <Route
-            path="/reset-password"
-            element={!user ? <ResetPassword /> : <Navigate to="/dashboard" />}
-          />
-          <Route
-            path="/dashboard"
-            element={user ? <Dashboard /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/humanizer"
-            element={user ? <Humanizer /> : <Navigate to="/login" />}
-          />
+          <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
+          <Route path="/signup" element={!user ? <Signup /> : <Navigate to="/dashboard" />} />
+          <Route path="/reset-password" element={!user ? <ResetPassword /> : <Navigate to="/dashboard" />} />
+          <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
+          <Route path="/humanizer" element={user ? <Humanizer /> : <Navigate to="/login" />} />
           <Route path="/pricing" element={<Pricing />} />
-          <Route
-            path="/account"
-            element={user ? <Account /> : <Navigate to="/login" />}
-          />
+          <Route path="/account" element={user ? <Account /> : <Navigate to="/login" />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
         </Routes>
         <Footer />
       </div>

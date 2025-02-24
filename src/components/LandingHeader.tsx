@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Brain } from 'lucide-react';
+import { HelpCircle } from 'lucide-react';
 
 export const LandingHeader = () => {
   return (
@@ -31,18 +31,18 @@ export const LandingHeader = () => {
             >
               Pricing
             </Link>
-            <a
-              href="#faq"
+            <Link
+              to="/faq"
               className="text-sm font-medium text-gray-700 hover:text-black transition-colors"
             >
               FAQ
-            </a>
-            <a
-              href="#contact"
+            </Link>
+            <Link
+              to="/contact"
               className="text-sm font-medium text-gray-700 hover:text-black transition-colors"
             >
               Contact
-            </a>
+            </Link>
           </nav>
 
           {/* Auth Buttons */}
