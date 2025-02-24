@@ -192,7 +192,7 @@ const handler = async (req: Request) => {
 function mapPriceToPlan(priceId: string) {
   return priceId === "price_1Qq5NqFfiJfL6EMieNtdAzFk" ? "premium" 
        : priceId === "price_1Qq5TAFfiJfL6EMiBcQHGdUx" ? "premium+" 
-       : priceId === "price_1QqMstFfiJfL6EMinLoK8xcj" ? "pro"
+       : priceId === "price_1QvrMxFfiJfL6EMiBTkaRSsP" ? "pro"
        : "free";
 }
 

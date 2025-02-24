@@ -56,8 +56,9 @@ export const PLANS = {
   pro: {
     name: 'StealthText Pro',
     price: 30,
-    priceId: 'price_1QqMstFfiJfL6EMinLoK8xcj',
-    productId: 'prod_RjYbe5FxvDSN9K',
+   
+    priceId: 'price_1QvrMxFfiJfL6EMiBTkaRSsP',
+    productId: 'prod_RpWPW2K2oaVwqA',
     monthly_characters: 10000000,
     monthly_words: 5000000,
     features: [
