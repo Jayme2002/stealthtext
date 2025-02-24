@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Sidebar, useSidebar } from '../components/Sidebar';
-import { Copy, Loader2, Check } from 'lucide-react';
+import { Copy, Loader2, Check, AlertCircle, Sparkles, FileText, Bot, User } from 'lucide-react';
 import { humanizeText, checkForAI } from '../lib/openai';
 import { useSubscriptionStore } from '../store/subscriptionStore';
 import { Navbar } from '../components/Navbar';
-import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/authStore';
 
 interface HumanizedResult {
@@ -34,9 +33,11 @@ const Humanizer = () => {
   const [isHumanizing, setIsHumanizing] = useState(false);
   const [humanizedResult, setHumanizedResult] = useState<HumanizedResult | null>(null);
   const [showCopyTooltip, setShowCopyTooltip] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleHumanize = async () => {
     if (!text.trim() || !user) return;
+    setError(null);
 
     const charCount = text.length;
     const wordCount = text.split(/\s+/).filter(Boolean).length;
@@ -48,7 +49,7 @@ const Humanizer = () => {
     );
     
     if (error || !canProceed) {
-      alert('Monthly limit exceeded for characters or words');
+      setError('Monthly limit exceeded. Please upgrade your plan to continue.');
       return;
     }
 
@@ -58,9 +59,8 @@ const Humanizer = () => {
       const aiScore = await checkForAI(humanizedText);
       setHumanizedResult({ text: humanizedText, aiScore });
       useSubscriptionStore.getState().fetchUsage(user.id);
-    } catch (error) {
-      console.error('Humanization failed:', error);
-      alert('Humanization failed. Please try again.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to humanize text. Please try again.');
     } finally {
       setIsHumanizing(false);
     }
@@ -70,6 +70,12 @@ const Humanizer = () => {
     navigator.clipboard.writeText(textToCopy);
     setShowCopyTooltip(true);
     setTimeout(() => setShowCopyTooltip(false), 2000);
+  };
+
+  const getScoreColor = (score: number) => {
+    if (score <= 20) return 'text-green-500';
+    if (score <= 45) return 'text-yellow-500';
+    return 'text-red-500';
   };
 
   return (
@@ -87,16 +93,41 @@ const Humanizer = () => {
 
         <div className="pt-16 min-h-screen" style={{ marginLeft: width }}>
           <div className="max-w-[1656px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {/* Header Section */}
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold text-gray-900">AI Text Humanizer</h1>
+              <p className="mt-2 text-gray-600">Transform AI-generated content into natural, human-like text.</p>
+            </div>
+
+            {error && (
+              <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-start">
+                <AlertCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-red-800">Error</h3>
+                  <p className="text-sm text-red-700 mt-1">{error}</p>
+                </div>
+              </div>
+            )}
+
             <div className="grid grid-cols-2 gap-8">
               {/* Input Box */}
               <div className="bg-white rounded-xl shadow-sm overflow-hidden">
                 <div className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center text-gray-700">
+                      <Bot className="w-5 h-5 mr-2" />
+                      <span className="font-medium">AI Text</span>
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {text.length} characters | {text.split(/\s+/).filter(Boolean).length} words
+                    </div>
+                  </div>
                   <div className="relative">
                     <textarea
                       value={text}
                       onChange={(e) => setText(e.target.value)}
-                      className="w-full h-[575px] p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-gray-200"
-                      placeholder="Enter your text here..."
+                      className="w-full h-[500px] p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-gray-200 bg-white"
+                      placeholder="Paste your AI-generated text here..."
                     />
                     <button
                       onClick={() => copyToClipboard(text)}
@@ -108,13 +139,16 @@ const Humanizer = () => {
                   </div>
                   
                   <div className="mt-4 flex items-center justify-between">
-                    <div className="text-sm text-gray-500">
-                      {text.length} characters | {text.split(/\s+/).filter(Boolean).length} words
-                    </div>
+                    <button
+                      onClick={() => setText('')}
+                      className="text-sm text-gray-600 hover:text-gray-900"
+                    >
+                      Clear text
+                    </button>
                     <button
                       onClick={handleHumanize}
                       disabled={isHumanizing || !text.trim()}
-                      className="px-6 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                      className="px-6 py-2.5 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 transition-colors"
                     >
                       {isHumanizing ? (
                         <>
@@ -122,7 +156,10 @@ const Humanizer = () => {
                           Humanizing...
                         </>
                       ) : (
-                        'Humanize'
+                        <>
+                          <Sparkles className="w-4 h-4" />
+                          Humanize
+                        </>
                       )}
                     </button>
                   </div>
@@ -132,11 +169,25 @@ const Humanizer = () => {
               {/* Output Box */}
               <div className="bg-white rounded-xl shadow-sm overflow-hidden">
                 <div className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center text-gray-700">
+                      <User className="w-5 h-5 mr-2" />
+                      <span className="font-medium">Humanized Text</span>
+                    </div>
+                    {humanizedResult && (
+                      <div className="flex items-center">
+                        <FileText className="w-4 h-4 mr-1.5 text-gray-500" />
+                        <span className="text-sm text-gray-500">
+                          {humanizedResult.text.length} chars | {humanizedResult.text.split(/\s+/).filter(Boolean).length} words
+                        </span>
+                      </div>
+                    )}
+                  </div>
                   <div className="relative">
                     <textarea
                       value={humanizedResult?.text || ''}
                       readOnly
-                      className="w-full h-[575px] p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-gray-200"
+                      className="w-full h-[500px] p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-gray-200 bg-gray-50"
                       placeholder="Humanized text will appear here..."
                     />
                     {humanizedResult && (
@@ -151,14 +202,19 @@ const Humanizer = () => {
                   </div>
                   
                   <div className="mt-4 flex items-center justify-between">
-                    <div className="text-sm text-gray-500">
-                      {humanizedResult?.text.length || 0} characters | {humanizedResult?.text.split(/\s+/).filter(Boolean).length || 0} words
-                    </div>
+                    {humanizedResult && (
+                      <div className="flex items-center">
+                        <span className="text-sm text-gray-600 mr-2">AI Detection Score:</span>
+                        <span className={`text-sm font-medium ${getScoreColor(humanizedResult.aiScore)}`}>
+                          {humanizedResult.aiScore}%
+                        </span>
+                      </div>
+                    )}
                     {humanizedResult && (
                       <button
                         onClick={handleHumanize}
                         disabled={isHumanizing}
-                        className="px-6 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-6 py-2.5 text-sm font-medium text-black bg-gray-100 rounded-lg hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                       >
                         Re-Humanize
                       </button>
