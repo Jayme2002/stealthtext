@@ -59,9 +59,9 @@ export const Navbar: React.FC<{ pageTitle?: string }> = ({ pageTitle }) => {
         >
           Upgrade
           <span className="inline-block w-3.5 h-3.5">
-            <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
-              <path d="M13 3L16.293 6.293L9.293 13.293L10.707 14.707L17.707 7.707L21 11V3H13Z" fill="currentColor"/>
-              <path d="M19 19H5V5H12L10 3H5C3.897 3 3 3.897 3 5V19C3 20.103 3.897 21 5 21H19C20.103 21 21 20.103 21 19V14L19 12V19Z" fill="currentColor"/>
+            <svg fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-full h-full">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13 3L16.293 6.293L9.293 13.293L10.707 14.707L17.707 7.707L21 11V3H13Z"/>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 19H5V5H12L10 3H5C3.897 3 3 3.897 3 5V19C3 20.103 3.897 21 5 21H19C20.103 21 21 20.103 21 19V14L19 12V19Z"/>
             </svg>
           </span>
         </Link>
