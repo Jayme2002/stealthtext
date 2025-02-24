@@ -1,9 +1,37 @@
 import React from 'react';
 import { Sidebar, useSidebar } from '../components/Sidebar';
 import { Navbar } from '../components/Navbar';
+import { Brain, Zap, Shield, Clock } from 'lucide-react';
+import { useSubscriptionStore } from '../store/subscriptionStore';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
   const { width } = useSidebar();
+  const subscription = useSubscriptionStore((state) => state.subscription);
+  const usage = useSubscriptionStore((state) => state.usage);
+
+  const features = [
+    {
+      icon: <Brain className="w-6 h-6 text-purple-500" />,
+      title: "Advanced AI Detection",
+      description: "Our AI detection system analyzes text patterns to ensure your content appears natural and human-written."
+    },
+    {
+      icon: <Zap className="w-6 h-6 text-yellow-500" />,
+      title: "Fast Processing",
+      description: "Get results in seconds with our optimized processing engine."
+    },
+    {
+      icon: <Shield className="w-6 h-6 text-blue-500" />,
+      title: "Content Protection",
+      description: "Your content is processed securely and never stored or shared."
+    },
+    {
+      icon: <Clock className="w-6 h-6 text-green-500" />,
+      title: "24/7 Availability",
+      description: "Access our humanizer service anytime, anywhere."
+    }
+  ];
 
   return (
     <div className="min-h-screen flex bg-gray-50">
@@ -20,56 +48,78 @@ const Dashboard = () => {
 
         <div className="pt-16" style={{ marginLeft: width }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+            {/* Welcome Section */}
+            <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
               <div className="p-8">
-                <h2 className="text-2xl font-semibold mb-6">How to Use</h2>
-                <div className="prose max-w-none">
-                  <p className="text-gray-600 mb-6">
-                    Quick guide to using our AI Humanizer
-                  </p>
+                <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                  Welcome to StealthText
+                </h1>
+                <p className="text-gray-600 mb-6">
+                  Transform your AI-generated content into natural, human-like text that bypasses AI detection.
+                </p>
+                <Link
+                  to="/humanizer"
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                >
+                  Start Humanizing
+                </Link>
+              </div>
+            </div>
 
-                  <div className="space-y-6">
-                    <div>
-                      <h3 className="text-lg font-medium text-gray-900">1. Generate AI Content</h3>
-                      <p className="mt-2 text-gray-600">
-                        Begin by generating AI content with a tool of your choice. For better results, use
-                        premium models like GPT-4 or Claude 3.5 Opus/Sonnet.
-                      </p>
+            {/* Usage Stats */}
+            <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+              <div className="p-8">
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Usage Statistics</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <p className="text-sm text-gray-500">Words Used</p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {usage?.used_words || 0} / {usage?.allocated_words || 0}
+                    </p>
+                    <div className="mt-2 bg-gray-200 rounded-full h-2">
+                      <div 
+                        className="bg-black rounded-full h-2" 
+                        style={{ 
+                          width: `${Math.min(((usage?.used_words || 0) / (usage?.allocated_words || 1)) * 100, 100)}%` 
+                        }}
+                      />
                     </div>
-
-                    <div>
-                      <h3 className="text-lg font-medium text-gray-900">2. Clean the Text (optional)</h3>
-                      <p className="mt-2 text-gray-600">
-                        Remove Markdown or HTML formatting, special characters, numbers, or other
-                        unwanted content.
-                      </p>
-                    </div>
-
-                    <div>
-                      <h3 className="text-lg font-medium text-gray-900">3. Select the Model</h3>
-                      <p className="mt-2 text-gray-600">
-                        Choose between Ninja or Ghost. Ghost generally provides better overall text
-                        quality and detection scores.
-                      </p>
-                    </div>
-
-                    <div>
-                      <h3 className="text-lg font-medium text-gray-900">4. Choose the Level of Humanization</h3>
-                      <p className="mt-2 text-gray-600">
-                        Select a level from 1 to 10. Start with level 7 and adjust as needed.
-                      </p>
-                    </div>
-
-                    <div>
-                      <h3 className="text-lg font-medium text-gray-900">5. Humanize the Text</h3>
-                      <p className="mt-2 text-gray-600">
-                        Click Humanize to process the text. Review the humanized content and
-                        predicted AI detection score.
-                      </p>
-                    </div>
+                  </div>
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <p className="text-sm text-gray-500">Current Plan</p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {subscription?.plan?.charAt(0).toUpperCase() + subscription?.plan?.slice(1) || 'Free'}
+                    </p>
+                    {subscription?.plan === 'free' && (
+                      <Link
+                        to="/pricing"
+                        className="text-sm text-black hover:text-gray-800 font-medium mt-2 inline-block"
+                      >
+                        Upgrade Now →
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Features Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {features.map((feature, index) => (
+                <div key={index} className="bg-white rounded-xl shadow-sm overflow-hidden">
+                  <div className="p-6">
+                    <div className="flex items-center mb-4">
+                      {feature.icon}
+                      <h3 className="ml-3 text-lg font-medium text-gray-900">
+                        {feature.title}
+                      </h3>
+                    </div>
+                    <p className="text-gray-600">
+                      {feature.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
