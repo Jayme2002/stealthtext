@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Settings, LogOut } from 'lucide-react';
+import { Settings, LogOut, Crown, Zap, Star, User } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useSubscriptionStore } from '../store/subscriptionStore';
 import { getPlanName } from '../utils/subscriptionPlanMapping';
@@ -26,6 +26,26 @@ export const Navbar: React.FC<{ pageTitle?: string }> = ({ pageTitle }) => {
   }, []);
 
   const isFreePlan = !subscription || subscription.plan === 'free';
+  const PlanIcon = isFreePlan ? User : 
+                  subscription?.plan === 'premium' ? Crown :
+                  subscription?.plan === 'premium+' ? Star : Zap;
+
+  const getPlanColor = () => {
+    if (isFreePlan) return 'bg-gray-100 text-gray-700';
+    switch (subscription?.plan) {
+      case 'premium': return 'bg-gradient-to-r from-purple-500 to-pink-500 text-white';
+      case 'premium+': return 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white';
+      case 'pro': return 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white';
+      default: return 'bg-gray-100 text-gray-700';
+    }
+  };
+
+  const getUsagePercentage = () => {
+    if (!usage) return 0;
+    return Math.round((usage.used_words / usage.allocated_words) * 100);
+  };
+
+  const usagePercentage = getUsagePercentage();
 
   const navControls = !user ? (
     <div className="flex items-center gap-3">
@@ -43,29 +63,40 @@ export const Navbar: React.FC<{ pageTitle?: string }> = ({ pageTitle }) => {
       </Link>
     </div>
   ) : (
-    <div className="flex items-center gap-3">
-      <span className={`px-2.5 py-1 text-xs font-medium rounded-full ${
-        isFreePlan ? 'bg-gray-100 text-gray-700' : 'bg-black text-white'
-      }`}>
-        {subscription ? getPlanName(subscription.plan) : 'Free Plan'}
-        <span className="ml-2 text-xs font-normal">
-          ({usage?.used_words || 0}/{usage?.allocated_words || PLANS.free.monthly_words} words)
+    <div className="flex items-center gap-4">
+      <div className={`flex items-center gap-2 px-3 py-2 rounded-lg ${getPlanColor()} shadow-sm`}>
+        <PlanIcon className="w-4 h-4" />
+        <span className="text-sm font-medium">
+          {subscription ? getPlanName(subscription.plan) : 'Free'}
         </span>
-      </span>
+        {!isFreePlan && (
+          <>
+            <div className="h-4 w-px bg-white/30 mx-2" />
+            <div className="flex items-center gap-1.5">
+              <div className="text-xs font-medium">
+                {usage?.used_words || 0}/{usage?.allocated_words || PLANS.free.monthly_words}
+              </div>
+              <div className="w-16 h-1.5 bg-black/10 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-white/90 rounded-full transition-all duration-300"
+                  style={{ width: `${usagePercentage}%` }}
+                />
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+
       {isFreePlan && (
         <Link
           to="/pricing"
-          className="px-3 py-1 text-xs font-medium text-gray-700 hover:text-gray-900 flex items-center gap-1"
+          className="px-3 py-1.5 text-xs font-medium text-white bg-black rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-1.5"
         >
+          <Crown className="w-3.5 h-3.5" />
           Upgrade
-          <span className="inline-block w-3.5 h-3.5">
-            <svg fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-full h-full">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13 3L16.293 6.293L9.293 13.293L10.707 14.707L17.707 7.707L21 11V3H13Z"/>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 19H5V5H12L10 3H5C3.897 3 3 3.897 3 5V19C3 20.103 3.897 21 5 21H19C20.103 21 21 20.103 21 19V14L19 12V19Z"/>
-            </svg>
-          </span>
         </Link>
       )}
+
       <div className="relative" ref={dropdownRef}>
         <button
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -83,6 +114,14 @@ export const Navbar: React.FC<{ pageTitle?: string }> = ({ pageTitle }) => {
                 {user.email}
               </p>
             </div>
+
+            <Link
+              to="/account"
+              className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+            >
+              <Settings className="w-4 h-4 mr-2" />
+              Account Settings
+            </Link>
 
             <button
               onClick={() => {
