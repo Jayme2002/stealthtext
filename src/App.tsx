@@ -46,7 +46,9 @@ function App() {
 
   useEffect(() => {
     if (user) {
-      fetchSubscription();
+      const store = useSubscriptionStore.getState();
+      store.fetchSubscription();
+      store.fetchUsage(user.id);
     } else {
       setSubscription(null);
     }
@@ -56,9 +58,15 @@ function App() {
   useEffect(() => {
     if (!user) return;
     const subscriptionChannel = supabase.channel('subscriptions')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'subscriptions', filter: `user_id=eq.${user.id}` }, payload => {
-        console.log('Detected subscription change:', payload);
-        fetchSubscription();
+      .on('postgres_changes', { 
+        event: '*', 
+        schema: 'public', 
+        table: 'subscriptions', 
+        filter: `user_id=eq.${user.id}` 
+      }, async () => {
+        console.log('Detected subscription change');
+        await fetchSubscription();
+        await useSubscriptionStore.getState().fetchUsage(user.id);
       })
       .subscribe();
 

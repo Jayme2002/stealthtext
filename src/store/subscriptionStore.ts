@@ -29,7 +29,7 @@ interface SubscriptionState {
   checkUsage: (userId: string, charsNeeded: number, wordsNeeded: number) => Promise<{ canProceed: boolean; error?: any }>;
 }
 
-export const useSubscriptionStore = create<SubscriptionState, [['zustand/persist', SubscriptionState]]>(
+export const useSubscriptionStore = create<SubscriptionState>()(
   persist(
     (set, get) => ({
       subscription: null,
@@ -109,6 +109,12 @@ export const useSubscriptionStore = create<SubscriptionState, [['zustand/persist
         };
       }
     }),
-    { name: 'subscription-store' }
+    {
+      name: 'subscription-store',
+      partialize: (state) => ({
+        subscription: state.subscription,
+        usage: state.usage
+      })
+    }
   )
 );

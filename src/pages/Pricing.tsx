@@ -24,16 +24,14 @@ export const Pricing = () => {
     setError(null);
     
     try {
-      console.log('Starting subscription process for plan:', priceId);
       await createCheckoutSession(priceId);
-      // Refresh subscription data after successful checkout
-      useSubscriptionStore.getState().fetchSubscription();
+      // Refresh both subscription and usage data
+      const store = useSubscriptionStore.getState();
+      await store.fetchSubscription();
+      await store.fetchUsage(user.id);
     } catch (error) {
-      console.error('Subscription Error:', {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        error
-      });
-      setError(error instanceof Error ? error.message : 'Failed to start subscription process. Please try again.');
+      console.error('Subscription Error:', error);
+      setError(error instanceof Error ? error.message : 'Failed to start subscription process');
     } finally {
       setIsLoading(null);
     }
