@@ -1,7 +1,7 @@
 import React from 'react';
 import { Sidebar, useSidebar } from '../components/Sidebar';
 import { Navbar } from '../components/Navbar';
-import { Brain, Zap, Shield, Clock } from 'lucide-react';
+import { Brain, Zap, Shield, Clock, Sparkles, Crown, Star, User } from 'lucide-react';
 import { useSubscriptionStore } from '../store/subscriptionStore';
 import { Link } from 'react-router-dom';
 
@@ -9,6 +9,38 @@ const Dashboard = () => {
   const { width } = useSidebar();
   const subscription = useSubscriptionStore((state) => state.subscription);
   const usage = useSubscriptionStore((state) => state.usage);
+
+  const getPlanGradient = () => {
+    if (!subscription || subscription.plan === 'free') {
+      return 'bg-gray-100 text-gray-900';
+    }
+    switch (subscription.plan) {
+      case 'premium':
+        return 'bg-gradient-to-r from-purple-500 to-pink-500 text-white';
+      case 'premium+':
+        return 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white';
+      case 'pro':
+        return 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white';
+      default:
+        return 'bg-gray-100 text-gray-900';
+    }
+  };
+
+  const getPlanIcon = () => {
+    if (!subscription || subscription.plan === 'free') {
+      return <User className="w-5 h-5 text-gray-500" />;
+    }
+    switch (subscription.plan) {
+      case 'premium':
+        return <Crown className="w-5 h-5 text-white" />;
+      case 'premium+':
+        return <Star className="w-5 h-5 text-white" />;
+      case 'pro':
+        return <Zap className="w-5 h-5 text-white" />;
+      default:
+        return <User className="w-5 h-5 text-gray-500" />;
+    }
+  };
 
   const features = [
     {
@@ -59,8 +91,9 @@ const Dashboard = () => {
                 </p>
                 <Link
                   to="/humanizer"
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 shadow-sm transition-all duration-300"
                 >
+                  <Sparkles className="w-4 h-4 mr-2" />
                   Start Humanizing
                 </Link>
               </div>
@@ -78,24 +111,28 @@ const Dashboard = () => {
                     </p>
                     <div className="mt-2 bg-gray-200 rounded-full h-2">
                       <div 
-                        className="bg-black rounded-full h-2" 
+                        className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full h-2 transition-all duration-300" 
                         style={{ 
                           width: `${Math.min(((usage?.used_words || 0) / (usage?.allocated_words || 1)) * 100, 100)}%` 
                         }}
                       />
                     </div>
                   </div>
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="text-sm text-gray-500">Current Plan</p>
-                    <p className="text-2xl font-bold text-gray-900">
+                  <div className={`rounded-lg p-4 ${getPlanGradient()}`}>
+                    <div className="flex items-center gap-2">
+                      {getPlanIcon()}
+                      <p className="text-sm font-medium">Current Plan</p>
+                    </div>
+                    <p className="text-2xl font-bold mt-1">
                       {subscription?.plan?.charAt(0).toUpperCase() + subscription?.plan?.slice(1) || 'Free'}
                     </p>
                     {subscription?.plan === 'free' && (
                       <Link
                         to="/pricing"
-                        className="text-sm text-black hover:text-gray-800 font-medium mt-2 inline-block"
+                        className="text-sm bg-black text-white px-3 py-1 rounded-lg mt-2 inline-flex items-center gap-1.5 hover:bg-gray-800 transition-colors"
                       >
-                        Upgrade Now →
+                        <Crown className="w-3.5 h-3.5" />
+                        Upgrade Now
                       </Link>
                     )}
                   </div>

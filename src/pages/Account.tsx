@@ -1,10 +1,12 @@
 import React from 'react';
 import { Sidebar, useSidebar } from '../components/Sidebar';
-import { Brain, CreditCard, Loader2 } from 'lucide-react';
+import { CreditCard, Loader2, Crown, Star, Zap, User, Clock, ArrowRight } from 'lucide-react';
 import { useSubscriptionStore } from '../store/subscriptionStore';
 import { getPlanName } from '../utils/subscriptionPlanMapping';
 import { Navbar } from '../components/Navbar';
 import { supabase } from '../lib/supabase';
+import { PLANS } from '../lib/stripe';
+import { Link } from 'react-router-dom';
 
 export const Account = () => {
   const subscription = useSubscriptionStore((state) => state.subscription);
@@ -52,8 +54,41 @@ export const Account = () => {
     }
   };
 
+  const getPlanIcon = () => {
+    if (!subscription || subscription.plan === 'free') {
+      return <User className="w-6 h-6 text-gray-400" />;
+    }
+    switch (subscription.plan) {
+      case 'premium':
+        return <Crown className="w-6 h-6 text-purple-500" />;
+      case 'premium+':
+        return <Star className="w-6 h-6 text-yellow-500" />;
+      case 'pro':
+        return <Zap className="w-6 h-6 text-blue-500" />;
+      default:
+        return <User className="w-6 h-6 text-gray-400" />;
+    }
+  };
+
+  const getPlanGradient = () => {
+    if (!subscription || subscription.plan === 'free') {
+      return 'bg-gray-100';
+    }
+    switch (subscription.plan) {
+      case 'premium':
+        return 'bg-gradient-to-r from-purple-500 to-pink-500';
+      case 'premium+':
+        return 'bg-gradient-to-r from-yellow-400 to-orange-500';
+      case 'pro':
+        return 'bg-gradient-to-r from-blue-500 to-indigo-500';
+      default:
+        return 'bg-gray-100';
+    }
+  };
+
   const currentPlan = subscription ? getPlanName(subscription.plan) : 'Free';
   const hasActiveSubscription = subscription?.status === 'active' && subscription.plan !== 'free' && !subscription?.cancel_at;
+  const planDetails = PLANS[subscription?.plan || 'free'];
 
   return (
     <div className="min-h-screen flex bg-gray-50">
@@ -70,45 +105,53 @@ export const Account = () => {
 
         <div className="pt-16" style={{ marginLeft: width }}>
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-              <div className="p-6">
-                <h2 className="text-xl font-semibold mb-6">Subscription Details</h2>
-                
-                {error && (
-                  <div className="mb-4 p-4 bg-red-50 border border-red-200 text-red-600 rounded-lg text-sm">
-                    {error}
-                  </div>
-                )}
-                
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                    <div className="flex items-center">
-                      <CreditCard className="w-5 h-5 text-gray-500" />
-                      <div className="ml-3">
-                        <p className="text-sm font-medium text-gray-900">Current Plan</p>
-                        <p className="text-sm text-gray-500">{currentPlan}</p>
+            <div className="mb-8">
+              <h1 className="text-2xl font-bold text-gray-900">Account Settings</h1>
+              <p className="mt-1 text-gray-600">Manage your subscription and account preferences</p>
+            </div>
+
+            {error && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded-lg text-sm">
+                {error}
+              </div>
+            )}
+
+            <div className="space-y-6">
+              {/* Current Plan Card */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="p-6">
+                  <h2 className="text-lg font-semibold text-gray-900 mb-6">Current Plan</h2>
+                  
+                  <div className={`p-6 rounded-lg ${getPlanGradient()} ${subscription?.plan === 'free' ? 'text-gray-900' : 'text-white'}`}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        {getPlanIcon()}
+                        <div>
+                          <h3 className="text-lg font-semibold">{currentPlan}</h3>
+                          <p className="text-sm opacity-90">
+                            {planDetails.monthly_words.toLocaleString()} words per month
+                          </p>
+                        </div>
                       </div>
+                      {hasActiveSubscription ? (
+                        <div className="px-3 py-1 rounded-full bg-white/20 text-sm font-medium">
+                          Active
+                        </div>
+                      ) : subscription?.cancel_at && (
+                        <div className="px-3 py-1 rounded-full bg-black/10 text-sm font-medium">
+                          Cancels {new Date(subscription.cancel_at).toLocaleDateString()}
+                        </div>
+                      )}
                     </div>
-                    {hasActiveSubscription && (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                        Active
-                      </span>
-                    )}
                   </div>
 
-                  {subscription?.current_period_end && (
-                    <div className="text-sm text-gray-500">
-                      {subscription?.cancel_at ? "Subscription ending: " : "Next billing date: "}
-                      {new Date(subscription.current_period_end).toLocaleDateString()}
-                    </div>
-                  )}
-
-                  <div className="pt-4">
+                  {/* Subscription Management */}
+                  <div className="mt-6 pt-6 border-t border-gray-200">
                     {hasActiveSubscription ? (
                       <button
                         onClick={handleManageSubscription}
                         disabled={isLoading}
-                        className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                       >
                         {isLoading ? (
                           <>
@@ -116,20 +159,39 @@ export const Account = () => {
                             Opening Portal...
                           </>
                         ) : (
-                          'Manage Subscription'
+                          <>
+                            <CreditCard className="w-4 h-4 mr-2" />
+                            Manage Subscription
+                          </>
                         )}
                       </button>
                     ) : (
-                      <a
-                        href="/pricing"
-                        className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800"
+                      <Link
+                        to="/pricing"
+                        className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800 transition-colors"
                       >
+                        <ArrowRight className="w-4 h-4 mr-2" />
                         Upgrade Plan
-                      </a>
+                      </Link>
                     )}
                   </div>
                 </div>
               </div>
+
+              {/* Billing History */}
+              {hasActiveSubscription && (
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                  <div className="p-6">
+                    <h2 className="text-lg font-semibold text-gray-900 mb-4">Billing History</h2>
+                    <div className="text-sm text-gray-600">
+                      <Clock className="w-4 h-4 inline-block mr-1.5 text-gray-400" />
+                      Next billing date: {subscription.current_period_end && 
+                        new Date(subscription.current_period_end).toLocaleDateString()
+                      }
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
