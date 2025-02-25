@@ -34,7 +34,7 @@ const Humanizer = () => {
   const [humanizedResult, setHumanizedResult] = useState<HumanizedResult | null>(null);
   const [showCopyTooltip, setShowCopyTooltip] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [intensity, setIntensity] = useState<HumanizerIntensity>('MEDIUM');
+  const [intensity, setIntensity] = useState<HumanizerIntensity>('HIGH');
 
   const handleHumanize = async () => {
     if (!text.trim() || !user) return;
