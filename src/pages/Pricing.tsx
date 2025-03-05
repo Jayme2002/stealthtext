@@ -117,12 +117,24 @@ export const Pricing = () => {
                   </div>
 
                   <ul className="mt-8 space-y-4">
-                    {plan.features.map((feature, index) => (
-                      <li key={index} className="flex items-start">
-                        <Check className="h-5 w-5 text-green-500 shrink-0" />
-                        <span className="ml-3 text-sm text-gray-700">{feature}</span>
-                      </li>
-                    ))}
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-green-500 shrink-0" />
+                      <span className="ml-3 text-sm text-gray-700">
+                        {key === 'free' ? '250 words per month' : 
+                         key === 'premium' ? '10,000 words per month' : 
+                         key === 'premium+' ? '25,000 words per month' : 
+                         '50,000 words per month'}
+                      </span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-green-500 shrink-0" />
+                      <span className="ml-3 text-sm text-gray-700">
+                        {key === 'free' ? 'Up to 250 words per request' : 
+                         key === 'premium' ? 'Up to 500 words per request' : 
+                         key === 'premium+' ? 'Up to 1,000 words per request' : 
+                         'Up to 2,000 words per request'}
+                      </span>
+                    </li>
                   </ul>
                 </div>
 

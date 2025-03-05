@@ -10,31 +10,28 @@ const stripePromise = loadStripe(process.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 export const PLANS = {
   free: {
-    name: '500 Words',
+    name: '250 Words',
     price: 0,
     priceId: undefined,
-    monthly_characters: 1000,
-    monthly_words: 500,
+    monthly_characters: 500,
+    monthly_words: 250,
+    max_request_words: 250,
     features: [
-      '500 words per month',
-      'Basic AI detection',
-      'Standard support',
-      'Single user'
+      '250 words per month',
+      'Up to 250 words per request'
     ]
   },
   premium: {
-    name: '5,000 Words',
+    name: '10,000 Words',
     price: 10,
     priceId: "price_1Qq5NqFfiJfL6EMieNtdAzFk",
     productId: 'prod_RjYUNTzdWRIChO',
-    monthly_characters: 10000,
-    monthly_words: 5000,
+    monthly_characters: 20000,
+    monthly_words: 10000,
+    max_request_words: 500,
     features: [
-      '5,000 words per month',
-      'Advanced AI detection',
-      'Priority support',
-      'Team collaboration',
-      'API access'
+      '10,000 words per month',
+      'Up to 500 words per request'
     ]
   },
   "premium+": {
@@ -44,30 +41,23 @@ export const PLANS = {
     productId: 'prod_RjYaNSCSSf4pEb',
     monthly_characters: 50000,
     monthly_words: 25000,
+    max_request_words: 1000,
     features: [
       '25,000 words per month',
-      'Enterprise AI detection',
-      '24/7 priority support',
-      'Advanced team features',
-      'Custom API integration',
-      'Analytics dashboard'
+      'Up to 1,000 words per request'
     ]
   },
   pro: {
-    name: 'Unlimited Words',
+    name: '50,000 Words',
     price: 30,
     priceId: 'price_1QvrMxFfiJfL6EMiBTkaRSsP',
     productId: 'prod_RpWPW2K2oaVwqA',
-    monthly_characters: 10000000,
-    monthly_words: 5000000,
+    monthly_characters: 100000,
+    monthly_words: 50000,
+    max_request_words: 2000,
     features: [
-      'Unlimited words',
-      'Custom AI detection rules',
-      'Dedicated support',
-      'Enterprise features',
-      'White-label options',
-      'Advanced analytics',
-      'Custom integrations'
+      '50,000 words per month',
+      'Up to 2,000 words per request'
     ]
   }
 };
