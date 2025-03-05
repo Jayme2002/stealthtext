@@ -17,7 +17,7 @@ const Humanizer = () => {
   const fetchSubscription = useSubscriptionStore((state) => state.fetchSubscription);
   const subscription = useSubscriptionStore((state) => state.subscription);
   const user = useAuthStore((state) => state.user);
-  const { width } = useSidebar();
+  const { width, isMobile } = useSidebar();
   
   useEffect(() => {
     fetchSubscription();
@@ -101,16 +101,21 @@ const Humanizer = () => {
       <Sidebar />
       
       <div className="flex-1">
-        <div className="fixed top-0 right-0 left-0 bg-white border-b border-gray-200 z-10">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-end h-16 items-center w-full">
-              <Navbar />
+        {!isMobile && (
+          <div className="fixed top-0 right-0 left-0 bg-white border-b border-gray-200 z-10">
+            <div className="w-full px-4 sm:px-6 lg:px-8">
+              <div className="flex justify-end h-16 items-center w-full">
+                <Navbar />
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
-        <div className="pt-16 min-h-screen" style={{ marginLeft: width }}>
-          <div className="max-w-[1656px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6">
+        <div 
+          className={`${isMobile ? 'pt-4' : 'pt-16'} min-h-screen`} 
+          style={{ marginLeft: isMobile ? '0' : width }}
+        >
+          <div className="max-w-[1656px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6 pb-20">
             {/* Header Section - More compact */}
             <div className="mb-4 md:mb-6">
               <div className="flex items-center gap-3">
@@ -118,7 +123,7 @@ const Humanizer = () => {
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900">AI Text Humanizer</h1>
+                  <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900">AI Text Humanizer</h1>
                   <p className="mt-0.5 text-sm md:text-base text-gray-600">Transform AI-generated content into natural, human-like text.</p>
                 </div>
               </div>

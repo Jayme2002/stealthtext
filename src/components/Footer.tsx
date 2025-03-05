@@ -5,10 +5,10 @@ import { MessageSquare, Book, Shield, Sparkles, HelpCircle } from 'lucide-react'
 import { useSidebar } from './Sidebar';
 
 const Footer: React.FC = () => {
-  const { width } = useSidebar();
+  const { width, isMobile } = useSidebar();
   
   return (
-    <footer className="footer" style={{ marginLeft: width }}>
+    <footer className="footer" style={{ marginLeft: isMobile ? '0' : width }}>
       <div className="container">
         <div className="footer-section">
           <div className="footer-logo">
@@ -102,6 +102,9 @@ const Footer: React.FC = () => {
           </ul>
         </div>
       </div>
+      
+      {/* Add extra padding at the bottom on mobile to account for the navigation bar */}
+      {isMobile && <div className="h-16"></div>}
     </footer>
   );
 };

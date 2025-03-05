@@ -6,7 +6,7 @@ import { useSubscriptionStore } from '../store/subscriptionStore';
 import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
-  const { width } = useSidebar();
+  const { width, isMobile } = useSidebar();
   const subscription = useSubscriptionStore((state) => state.subscription);
   const usage = useSubscriptionStore((state) => state.usage);
 
@@ -70,20 +70,25 @@ const Dashboard = () => {
       <Sidebar />
 
       <div className="flex-1">
-        <div className="fixed top-0 right-0 left-0 bg-white border-b border-gray-200 z-10">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-end h-16 items-center w-full">
-              <Navbar />
+        {!isMobile && (
+          <div className="fixed top-0 right-0 left-0 bg-white border-b border-gray-200 z-10">
+            <div className="w-full px-4 sm:px-6 lg:px-8">
+              <div className="flex justify-end h-16 items-center w-full">
+                <Navbar />
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
-        <div className="pt-16" style={{ marginLeft: width }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div 
+          className={`${isMobile ? 'pt-4' : 'pt-16'}`} 
+          style={{ marginLeft: isMobile ? '0' : width }}
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8 pb-20 w-full overflow-x-hidden">
             {/* Welcome Section */}
             <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
-              <div className="p-8">
-                <h1 className="text-2xl font-bold text-gray-900 mb-2">
+              <div className="p-4 md:p-6">
+                <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
                   Welcome to StealthText
                 </h1>
                 <p className="text-gray-600 mb-6">
@@ -101,7 +106,7 @@ const Dashboard = () => {
 
             {/* Usage Stats */}
             <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
-              <div className="p-8">
+              <div className="p-4 md:p-6">
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">Usage Statistics</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="bg-gray-50 rounded-lg p-4">
@@ -141,17 +146,17 @@ const Dashboard = () => {
             </div>
 
             {/* Features Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
               {features.map((feature, index) => (
                 <div key={index} className="bg-white rounded-xl shadow-sm overflow-hidden">
-                  <div className="p-6">
-                    <div className="flex items-center mb-4">
+                  <div className="p-4 md:p-5">
+                    <div className="flex items-center mb-3">
                       {feature.icon}
-                      <h3 className="ml-3 text-lg font-medium text-gray-900">
+                      <h3 className="ml-3 text-base font-medium text-gray-900">
                         {feature.title}
                       </h3>
                     </div>
-                    <p className="text-gray-600">
+                    <p className="text-sm text-gray-600">
                       {feature.description}
                     </p>
                   </div>

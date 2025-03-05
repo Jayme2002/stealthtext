@@ -16,6 +16,7 @@ import { Privacy } from './pages/Privacy';
 import { useSubscriptionStore } from './store/subscriptionStore';
 import Humanizer from './pages/Humanizer';
 import Footer from './components/Footer';
+import MobileNav from './components/MobileNav';
 
 function App() {
   const setUser = useAuthStore((state) => state.setUser);
@@ -117,6 +118,7 @@ function App() {
           <Route path="/privacy" element={<Privacy />} />
         </Routes>
         <Footer />
+        <MobileNav />
       </div>
     </BrowserRouter>
   );

@@ -79,6 +79,7 @@
   line-height: 1.5;
 }
 
+/* Tablet view */
 @media (max-width: 1024px) {
   .footer .container {
     flex-wrap: wrap;
@@ -91,7 +92,12 @@
   }
 }
 
+/* Mobile view */
 @media (max-width: 768px) {
+  .footer {
+    padding: 30px 0 0 0; /* Remove bottom padding as we add it with a spacer div */
+  }
+  
   .footer .container {
     flex-direction: column;
     padding: 0 16px;
@@ -99,12 +105,16 @@
   
   .footer-section {
     margin-right: 0;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
     text-align: left;
     flex: 1 0 100%;
   }
   
   .footer-section:last-child {
     margin-bottom: 0;
+  }
+  
+  .footer-description {
+    max-width: 100%;
   }
 }

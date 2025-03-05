@@ -63,7 +63,7 @@ export const Pricing = () => {
   };
 
   const PricingContent = () => (
-    <div className="pt-24 pb-12">
+    <div className="pt-16 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
@@ -75,14 +75,14 @@ export const Pricing = () => {
         </div>
 
         {error && (
-          <div className="mt-8 max-w-md mx-auto">
+          <div className="mt-6 max-w-md mx-auto">
             <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
               {error}
             </div>
           </div>
         )}
 
-        <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 justify-center">
           {Object.entries(PLANS).map(([key, plan]) => {
             const isCurrentPlan = currentPlanKey === key;
             const planIcon = getPlanIcon(key);
@@ -177,7 +177,9 @@ export const Pricing = () => {
             </div>
           </div>
         </div>
-        <PricingContent />
+        <main style={{ marginLeft: "250px" }}>
+          <PricingContent />
+        </main>
       </div>
     </div>
   );
