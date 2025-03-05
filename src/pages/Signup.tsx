@@ -32,7 +32,7 @@ export const Signup = () => {
         <div className="flex justify-center">
           <Link to="/" className="flex items-center gap-2">
             <img 
-              src="src/icons/noun-ninja.svg" 
+              src="/icons/noun-ninja.svg" 
               className="w-8 h-8"
               alt="StealthText Logo"
             />
@@ -61,15 +61,15 @@ export const Signup = () => {
             <ul className="space-y-2 text-sm">
               <li className="flex items-center gap-2">
                 <div className="w-1 h-1 bg-white rounded-full"></div>
-                500 words per month, free forever
-              </li>
-              <li className="flex items-center gap-2">
-                <div className="w-1 h-1 bg-white rounded-full"></div>
-                Advanced AI detection system
+                250 words per month, free forever
               </li>
               <li className="flex items-center gap-2">
                 <div className="w-1 h-1 bg-white rounded-full"></div>
                 Instant content humanization
+              </li>
+              <li className="flex items-center gap-2">
+                <div className="w-1 h-1 bg-white rounded-full"></div>
+                Easy-to-use interface
               </li>
             </ul>
           </div>
