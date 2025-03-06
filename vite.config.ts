@@ -6,28 +6,37 @@ export default defineConfig(({ mode }) => {
   // Load env file based on `mode` in the current working directory.
   const env = loadEnv(mode, process.cwd(), '');
 
+  // Separate client-side env vars (safe to expose) from server-side ones (must be kept secret)
+  const clientEnvVars = {
+    VITE_SUPABASE_URL: env.VITE_SUPABASE_URL,
+    VITE_SUPABASE_ANON_KEY: env.VITE_SUPABASE_ANON_KEY,
+    VITE_STRIPE_PUBLISHABLE_KEY: env.VITE_STRIPE_PUBLISHABLE_KEY,
+    VITE_APP_URL: env.VITE_APP_URL
+  };
+
+  // Add all env vars to process.env for server middleware
+  Object.keys(env).forEach(key => {
+    process.env[key] = env[key];
+  });
+
   return {
     plugins: [
       react(),
       {
-        name: 'api-handler',
+        name: 'api-handler-dev-only',
         configureServer(server) {
-          // Add environment variables to process.env
-          Object.keys(env).forEach(key => {
-            process.env[key] = env[key];
-          });
-
           server.middlewares.use(async (req, res, next) => {
             if (req.url?.startsWith('/api/')) {
               try {
                 const pathName = req.url.replace('/api/', '');
+                // In development, we'll use the local api files
                 const module = await import(`./api/${pathName}.ts`);
                 const handler = module.default;
                 
                 // Create a Request object from the incoming request
                 const request = new Request(`http://${req.headers.host}${req.url}`, {
                   method: req.method,
-                  headers: req.headers as HeadersInit,
+                  headers: req.headers as Record<string, string>,
                   body: req.method !== 'GET' && req.method !== 'HEAD' ? 
                     await new Promise((resolve) => {
                       let body = '';
@@ -41,7 +50,7 @@ export default defineConfig(({ mode }) => {
                 
                 // Send the response
                 res.statusCode = response.status;
-                response.headers.forEach((value, key) => {
+                response.headers.forEach((value: string, key: string) => {
                   res.setHeader(key, value);
                 });
                 
@@ -64,13 +73,11 @@ export default defineConfig(({ mode }) => {
       },
     ],
     define: {
-      'process.env.VITE_SUPABASE_URL': JSON.stringify(env.VITE_SUPABASE_URL),
-      'process.env.VITE_SUPABASE_ANON_KEY': JSON.stringify(env.VITE_SUPABASE_ANON_KEY),
-      'process.env.VITE_STRIPE_PUBLISHABLE_KEY': JSON.stringify(env.VITE_STRIPE_PUBLISHABLE_KEY),
-      'process.env.VITE_STRIPE_SECRET_KEY': JSON.stringify(env.VITE_STRIPE_SECRET_KEY),
-      'process.env.VITE_APP_URL': JSON.stringify(env.VITE_APP_URL),
-      'process.env.VITE_OPENAI_API_KEY': JSON.stringify(env.VITE_OPENAI_API_KEY),
-      'process.env.HUMANIZED_AI_API_KEY': JSON.stringify(env.HUMANIZED_AI_API_KEY),
+      // Only expose client-safe environment variables
+      'process.env.VITE_SUPABASE_URL': JSON.stringify(clientEnvVars.VITE_SUPABASE_URL),
+      'process.env.VITE_SUPABASE_ANON_KEY': JSON.stringify(clientEnvVars.VITE_SUPABASE_ANON_KEY),
+      'process.env.VITE_STRIPE_PUBLISHABLE_KEY': JSON.stringify(clientEnvVars.VITE_STRIPE_PUBLISHABLE_KEY),
+      'process.env.VITE_APP_URL': JSON.stringify(clientEnvVars.VITE_APP_URL),
     },
   };
 });

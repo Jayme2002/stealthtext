@@ -25,17 +25,46 @@ export const Account = () => {
         setIsLoading(false);
         return;
       }
+      
       const token = session.access_token;
-      const response = await fetch('/api/create-portal-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-        },
-        credentials: 'include'
-      });
+      
+      // Simple retry logic
+      let retryAttempts = 0;
+      const maxRetries = 2;
+      let response;
+      
+      while (retryAttempts <= maxRetries) {
+        try {
+          response = await fetch('/api/create-portal-session', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+            },
+            credentials: 'include'
+          });
+          break; // If successful, exit the loop
+        } catch (error) {
+          retryAttempts++;
+          if (retryAttempts > maxRetries) throw error;
+          console.log(`Retrying portal session request, attempt ${retryAttempts}...`);
+          await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retrying
+        }
+      }
 
-      const data = await response.json();
+      if (!response) {
+        throw new Error('Failed to make API request after retries');
+      }
+
+      // Better error handling
+      let data;
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        throw new Error(`Unexpected response format: ${text}`);
+      }
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to open subscription portal');

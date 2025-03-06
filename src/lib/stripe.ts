@@ -8,12 +8,11 @@ if (!process.env.VITE_STRIPE_PUBLISHABLE_KEY) {
 
 const stripePromise = loadStripe(process.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
+// Only define plan features in client code, not sensitive pricing details
 export const PLANS = {
   free: {
     name: '250 Words',
     price: 0,
-    priceId: undefined,
-    monthly_characters: 500,
     monthly_words: 250,
     max_request_words: 250,
     features: [
@@ -24,9 +23,7 @@ export const PLANS = {
   premium: {
     name: '10,000 Words',
     price: 10,
-    priceId: "price_1Qq5NqFfiJfL6EMieNtdAzFk",
-    productId: 'prod_RjYUNTzdWRIChO',
-    monthly_characters: 20000,
+    priceId: "price_1Qq5NqFfiJfL6EMieNtdAzFk", // This is public and needed for checkout
     monthly_words: 10000,
     max_request_words: 500,
     features: [
@@ -37,9 +34,7 @@ export const PLANS = {
   "premium+": {
     name: '25,000 Words',
     price: 20,
-    priceId: 'price_1Qq5TAFfiJfL6EMiBcQHGdUx',
-    productId: 'prod_RjYaNSCSSf4pEb',
-    monthly_characters: 50000,
+    priceId: 'price_1Qq5TAFfiJfL6EMiBcQHGdUx', // This is public and needed for checkout
     monthly_words: 25000,
     max_request_words: 1000,
     features: [
@@ -50,9 +45,7 @@ export const PLANS = {
   pro: {
     name: '50,000 Words',
     price: 30,
-    priceId: 'price_1QvrMxFfiJfL6EMiBTkaRSsP',
-    productId: 'prod_RpWPW2K2oaVwqA',
-    monthly_characters: 100000,
+    priceId: 'price_1QvrMxFfiJfL6EMiBTkaRSsP', // This is public and needed for checkout
     monthly_words: 50000,
     max_request_words: 2000,
     features: [
@@ -98,18 +91,47 @@ export async function createCheckoutSession(priceId: string) {
     };
 
     console.log('Client: Making API request with body:', requestBody);
+
+    // Simple retry logic
+    let retryAttempts = 0;
+    const maxRetries = 2;
+    let response;
     
-    const response = await fetch('/api/create-checkout-session', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestBody),
-    });
+    while (retryAttempts <= maxRetries) {
+      try {
+        response = await fetch('/api/create-checkout-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requestBody),
+        });
+        break; // If successful, exit the loop
+      } catch (error) {
+        retryAttempts++;
+        if (retryAttempts > maxRetries) throw error;
+        console.log(`Retrying API request, attempt ${retryAttempts}...`);
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retrying
+      }
+    }
+
+    if (!response) {
+      throw new Error('Failed to make API request after retries');
+    }
 
     console.log('🔵 [4] API response status:', response.status);
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('🔴 [5] API Error:', errorText);
-      throw new Error(`API Error: ${response.statusText}`);
+      let errorMessage = 'API Error';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.error || errorMessage;
+      } catch {
+        try {
+          errorMessage = await response.text() || errorMessage;
+        } catch {
+          errorMessage = `API Error: ${response.statusText}`;
+        }
+      }
+      console.error('🔴 [5] API Error:', errorMessage);
+      throw new Error(errorMessage);
     }
 
     const responseData = await response.json();
