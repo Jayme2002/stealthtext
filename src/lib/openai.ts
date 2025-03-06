@@ -1,9 +1,25 @@
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true
-});
+// Use the non-VITE prefixed environment variable with fallback
+const openaiApiKey = typeof window !== 'undefined' 
+  ? import.meta.env.OPENAI_API_KEY || import.meta.env.VITE_OPENAI_API_KEY 
+  : process.env.OPENAI_API_KEY || process.env.VITE_OPENAI_API_KEY;
+
+// Create a dummy client for development or if key is missing
+const openai = openaiApiKey 
+  ? new OpenAI({
+      apiKey: openaiApiKey,
+      dangerouslyAllowBrowser: true
+    })
+  : {
+      chat: { 
+        completions: { 
+          create: async () => ({ 
+            choices: [{ message: { content: "0" } }] 
+          }) 
+        } 
+      }
+    };
 
 const AI_DETECTION_PROMPT = `Assume the role of an expert in linguistic forensics and AI content detection. I will provide you with a piece of text, and your task is to analyze it for indicators of AI generation. In your analysis, consider factors such as:
 
@@ -28,25 +44,45 @@ export type HumanizerIntensity = 'LOW' | 'MEDIUM' | 'HIGH';
 
 export async function humanizeText(text: string, intensity: HumanizerIntensity = 'HIGH'): Promise<string> {
   const url = "https://www.the-ghost-ai-api.com/transformations/humanize-v2/";
+  
+  // Use the non-VITE prefixed environment variable with fallback
+  const apiKey = typeof window !== 'undefined'
+    ? import.meta.env.HUMANIZED_AI_API_KEY || import.meta.env.VITE_HUMANIZED_AI_API_KEY
+    : process.env.HUMANIZED_AI_API_KEY || process.env.VITE_HUMANIZED_AI_API_KEY;
+  
+  if (!apiKey) {
+    console.warn('Humanized AI API key is missing, returning original text');
+    return text;
+  }
+  
   const payload = {
     text,
     humanizerIntensity: intensity,
     purpose: "GENERAL",
     literacyLevel: "COLLEGE"
   };
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": import.meta.env.VITE_HUMANIZED_AI_API_KEY
-    },
-    body: JSON.stringify(payload)
-  });
-  const json = await response.json();
-  if (!response.ok) {
-    throw new Error(json.error || "Failed to humanize text");
+  
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": apiKey
+      },
+      body: JSON.stringify(payload)
+    });
+    
+    const json = await response.json();
+    if (!response.ok) {
+      console.error('Humanization API error:', json.error);
+      return text; // Return original text on error
+    }
+    
+    return json.humanizedText || text;
+  } catch (error) {
+    console.error('Error calling humanization API:', error);
+    return text; // Return original text on error
   }
-  return json.humanizedText;
 }
 
 export async function checkForAI(text: string): Promise<number> {
