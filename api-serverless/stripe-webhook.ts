@@ -3,9 +3,16 @@ import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 
 // Initialize Supabase client with environment variables
-const supabaseUrl = process.env.VITE_SUPABASE_URL!;
-const supabaseKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey, {
+const supabaseUrl = process.env.VITE_SUPABASE_URL || '';
+// Use non-VITE prefixed env var with fallback
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || '';
+
+// Format URL if needed
+const formattedUrl = supabaseUrl.startsWith('http') 
+  ? supabaseUrl 
+  : `https://${supabaseUrl}`;
+
+const supabase = createClient(formattedUrl, supabaseKey, {
   global: {
     headers: {
       'X-Client-Info': 'stealth-writer'
@@ -13,17 +20,21 @@ const supabase = createClient(supabaseUrl, supabaseKey, {
   }
 });
 
-// Initialize Stripe
-if (!process.env.VITE_STRIPE_SECRET_KEY) {
-  throw new Error('Missing VITE_STRIPE_SECRET_KEY');
+// Initialize Stripe - use non-VITE prefixed env var with fallback
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY || process.env.VITE_STRIPE_SECRET_KEY;
+if (!stripeSecretKey) {
+  throw new Error('Missing Stripe Secret Key');
 }
 
-const stripe = new Stripe(process.env.VITE_STRIPE_SECRET_KEY, {
+const stripe = new Stripe(stripeSecretKey, {
   apiVersion: '2025-01-27.acacia',
 });
 
-// Webhook secret for verifying the event
-const webhookSecret = process.env.VITE_STRIPE_WEBHOOK_SECRET!;
+// Webhook secret for verifying the event - use non-VITE prefixed version with fallback
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || process.env.VITE_STRIPE_WEBHOOK_SECRET || '';
+if (!webhookSecret) {
+  throw new Error('Missing Stripe Webhook Secret');
+}
 
 // Helper to map price IDs to plan names
 function mapPriceToPlan(priceId: string) {
