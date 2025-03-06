@@ -19,8 +19,9 @@ export const Signup = () => {
     setIsLoading(true);
 
     try {
-      await signUp(email, password);
-      navigate('/dashboard');
+      const data = await signUp(email, password);
+      console.log('Signup completed, redirecting to verification page');
+      navigate('/verify-email', { state: { email } });
     } catch (err) {
       setError(err instanceof Error ? err.message : JSON.stringify(err));
     } finally {

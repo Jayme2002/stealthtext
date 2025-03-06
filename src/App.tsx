@@ -17,6 +17,7 @@ import { useSubscriptionStore } from './store/subscriptionStore';
 import Humanizer from './pages/Humanizer';
 import Footer from './components/Footer';
 import MobileNav from './components/MobileNav';
+import { EmailVerification } from './pages/EmailVerification';
 
 function App() {
   const setUser = useAuthStore((state) => state.setUser);
@@ -107,6 +108,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
           <Route path="/signup" element={!user ? <Signup /> : <Navigate to="/dashboard" />} />
+          <Route path="/verify-email" element={<EmailVerification />} />
           <Route path="/reset-password" element={!user ? <ResetPassword /> : <Navigate to="/dashboard" />} />
           <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
           <Route path="/humanizer" element={user ? <Humanizer /> : <Navigate to="/login" />} />
