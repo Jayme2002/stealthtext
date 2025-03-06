@@ -8,7 +8,9 @@ export const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const signIn = useAuthStore((state) => state.signIn);
+  const signInWithGoogle = useAuthStore((state) => state.signInWithGoogle);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,6 +25,19 @@ export const Login = () => {
       setError(err instanceof Error ? err.message : 'Failed to sign in');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setError('');
+    setIsGoogleLoading(true);
+    
+    try {
+      await signInWithGoogle();
+      // No need to navigate as the OAuth redirect will handle this
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to sign in with Google');
+      setIsGoogleLoading(false);
     }
   };
 
@@ -125,6 +140,33 @@ export const Login = () => {
               </button>
             </div>
           </form>
+
+          <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="bg-white px-2 text-gray-500">Or continue with</span>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <button
+                type="button"
+                onClick={handleGoogleSignIn}
+                disabled={isGoogleLoading}
+                className="flex w-full justify-center items-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isGoogleLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-5 h-5" />
+                )}
+                {isGoogleLoading ? 'Connecting...' : 'Sign in with Google'}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
