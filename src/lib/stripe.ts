@@ -11,12 +11,12 @@ const stripePromise = loadStripe(process.env.VITE_STRIPE_PUBLISHABLE_KEY);
 // Only define plan features in client code, not sensitive pricing details
 export const PLANS = {
   free: {
-    name: '250 Words',
+    name: '500 Words',
     price: 0,
-    monthly_words: 250,
+    monthly_words: 500,
     max_request_words: 250,
     features: [
-      '250 words per month',
+      '500 words per month',
       'Up to 250 words per request'
     ]
   },
