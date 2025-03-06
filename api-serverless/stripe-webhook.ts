@@ -2,15 +2,41 @@ import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 
+// Extremely thorough URL cleaning to handle any format issues
+function cleanUrl(url: string): string {
+  // Remove quotes, backslashes, and unnecessary spaces
+  let cleaned = url.replace(/["'\\]/g, '').trim();
+  
+  // Remove URL encoding
+  try {
+    cleaned = decodeURIComponent(cleaned);
+  } catch (e) {
+    // If decoding fails, continue with the original cleaned string
+  }
+  
+  // Fix double https:// issues
+  cleaned = cleaned.replace(/https?:\/\/https?:\/\//, 'https://');
+  
+  // Ensure the URL doesn't end with a trailing slash for auth endpoints
+  cleaned = cleaned.replace(/\/$/, '');
+  
+  // If there's no protocol, add https://
+  if (!cleaned.match(/^https?:\/\//)) {
+    cleaned = `https://${cleaned}`;
+  }
+  
+  return cleaned;
+}
+
 // Initialize Supabase client with environment variables
-const supabaseUrl = process.env.VITE_SUPABASE_URL || '';
+const rawSupabaseUrl = process.env.VITE_SUPABASE_URL || '';
 // Use non-VITE prefixed env var with fallback
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || '';
 
-// Format URL if needed
-const formattedUrl = supabaseUrl.startsWith('http') 
-  ? supabaseUrl 
-  : `https://${supabaseUrl}`;
+// Clean the URL
+const formattedUrl = cleanUrl(rawSupabaseUrl);
+
+console.log('[Webhook] Using Supabase URL:', formattedUrl);
 
 const supabase = createClient(formattedUrl, supabaseKey, {
   global: {
