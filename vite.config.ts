@@ -6,12 +6,13 @@ export default defineConfig(({ mode }) => {
   // Load env file based on `mode` in the current working directory.
   const env = loadEnv(mode, process.cwd(), '');
 
-  // Separate client-side env vars (safe to expose) from server-side ones (must be kept secret)
-  const clientEnvVars = {
+  // STRICT SECURITY: Only these specific variables will be exposed to the client
+  // Everything else will be completely hidden regardless of prefix
+  const clientSafeVars = {
     VITE_SUPABASE_URL: env.VITE_SUPABASE_URL,
     VITE_SUPABASE_ANON_KEY: env.VITE_SUPABASE_ANON_KEY,
     VITE_STRIPE_PUBLISHABLE_KEY: env.VITE_STRIPE_PUBLISHABLE_KEY,
-    VITE_APP_URL: env.VITE_APP_URL
+    VITE_APP_URL: env.VITE_APP_URL,
   };
 
   // Add all env vars to process.env for server middleware
@@ -72,12 +73,16 @@ export default defineConfig(({ mode }) => {
         },
       },
     ],
+    // SECURITY CRITICAL: Define ONLY the safe variables to expose
+    // Any variable not explicitly listed here will NOT be exposed to the client
     define: {
-      // Only expose client-safe environment variables
-      'process.env.VITE_SUPABASE_URL': JSON.stringify(clientEnvVars.VITE_SUPABASE_URL),
-      'process.env.VITE_SUPABASE_ANON_KEY': JSON.stringify(clientEnvVars.VITE_SUPABASE_ANON_KEY),
-      'process.env.VITE_STRIPE_PUBLISHABLE_KEY': JSON.stringify(clientEnvVars.VITE_STRIPE_PUBLISHABLE_KEY),
-      'process.env.VITE_APP_URL': JSON.stringify(clientEnvVars.VITE_APP_URL),
+      // Only these specific environment variables will be defined in client code
+      'process.env': {
+        VITE_SUPABASE_URL: JSON.stringify(clientSafeVars.VITE_SUPABASE_URL),
+        VITE_SUPABASE_ANON_KEY: JSON.stringify(clientSafeVars.VITE_SUPABASE_ANON_KEY),
+        VITE_STRIPE_PUBLISHABLE_KEY: JSON.stringify(clientSafeVars.VITE_STRIPE_PUBLISHABLE_KEY),
+        VITE_APP_URL: JSON.stringify(clientSafeVars.VITE_APP_URL),
+      },
     },
   };
 });

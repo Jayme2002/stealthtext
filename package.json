@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "vercel-build": "vite build",
+    "vercel-build": "npm run secure-check && vite build",
+    "secure-check": "node scripts/check-env-security.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
