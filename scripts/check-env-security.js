@@ -7,6 +7,14 @@
  * to prevent accidental exposure in client-side code.
  */
 
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Get current file directory with ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // List of environment variables that are safe to expose to the client
 const SAFE_ENV_VARS = [
   'VITE_SUPABASE_URL',
@@ -44,8 +52,6 @@ if (missingRequiredVars) {
 
 // Check vite.config.ts to ensure it doesn't leak sensitive variables
 console.log('\n🔍 Checking vite.config.ts structure...');
-const fs = require('fs');
-const path = require('path');
 
 try {
   const viteConfigPath = path.join(process.cwd(), 'vite.config.ts');
