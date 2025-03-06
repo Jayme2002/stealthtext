@@ -10,14 +10,14 @@ const stripePromise = loadStripe(process.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 export const PLANS = {
   free: {
-    name: '250 Words',
+    name: '500 Words',
     price: 0,
     priceId: undefined,
-    monthly_characters: 500,
-    monthly_words: 250,
+    monthly_characters: 4000,
+    monthly_words: 500,
     max_request_words: 250,
     features: [
-      '250 words per month',
+      '500 words per month',
       'Up to 250 words per request'
     ]
   },
@@ -26,7 +26,7 @@ export const PLANS = {
     price: 10,
     priceId: "price_1Qq5NqFfiJfL6EMieNtdAzFk",
     productId: 'prod_RjYUNTzdWRIChO',
-    monthly_characters: 20000,
+    monthly_characters: 80000,
     monthly_words: 10000,
     max_request_words: 500,
     features: [
@@ -39,7 +39,7 @@ export const PLANS = {
     price: 20,
     priceId: 'price_1Qq5TAFfiJfL6EMiBcQHGdUx',
     productId: 'prod_RjYaNSCSSf4pEb',
-    monthly_characters: 50000,
+    monthly_characters: 200000,
     monthly_words: 25000,
     max_request_words: 1000,
     features: [
@@ -52,7 +52,7 @@ export const PLANS = {
     price: 30,
     priceId: 'price_1QvrMxFfiJfL6EMiBTkaRSsP',
     productId: 'prod_RpWPW2K2oaVwqA',
-    monthly_characters: 100000,
+    monthly_characters: 400000,
     monthly_words: 50000,
     max_request_words: 2000,
     features: [
