@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { Copy, Check, Sparkles, Crown, Star, Zap, ArrowRight } from 'lucide-react';
 import { LandingHeader } from '../components/LandingHeader';
+import { Helmet } from 'react-helmet-async';
 
 export const Home = () => {
   const user = useAuthStore((state) => state.user);
@@ -31,17 +32,48 @@ export const Home = () => {
     {
       icon: <Star className="w-6 h-6 text-yellow-500" />,
       title: "Advanced Detection",
-      description: "Get detailed AI detection scores for your content"
+      description: "Get AI detection scores for your content"
     },
     {
       icon: <Zap className="w-6 h-6 text-blue-500" />,
       title: "Instant Results",
-      description: "Transform your content in seconds with our powerful API"
+      description: "Transform your content in seconds with our powerful humanization technology"
     }
   ];
 
   return (
     <div className="min-h-screen bg-white">
+      <Helmet>
+        <title>StealthText - Undetectable AI Content</title>
+        <meta name="description" content="Transform AI-generated content into natural, human-like text that bypasses AI detection with our advanced humanization technology." />
+        
+        {/* Favicon/icon for search results */}
+        <link rel="icon" href="/icons/noun-ninja.svg" />
+        
+        {/* Open Graph tags for social sharing */}
+        <meta property="og:title" content="Stealth Text - Undetectable AI Text Humanizer" />
+        <meta property="og:description" content="Transform AI-generated content into natural, human-like text that bypasses AI detection with our advanced humanization technology." />
+        <meta property="og:image" content="https://stealthtext.com/icons/noun-ninja.svg" />
+        <meta property="og:url" content="https://stealthtext.com" />
+        
+        {/* Structured data for rich search results */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Stealth Text",
+            "description": "Transform AI-generated content into natural, human-like text that bypasses AI detection with our advanced humanization technology.",
+            "image": "https://stealthtext.com/icons/noun-ninja.svg",
+            "offers": {
+              "@type": "Offer",
+              "category": "Pricing Plans",
+              "url": "https://stealthtext.com/pricing",
+              "priceCurrency": "USD"
+            }
+          })}
+        </script>
+      </Helmet>
+      
       <LandingHeader />
       
       <main>

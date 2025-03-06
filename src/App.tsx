@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { useAuthStore } from './store/authStore';
 import { supabase } from './lib/supabase';
 import { Home } from './pages/Home';
@@ -102,27 +103,29 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-      <div className="min-h-screen flex flex-col">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
-          <Route path="/signup" element={!user ? <Signup /> : <Navigate to="/dashboard" />} />
-          <Route path="/verify-email" element={<EmailVerification />} />
-          <Route path="/reset-password" element={!user ? <ResetPassword /> : <Navigate to="/dashboard" />} />
-          <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
-          <Route path="/humanizer" element={user ? <Humanizer /> : <Navigate to="/login" />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/account" element={user ? <Account /> : <Navigate to="/login" />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/privacy" element={<Privacy />} />
-        </Routes>
-        <Footer />
-        <MobileNav />
-      </div>
-    </BrowserRouter>
+    <HelmetProvider>
+      <BrowserRouter>
+        <div className="min-h-screen flex flex-col">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
+            <Route path="/signup" element={!user ? <Signup /> : <Navigate to="/dashboard" />} />
+            <Route path="/verify-email" element={<EmailVerification />} />
+            <Route path="/reset-password" element={!user ? <ResetPassword /> : <Navigate to="/dashboard" />} />
+            <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
+            <Route path="/humanizer" element={user ? <Humanizer /> : <Navigate to="/login" />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/account" element={user ? <Account /> : <Navigate to="/login" />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
+          </Routes>
+          <Footer />
+          <MobileNav />
+        </div>
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }
 

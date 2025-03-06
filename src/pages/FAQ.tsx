@@ -8,7 +8,7 @@ export const FAQ = () => {
   const faqs = [
     {
       question: "What is StealthText?",
-      answer: "StealthText is an advanced AI text humanization tool that helps transform AI-generated content into natural, human-like text that can bypass AI detection systems while maintaining the original meaning and context."
+      answer: "StealthText is an advanced AI text humanization tool that helps transform AI-generated content into natural, human-like text that can bypass AI detection systems and optimize for SEO while maintaining the original meaning and context."
     },
     {
       question: "How does the word limit work?",
@@ -28,7 +28,7 @@ export const FAQ = () => {
     },
     {
       question: "Do you offer refunds?",
-      answer: "We offer a 7-day money-back guarantee for all paid plans. If you're not satisfied with our service, contact our support team within 7 days of your purchase for a full refund."
+      answer: "We offer refunds if you accidentally accidentally re-subscribe to a plan and have not used the service. Please contact us at contactstealthtext@gmail.com to request a refund."
     },
     {
       question: "How do I get started?",
