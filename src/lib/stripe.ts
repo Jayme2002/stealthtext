@@ -1,12 +1,23 @@
 import { loadStripe } from '@stripe/stripe-js';
 import { supabase } from './supabase';
 
-if (!process.env.VITE_STRIPE_PUBLISHABLE_KEY) {
+// Use import.meta.env instead of process.env for Vite
+const STRIPE_PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+
+if (!STRIPE_PUBLISHABLE_KEY) {
   console.error('Configuration Error: Missing VITE_STRIPE_PUBLISHABLE_KEY');
-  throw new Error('Missing Stripe publishable key');
 }
 
-const stripePromise = loadStripe(process.env.VITE_STRIPE_PUBLISHABLE_KEY);
+// Log first few characters to debug mode (test vs live)
+console.log(`Using Stripe publishable key (first 10 chars): ${STRIPE_PUBLISHABLE_KEY ? STRIPE_PUBLISHABLE_KEY.substring(0, 10) + '...' : 'undefined'}`);
+
+// Set up Stripe with better error handling
+let stripePromise;
+try {
+  stripePromise = STRIPE_PUBLISHABLE_KEY ? loadStripe(STRIPE_PUBLISHABLE_KEY) : null;
+} catch (error) {
+  console.error('Error initializing Stripe:', error);
+}
 
 // Only define plan features in client code, not sensitive pricing details
 export const PLANS = {
