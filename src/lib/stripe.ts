@@ -203,13 +203,12 @@ export async function createPortalSession() {
   console.log('Client: Creating Stripe Portal Session');
   
   try {
-    // Use Supabase Edge Function URL instead of the local API route
+    // Try Supabase Edge Function first
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
     const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
     const portalEndpoint = `${supabaseUrl}/functions/v1/create-portal-session`;
     
     console.log(`Client: Using portal endpoint: ${portalEndpoint}`);
-    console.log(`Client: Anon key available: ${supabaseAnonKey ? 'Yes (first 5 chars: ' + supabaseAnonKey.substring(0, 5) + '...)' : 'No'}`);
     
     // Get session token for authentication
     const { data: sessionData } = await supabase.auth.getSession();
@@ -219,45 +218,75 @@ export async function createPortalSession() {
       throw new Error('Not authenticated');
     }
     
-    console.log('Client: JWT token available:', token ? 'Yes (first 10 chars: ' + token.substring(0, 10) + '...)' : 'No');
-    
-    const response = await fetch(portalEndpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        'apikey': supabaseAnonKey
-      }
-    });
-
-    // Log complete response info
-    console.log(`Client: Portal API Response status: ${response.status} ${response.statusText}`);
-
-    if (!response.ok) {
-      let errorMessage = `Failed to create portal session (${response.status})`;
-      try {
-        const errorData = await response.json();
-        if (errorData.error) {
-          errorMessage = `API Error: ${errorData.error}`;
+    // Try the Supabase Edge Function first
+    try {
+      console.log('Client: Attempting to use Supabase Edge Function...');
+      const response = await fetch(portalEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          'apikey': supabaseAnonKey
         }
-      } catch (e) {
-        errorMessage = `API Error: ${response.statusText}`;
-      }
-      console.error('Client: Portal Session API Error:', errorMessage);
-      throw new Error(errorMessage);
-    }
+      });
 
-    const { url } = await response.json();
-    
-    if (!url) {
-      console.error('Client: No portal URL in response');
-      throw new Error('Invalid response: No portal URL');
+      console.log(`Client: Portal API Response status: ${response.status} ${response.statusText}`);
+
+      if (response.ok) {
+        const { url } = await response.json();
+        
+        if (!url) {
+          throw new Error('Invalid response: No portal URL');
+        }
+        
+        console.log('Client: Success! Redirecting to portal URL');
+        window.location.href = url;
+        return url;
+      }
+      
+      // If Supabase Edge Function fails, throw an error to try the Vercel API instead
+      throw new Error(`Supabase Edge Function failed with status ${response.status}`);
+    } catch (error) {
+      // If the Supabase Edge Function fails, fall back to the Vercel API
+      console.log('Client: Supabase Edge Function failed, trying Vercel API instead...');
+      
+      // Try using the Vercel API instead
+      const vercelResponse = await fetch('/api/create-portal-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      console.log(`Client: Vercel API Response status: ${vercelResponse.status}`);
+      
+      if (!vercelResponse.ok) {
+        let errorMessage = `Failed to create portal session (${vercelResponse.status})`;
+        try {
+          const errorData = await vercelResponse.json();
+          if (errorData.error) {
+            errorMessage = `API Error: ${errorData.error}`;
+          }
+        } catch (e) {
+          errorMessage = `API Error: ${vercelResponse.statusText}`;
+        }
+        console.error('Client: Portal Session API Error:', errorMessage);
+        throw new Error(errorMessage);
+      }
+      
+      const { url } = await vercelResponse.json();
+      
+      if (!url) {
+        console.error('Client: No portal URL in response');
+        throw new Error('Invalid response: No portal URL');
+      }
+      
+      console.log('Client: Redirecting to portal URL');
+      window.location.href = url;
+      
+      return url;
     }
-    
-    console.log('Client: Redirecting to portal URL');
-    window.location.href = url;
-    
-    return url;
   } catch (error) {
     console.error('Client: Portal Session Error:', {
       message: error instanceof Error ? error.message : 'Unknown error',
