@@ -94,15 +94,18 @@ export async function createCheckoutSession(priceId: string) {
     };
 
     console.log('Client: Making API request with body:', requestBody);
-
+  
     let retryAttempts = 0;
     const maxRetries = 2;
     let response;
     
+    // Use Supabase Edge Function URL instead of the local API route
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+    const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
     const checkoutEndpoint = `${supabaseUrl}/functions/v1/create-checkout-session`;
     
     console.log(`Client: Using checkout endpoint: ${checkoutEndpoint}`);
+    console.log(`Client: Anon key available: ${supabaseAnonKey ? 'Yes (first 5 chars: ' + supabaseAnonKey.substring(0, 5) + '...)' : 'No'}`);
     
     while (retryAttempts <= maxRetries) {
       try {
@@ -110,10 +113,17 @@ export async function createCheckoutSession(priceId: string) {
           method: 'POST',
           headers: { 
             'Content-Type': 'application/json',
-            'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY || ''
+            // Include apikey for Supabase Edge Functions (with fallback to Authorization)
+            'apikey': supabaseAnonKey,
+            'Authorization': `Bearer ${supabaseAnonKey}`
           },
           body: JSON.stringify(requestBody),
         });
+        
+        // Log complete response info
+        console.log(`Client: API Response status: ${response.status} ${response.statusText}`);
+        console.log('Client: API Response headers:', Object.fromEntries([...response.headers.entries()]));
+        
         break; // If successful, exit the loop
       } catch (error) {
         retryAttempts++;
@@ -184,9 +194,11 @@ export async function createPortalSession() {
   try {
     // Use Supabase Edge Function URL instead of the local API route
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+    const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
     const portalEndpoint = `${supabaseUrl}/functions/v1/create-portal-session`;
     
     console.log(`Client: Using portal endpoint: ${portalEndpoint}`);
+    console.log(`Client: Anon key available: ${supabaseAnonKey ? 'Yes (first 5 chars: ' + supabaseAnonKey.substring(0, 5) + '...)' : 'No'}`);
     
     // Get session token for authentication
     const { data: sessionData } = await supabase.auth.getSession();
@@ -196,14 +208,19 @@ export async function createPortalSession() {
       throw new Error('Not authenticated');
     }
     
+    console.log('Client: JWT token available:', token ? 'Yes (first 10 chars: ' + token.substring(0, 10) + '...)' : 'No');
+    
     const response = await fetch(portalEndpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
-        'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY || ''
+        'apikey': supabaseAnonKey
       }
     });
+
+    // Log complete response info
+    console.log(`Client: Portal API Response status: ${response.status} ${response.statusText}`);
 
     if (!response.ok) {
       let errorMessage = `Failed to create portal session (${response.status})`;
