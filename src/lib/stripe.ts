@@ -23,7 +23,8 @@ export const PLANS = {
   premium: {
     name: '10,000 Words',
     price: 10,
-    priceId: "price_1Qq5NqFfiJfL6EMieNtdAzFk", // This is public and needed for checkout
+    priceId: "price_1Qq5NqFfiJfL6EMieNtdAzFk",
+    productId: 'prod_RjYUNTzdWRIChO',
     monthly_words: 10000,
     max_request_words: 500,
     features: [
@@ -34,7 +35,8 @@ export const PLANS = {
   "premium+": {
     name: '25,000 Words',
     price: 20,
-    priceId: 'price_1Qq5TAFfiJfL6EMiBcQHGdUx', // This is public and needed for checkout
+    priceId: 'price_1Qq5TAFfiJfL6EMiBcQHGdUx',
+    productId: 'prod_RjYaNSCSSf4pEb',
     monthly_words: 25000,
     max_request_words: 1000,
     features: [
@@ -45,7 +47,8 @@ export const PLANS = {
   pro: {
     name: '50,000 Words',
     price: 30,
-    priceId: 'price_1QvrMxFfiJfL6EMiBTkaRSsP', // This is public and needed for checkout
+    priceId: 'price_1QvrMxFfiJfL6EMiBTkaRSsP',
+    productId: 'prod_RpWPW2K2oaVwqA',
     monthly_words: 50000,
     max_request_words: 2000,
     features: [
@@ -92,16 +95,23 @@ export async function createCheckoutSession(priceId: string) {
 
     console.log('Client: Making API request with body:', requestBody);
 
-    // Simple retry logic
     let retryAttempts = 0;
     const maxRetries = 2;
     let response;
     
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+    const checkoutEndpoint = `${supabaseUrl}/functions/v1/create-checkout-session`;
+    
+    console.log(`Client: Using checkout endpoint: ${checkoutEndpoint}`);
+    
     while (retryAttempts <= maxRetries) {
       try {
-        response = await fetch('/api/create-checkout-session', {
+        response = await fetch(checkoutEndpoint, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY || ''
+          },
           body: JSON.stringify(requestBody),
         });
         break; // If successful, exit the loop
@@ -161,6 +171,67 @@ export async function createCheckoutSession(priceId: string) {
     }
   } catch (error) {
     console.error('Client: Checkout Session Error:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      error
+    });
+    throw error;
+  }
+}
+
+export async function createPortalSession() {
+  console.log('Client: Creating Stripe Portal Session');
+  
+  try {
+    // Use Supabase Edge Function URL instead of the local API route
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+    const portalEndpoint = `${supabaseUrl}/functions/v1/create-portal-session`;
+    
+    console.log(`Client: Using portal endpoint: ${portalEndpoint}`);
+    
+    // Get session token for authentication
+    const { data: sessionData } = await supabase.auth.getSession();
+    const token = sessionData?.session?.access_token;
+    
+    if (!token) {
+      throw new Error('Not authenticated');
+    }
+    
+    const response = await fetch(portalEndpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY || ''
+      }
+    });
+
+    if (!response.ok) {
+      let errorMessage = `Failed to create portal session (${response.status})`;
+      try {
+        const errorData = await response.json();
+        if (errorData.error) {
+          errorMessage = `API Error: ${errorData.error}`;
+        }
+      } catch (e) {
+        errorMessage = `API Error: ${response.statusText}`;
+      }
+      console.error('Client: Portal Session API Error:', errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    const { url } = await response.json();
+    
+    if (!url) {
+      console.error('Client: No portal URL in response');
+      throw new Error('Invalid response: No portal URL');
+    }
+    
+    console.log('Client: Redirecting to portal URL');
+    window.location.href = url;
+    
+    return url;
+  } catch (error) {
+    console.error('Client: Portal Session Error:', {
       message: error instanceof Error ? error.message : 'Unknown error',
       error
     });
