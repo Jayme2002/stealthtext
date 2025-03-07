@@ -120,11 +120,12 @@ export async function createCheckoutSession(priceId: string) {
     
     while (retryAttempts <= maxRetries) {
       try {
+        // Try Supabase Edge Function first
+        console.log(`Client: Attempting call to Supabase Edge Function (attempt ${retryAttempts + 1}/${maxRetries + 1})`);
         response = await fetch(checkoutEndpoint, {
           method: 'POST',
           headers: { 
             'Content-Type': 'application/json',
-            // Include apikey for Supabase Edge Functions (with fallback to Authorization)
             'apikey': supabaseAnonKey,
             'Authorization': `Bearer ${supabaseAnonKey}`
           },
@@ -133,7 +134,21 @@ export async function createCheckoutSession(priceId: string) {
         
         // Log complete response info
         console.log(`Client: API Response status: ${response.status} ${response.statusText}`);
-        console.log('Client: API Response headers:', Object.fromEntries([...response.headers.entries()]));
+        
+        if (!response.ok) {
+          // If Edge Function fails, try Vercel API
+          console.log('Client: Edge Function failed, trying Vercel API...');
+          response = await fetch('/api/create-checkout-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody),
+          });
+          
+          console.log(`Client: Vercel API Response status: ${response.status} ${response.statusText}`);
+          if (!response.ok) {
+            throw new Error(`API call failed with status ${response.status}`);
+          }
+        }
         
         break; // If successful, exit the loop
       } catch (error) {
@@ -250,7 +265,8 @@ export async function createPortalSession() {
       // If the Supabase Edge Function fails, fall back to the Vercel API
       console.log('Client: Supabase Edge Function failed, trying Vercel API instead...');
       
-      // Try using the Vercel API instead
+      // Try using the Vercel API instead with detailed logging
+      console.log('Client: Using Vercel API path: /api/create-portal-session (rewrites to /api-serverless/create-portal-session.ts)');
       const vercelResponse = await fetch('/api/create-portal-session', {
         method: 'POST',
         headers: {
