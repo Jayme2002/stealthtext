@@ -62,6 +62,16 @@ if (!webhookSecret) {
   throw new Error('Missing Stripe Webhook Secret');
 }
 
+// CORS headers to allow cross-origin requests
+function getCorsHeaders() {
+  return {
+    'Access-Control-Allow-Origin': '*', // In production, restrict this to your domain
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-client-info, apikey, X-Client-Info, Stripe-Signature',
+    'Access-Control-Allow-Credentials': 'true'
+  };
+}
+
 // Helper to map price IDs to plan names
 function mapPriceToPlan(priceId: string) {
   return priceId === "price_1Qq5NqFfiJfL6EMieNtdAzFk" ? "premium" 
@@ -71,10 +81,18 @@ function mapPriceToPlan(priceId: string) {
 }
 
 export default async function handler(req: Request) {
+  // Handle preflight OPTIONS request
+  if (req.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 204,
+      headers: getCorsHeaders()
+    });
+  }
+  
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), { 
-      status: 405,
-      headers: { 'Content-Type': 'application/json' }
+      status: 405, 
+      headers: getCorsHeaders()
     });
   }
   
@@ -82,7 +100,7 @@ export default async function handler(req: Request) {
   if (!signature) {
     return new Response(JSON.stringify({ error: 'Missing Stripe signature' }), { 
       status: 400,
-      headers: { 'Content-Type': 'application/json' }
+      headers: getCorsHeaders()
     });
   }
   
@@ -94,7 +112,7 @@ export default async function handler(req: Request) {
     console.error('Webhook signature verification failed:', err);
     return new Response(JSON.stringify({ error: 'Webhook signature verification failed' }), { 
       status: 400,
-      headers: { 'Content-Type': 'application/json' }
+      headers: getCorsHeaders()
     });
   }
   
@@ -219,7 +237,7 @@ export default async function handler(req: Request) {
     
     return new Response(JSON.stringify({ received: true }), { 
       status: 200,
-      headers: { 'Content-Type': 'application/json' }
+      headers: getCorsHeaders()
     });
   } catch (error) {
     console.error('Error processing webhook:', error);
@@ -228,7 +246,7 @@ export default async function handler(req: Request) {
       details: error instanceof Error ? error.message : 'Unknown error'
     }), { 
       status: 500,
-      headers: { 'Content-Type': 'application/json' }
+      headers: getCorsHeaders()
     });
   }
 } 

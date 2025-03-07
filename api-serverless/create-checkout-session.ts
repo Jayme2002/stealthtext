@@ -69,6 +69,16 @@ const stripe = new Stripe(stripeSecretKey, {
   apiVersion: '2025-01-27.acacia',
 });
 
+// CORS headers to allow cross-origin requests
+function getCorsHeaders() {
+  return {
+    'Access-Control-Allow-Origin': '*', // In production, restrict this to your domain
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-client-info, apikey, X-Client-Info',
+    'Access-Control-Allow-Credentials': 'true'
+  };
+}
+
 // Type definitions
 interface RequestBody {
   priceId: string;
@@ -78,23 +88,18 @@ interface RequestBody {
 }
 
 export default async function handler(req: Request) {
-  // CORS headers to allow client-side requests
-  const headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    "Content-Type": "application/json"
-  };
-
-  // Handle preflight requests
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers, status: 204 });
+  // Handle preflight OPTIONS request
+  if (req.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 204,
+      headers: getCorsHeaders()
+    });
   }
 
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), { 
       status: 405, 
-      headers 
+      headers: getCorsHeaders()
     });
   }
 
@@ -192,7 +197,7 @@ export default async function handler(req: Request) {
       JSON.stringify({ sessionId: session.id }),
       { 
         status: 200,
-        headers
+        headers: getCorsHeaders()
       }
     );
   } catch (error) {
@@ -204,7 +209,7 @@ export default async function handler(req: Request) {
       }),
       { 
         status: 500,
-        headers
+        headers: getCorsHeaders()
       }
     );
   }

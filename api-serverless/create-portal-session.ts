@@ -55,24 +55,29 @@ const stripe = new Stripe(stripeSecretKey, {
   apiVersion: '2025-01-27.acacia',
 });
 
-export default async function handler(req: Request) {
-  // CORS headers to allow client-side requests
-  const headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    "Content-Type": "application/json"
+// CORS headers to allow cross-origin requests
+function getCorsHeaders() {
+  return {
+    'Access-Control-Allow-Origin': '*', // In production, restrict this to your domain
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-client-info, apikey, X-Client-Info',
+    'Access-Control-Allow-Credentials': 'true'
   };
+}
 
-  // Handle preflight requests
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers, status: 204 });
+export default async function handler(req: Request) {
+  // Handle preflight OPTIONS request
+  if (req.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 204,
+      headers: getCorsHeaders()
+    });
   }
 
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), { 
       status: 405, 
-      headers 
+      headers: getCorsHeaders()
     });
   }
 
@@ -91,7 +96,7 @@ export default async function handler(req: Request) {
       console.error('No token found in either Authorization header or cookie');
       return new Response(
         JSON.stringify({ error: 'Unauthorized'}), 
-        { status: 401, headers }
+        { status: 401, headers: getCorsHeaders() }
       );
     }
     
@@ -101,7 +106,7 @@ export default async function handler(req: Request) {
       console.error('Auth error:', authError);
       return new Response(
         JSON.stringify({ error: 'Unauthorized' }), 
-        { status: 401, headers }
+        { status: 401, headers: getCorsHeaders() }
       );
     }
 
@@ -116,14 +121,14 @@ export default async function handler(req: Request) {
       console.error('Subscription error:', subscriptionError);
       return new Response(
         JSON.stringify({ error: 'Failed to fetch subscription' }), 
-        { status: 500, headers }
+        { status: 500, headers: getCorsHeaders() }
       );
     }
 
     if (!subscription?.stripe_customer_id) {
       return new Response(
         JSON.stringify({ error: 'No active subscription found' }), 
-        { status: 400, headers }
+        { status: 400, headers: getCorsHeaders() }
       );
     }
 
@@ -135,7 +140,7 @@ export default async function handler(req: Request) {
 
     return new Response(
       JSON.stringify({ url: session.url }), 
-      { status: 200, headers }
+      { status: 200, headers: getCorsHeaders() }
     );
   } catch (error) {
     console.error('Portal session error:', error);
@@ -143,7 +148,7 @@ export default async function handler(req: Request) {
       JSON.stringify({ 
         error: error instanceof Error ? error.message : 'Failed to create portal session'
       }), 
-      { status: 500, headers }
+      { status: 500, headers: getCorsHeaders() }
     );
   }
 } 
