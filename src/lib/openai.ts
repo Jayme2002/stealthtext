@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import { createClient } from '@supabase/supabase-js';
 
 // Use the non-VITE prefixed environment variable with fallback
 const openaiApiKey = typeof window !== 'undefined' 
@@ -42,19 +43,32 @@ Text for Analysis:`;
 
 export type HumanizerIntensity = 'LOW' | 'MEDIUM' | 'HIGH';
 
-// Get the Supabase URL from environment or a constant
+// Get the Supabase URL and anon key from environment
 const SUPABASE_URL = typeof window !== 'undefined'
   ? import.meta.env.VITE_SUPABASE_URL || import.meta.env.SUPABASE_URL
   : process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+
+const SUPABASE_ANON_KEY = typeof window !== 'undefined'
+  ? import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.SUPABASE_ANON_KEY
+  : process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+
+// Create a Supabase client
+const supabase = createClient(SUPABASE_URL || '', SUPABASE_ANON_KEY || '');
 
 export async function humanizeText(text: string, intensity: HumanizerIntensity = 'HIGH'): Promise<string> {
   if (!text.trim()) return text;
   
   try {
+    // Get the current session - this will include the access token if user is logged in
+    const { data: { session } } = await supabase.auth.getSession();
+    const accessToken = session?.access_token;
+    
     const response = await fetch(`${SUPABASE_URL}/functions/v1/humanize-text`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${accessToken}`,
+        "apikey": SUPABASE_ANON_KEY || '',
       },
       body: JSON.stringify({
         text,
@@ -79,10 +93,16 @@ export async function checkForAI(text: string): Promise<number> {
   if (!text.trim()) return 0;
   
   try {
+    // Get the current session - this will include the access token if user is logged in
+    const { data: { session } } = await supabase.auth.getSession();
+    const accessToken = session?.access_token;
+    
     const response = await fetch(`${SUPABASE_URL}/functions/v1/check-ai`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${accessToken}`,
+        "apikey": SUPABASE_ANON_KEY || '',
       },
       body: JSON.stringify({ text })
     });

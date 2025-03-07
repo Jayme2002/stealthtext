@@ -24,6 +24,7 @@ serve(async (req) => {
       )
     }
 
+    // Get API key from environment variables
     const apiKey = Deno.env.get('HUMANIZED_AI_API_KEY')
     if (!apiKey) {
       console.error('HUMANIZED_AI_API_KEY environment variable is not set')

@@ -22,6 +22,7 @@ serve(async (req) => {
       )
     }
 
+    // Get API key from environment variables
     const apiKey = Deno.env.get('OPENAI_API_KEY')
     if (!apiKey) {
       console.error('OPENAI_API_KEY environment variable is not set')
