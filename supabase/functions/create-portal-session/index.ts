@@ -40,9 +40,18 @@ function cleanUrl(url: string): string {
 }
 
 // CORS headers to allow cross-origin requests
-function getCorsHeaders() {
+function getCorsHeaders(request: Request) {
+  // Get the origin from the request
+  const origin = request.headers.get('origin') || 'https://www.stealthtext.com';
+  
+  // Only allow your specific domain(s)
+  const allowedOrigins = ['https://www.stealthtext.com', 'https://stealthtext.com'];
+  
+  // Use the actual origin if it's in the allowed list, otherwise use your primary domain
+  const allowedOrigin = allowedOrigins.includes(origin) ? origin : 'https://www.stealthtext.com';
+  
   return {
-    'Access-Control-Allow-Origin': '*', // In production, restrict this to your domain
+    'Access-Control-Allow-Origin': allowedOrigin,
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-client-info, apikey, X-Client-Info',
     'Access-Control-Allow-Credentials': 'true',
@@ -68,14 +77,14 @@ const handler = async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, {
       status: 204,
-      headers: getCorsHeaders()
+      headers: getCorsHeaders(req)
     });
   }
 
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), { 
       status: 405, 
-      headers: getCorsHeaders()
+      headers: getCorsHeaders(req)
     });
   }
 
@@ -105,7 +114,7 @@ const handler = async (req: Request) => {
       console.error('No token found in either Authorization header or cookie');
       return new Response(
         JSON.stringify({ error: 'Unauthorized'}), 
-        { status: 401, headers: getCorsHeaders() }
+        { status: 401, headers: getCorsHeaders(req) }
       );
     }
     
@@ -115,7 +124,7 @@ const handler = async (req: Request) => {
       console.error('Auth error:', authError);
       return new Response(
         JSON.stringify({ error: 'Unauthorized' }), 
-        { status: 401, headers: getCorsHeaders() }
+        { status: 401, headers: getCorsHeaders(req) }
       );
     }
 
@@ -130,14 +139,14 @@ const handler = async (req: Request) => {
       console.error('Subscription error:', subscriptionError);
       return new Response(
         JSON.stringify({ error: 'Failed to fetch subscription' }), 
-        { status: 500, headers: getCorsHeaders() }
+        { status: 500, headers: getCorsHeaders(req) }
       );
     }
 
     if (!subscription?.stripe_customer_id) {
       return new Response(
         JSON.stringify({ error: 'No active subscription found' }), 
-        { status: 400, headers: getCorsHeaders() }
+        { status: 400, headers: getCorsHeaders(req) }
       );
     }
 
@@ -153,7 +162,7 @@ const handler = async (req: Request) => {
 
     return new Response(
       JSON.stringify({ url: session.url }), 
-      { status: 200, headers: getCorsHeaders() }
+      { status: 200, headers: getCorsHeaders(req) }
     );
   } catch (error) {
     console.error('Portal session error:', error);
@@ -162,7 +171,7 @@ const handler = async (req: Request) => {
         error: error instanceof Error ? error.message : 'Failed to create portal session',
         details: error instanceof Error ? (error as Error).stack : undefined
       }), 
-      { status: 500, headers: getCorsHeaders() }
+      { status: 500, headers: getCorsHeaders(req) }
     );
   }
 };

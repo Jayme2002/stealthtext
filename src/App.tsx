@@ -19,6 +19,7 @@ import Humanizer from './pages/Humanizer';
 import Footer from './components/Footer';
 import MobileNav from './components/MobileNav';
 import { EmailVerification } from './pages/EmailVerification';
+import { UpdatePassword } from './pages/UpdatePassword';
 
 function App() {
   const setUser = useAuthStore((state) => state.setUser);
@@ -120,6 +121,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
+            <Route path="/update-password" element={<UpdatePassword />} />
           </Routes>
           <Footer />
           <MobileNav />
