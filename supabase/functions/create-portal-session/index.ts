@@ -142,8 +142,9 @@ const handler = async (req: Request) => {
     }
 
     // Create Stripe portal session
-    const rawAppUrl = Deno.env.get("VITE_APP_URL") || 'http://localhost:3000';
-    const appUrl = cleanUrl(rawAppUrl);
+    // Hardcode the production URL to ensure proper redirects
+    const appUrl = 'https://www.stealthtext.com';
+    console.log(`Edge: Using hardcoded production URL for redirects: ${appUrl}`);
     
     const session = await stripe.billingPortal.sessions.create({
       customer: subscription.stripe_customer_id,
