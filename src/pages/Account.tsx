@@ -35,7 +35,7 @@ export const Account = () => {
       
       while (retryAttempts <= maxRetries) {
         try {
-          response = await fetch('/api/create-portal-session', {
+          response = await fetch('https://qbdzfdqnnhdprwvdnlkn.supabase.co/functions/v1/create-portal-session', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

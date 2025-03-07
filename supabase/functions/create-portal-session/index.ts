@@ -51,8 +51,8 @@ function getCorsHeaders() {
 }
 
 // Initialize Stripe
-const rawStripeSecretKey = Deno.env.get("VITE_STRIPE_SECRET_KEY");
-const stripeSecretKey = cleanString(rawStripeSecretKey || '');
+const rawStripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY") || Deno.env.get("VITE_STRIPE_SECRET_KEY") || '';
+const stripeSecretKey = cleanString(rawStripeSecretKey);
 
 if (!stripeSecretKey) {
   console.error('Missing Stripe Secret Key');
@@ -80,8 +80,8 @@ const handler = async (req: Request) => {
   }
 
   try {
-    const rawSupabaseUrl = Deno.env.get("VITE_SUPABASE_URL") || '';
-    const rawSupabaseKey = Deno.env.get("VITE_SUPABASE_SERVICE_ROLE_KEY") || '';
+    const rawSupabaseUrl = Deno.env.get("SUPABASE_URL") || Deno.env.get("VITE_SUPABASE_URL") || '';
+    const rawSupabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || Deno.env.get("VITE_SUPABASE_SERVICE_ROLE_KEY") || '';
 
     // Clean the strings
     const supabaseKey = cleanString(rawSupabaseKey);
