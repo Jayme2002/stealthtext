@@ -1,17 +1,28 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 
-// Extremely thorough URL cleaning to handle any format issues
-function cleanUrl(url: string): string {
-  // Remove quotes, backslashes, and unnecessary spaces
-  let cleaned = url.replace(/["'\\]/g, '').trim();
+// Clean strings by removing quotes, extra spaces, and decoding any URL-encoded parts
+function cleanString(str: string): string {
+  // First remove any surrounding quotes and trim spaces
+  let cleaned = str.trim().replace(/^["'](.*)["']$/, '$1');
   
-  // Remove URL encoding
+  // Handle any URL-encoded quotes or other characters
   try {
     cleaned = decodeURIComponent(cleaned);
   } catch (e) {
-    // If decoding fails, continue with the original cleaned string
+    // Continue with what we have if decoding fails
   }
+  
+  // Clean any remaining problematic characters
+  cleaned = cleaned.replace(/["'\\]/g, '');
+  
+  return cleaned;
+}
+
+// Extremely thorough URL cleaning
+function cleanUrl(url: string): string {
+  // First use the general string cleaner
+  let cleaned = cleanString(url);
   
   // Fix double https:// issues
   cleaned = cleaned.replace(/https?:\/\/https?:\/\//, 'https://');
@@ -30,9 +41,10 @@ function cleanUrl(url: string): string {
 // Initialize Supabase client with environment variables
 const rawSupabaseUrl = process.env.VITE_SUPABASE_URL || '';
 // Use non-VITE prefixed env var with fallback
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || '';
+const rawSupabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY || '';
 
-// Clean the URL
+// Clean the strings
+const supabaseKey = cleanString(rawSupabaseKey);
 const formattedUrl = cleanUrl(rawSupabaseUrl);
 
 console.log('[API] Using Supabase URL:', formattedUrl);
@@ -46,7 +58,9 @@ const supabase = createClient(formattedUrl, supabaseKey, {
 });
 
 // Initialize Stripe - use non-VITE prefixed env var with fallback
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY || process.env.VITE_STRIPE_SECRET_KEY;
+const rawStripeSecretKey = process.env.STRIPE_SECRET_KEY || process.env.VITE_STRIPE_SECRET_KEY;
+const stripeSecretKey = cleanString(rawStripeSecretKey || '');
+
 if (!stripeSecretKey) {
   throw new Error('Missing Stripe Secret Key');
 }

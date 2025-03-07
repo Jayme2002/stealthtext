@@ -2,19 +2,30 @@ import { createClient } from '@supabase/supabase-js';
 
 // Get URL and key from environment
 const rawSupabaseUrl = process.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || '';
+const rawSupabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || '';
 
-// Extremely thorough URL cleaning to handle any format issues
-function cleanUrl(url: string): string {
-  // Remove quotes, backslashes, and unnecessary spaces
-  let cleaned = url.replace(/["'\\]/g, '').trim();
+// Clean strings by removing quotes, extra spaces, and decoding any URL-encoded parts
+function cleanString(str: string): string {
+  // First remove any surrounding quotes and trim spaces
+  let cleaned = str.trim().replace(/^["'](.*)["']$/, '$1');
   
-  // Remove URL encoding
+  // Handle any URL-encoded quotes or other characters
   try {
     cleaned = decodeURIComponent(cleaned);
   } catch (e) {
-    // If decoding fails, continue with the original cleaned string
+    // Continue with what we have if decoding fails
   }
+  
+  // Clean any remaining problematic characters
+  cleaned = cleaned.replace(/["'\\]/g, '');
+  
+  return cleaned;
+}
+
+// Extremely thorough URL cleaning
+function cleanUrl(url: string): string {
+  // First use the general string cleaner
+  let cleaned = cleanString(url);
   
   // Fix double https:// issues
   cleaned = cleaned.replace(/https?:\/\/https?:\/\//, 'https://');
@@ -33,10 +44,14 @@ function cleanUrl(url: string): string {
   return cleaned;
 }
 
+// Clean the API key
+const supabaseAnonKey = cleanString(rawSupabaseAnonKey);
+
+// Clean the URL
 const formattedUrl = cleanUrl(rawSupabaseUrl);
 
 console.log('Final Supabase URL:', formattedUrl);
-console.log('Supabase Anon Key:', supabaseAnonKey?.slice(0, 6) + '...');
+console.log('Supabase Anon Key (first 10 chars):', supabaseAnonKey.substring(0, 10) + '...');
 
 // Create client with formatted URL
 export const supabase = createClient(formattedUrl, supabaseAnonKey, {
