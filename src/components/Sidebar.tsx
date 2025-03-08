@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Brain, User, LayoutDashboard, CreditCard, ChevronLeft, ChevronRight, X, Menu } from 'lucide-react';
+import { Brain, User, LayoutDashboard, CreditCard, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { useUIStore } from '../store/uiStore';
 
 export const SidebarContext = createContext<{
@@ -184,7 +184,7 @@ export const Sidebar = () => {
               }
               onClick={() => isMobileView && setSidebarCollapsed(true)}
             >
-              <LayoutDashboard className={`flex-shrink-0 ${sidebarCollapsed ? 'w-5 h-5 mx-auto' : 'w-5 h-5'}`} />
+              <LayoutDashboard className={`${sidebarCollapsed ? 'mx-auto' : ''}`} />
               <span className={`ml-3 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100 w-auto block'}`}>
                 Dashboard
               </span>
@@ -193,8 +193,8 @@ export const Sidebar = () => {
 
           {/* Features group */}
           <div className="mt-6">
-            <div className={`text-xs font-semibold text-gray-400 dark:text-gray-500 px-3 mb-2 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'text-center' : ''}`}>
-              {sidebarCollapsed ? '•••' : 'Features'}
+            <div className={`text-xs font-semibold text-gray-400 dark:text-gray-500 px-3 mb-2 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 h-0 overflow-hidden' : ''}`}>
+              Features
             </div>
             <div className="space-y-1">
               <NavLink
@@ -208,7 +208,7 @@ export const Sidebar = () => {
                 }
                 onClick={() => isMobileView && setSidebarCollapsed(true)}
               >
-                <Brain className={`flex-shrink-0 ${sidebarCollapsed ? 'w-5 h-5 mx-auto' : 'w-5 h-5'}`} />
+                <Brain className={`${sidebarCollapsed ? 'mx-auto' : ''}`} />
                 <span className={`ml-3 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100 w-auto block'}`}>
                   Humanizer
                 </span>
@@ -218,8 +218,8 @@ export const Sidebar = () => {
 
           {/* Settings group */}
           <div className="mt-6">
-            <div className={`text-xs font-semibold text-gray-400 dark:text-gray-500 px-3 mb-2 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'text-center' : ''}`}>
-              {sidebarCollapsed ? '•••' : 'Settings'}
+            <div className={`text-xs font-semibold text-gray-400 dark:text-gray-500 px-3 mb-2 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 h-0 overflow-hidden' : ''}`}>
+              Settings
             </div>
             <div className="space-y-1">
               <NavLink
@@ -233,7 +233,7 @@ export const Sidebar = () => {
                 }
                 onClick={() => isMobileView && setSidebarCollapsed(true)}
               >
-                <User className={`flex-shrink-0 ${sidebarCollapsed ? 'w-5 h-5 mx-auto' : 'w-5 h-5'}`} />
+                <User className={`${sidebarCollapsed ? 'mx-auto' : ''}`} />
                 <span className={`ml-3 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100 w-auto block'}`}>
                   Account
                 </span>
@@ -249,7 +249,7 @@ export const Sidebar = () => {
                 }
                 onClick={() => isMobileView && setSidebarCollapsed(true)}
               >
-                <CreditCard className={`flex-shrink-0 ${sidebarCollapsed ? 'w-5 h-5 mx-auto' : 'w-5 h-5'}`} />
+                <CreditCard className={`${sidebarCollapsed ? 'mx-auto' : ''}`} />
                 <span className={`ml-3 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100 w-auto block'}`}>
                   Pricing
                 </span>
