@@ -67,19 +67,47 @@ export const useSubscriptionStore = create<SubscriptionState>()(
         }
       },
       fetchUsage: async (userId) => {
-        const { data, error } = await supabase
-          .from('usage_metrics')
-          .select('used_chars, used_words, allocated_chars, allocated_words')
-          .eq('user_id', userId)
-          .single();
+        try {
+          // First ensure usage metrics exist
+          await supabase.rpc('initialize_new_user_usage', { user_uuid: userId });
+          
+          // Then fetch the metrics (which should now exist)
+          const { data, error } = await supabase
+            .from('usage_metrics')
+            .select('used_chars, used_words, allocated_chars, allocated_words')
+            .eq('user_id', userId)
+            .single();
 
-        if (!error && data) {
+          if (error) {
+            console.error("Error fetching usage metrics:", error);
+            // Set default values for free tier if there's an error
+            set({ 
+              usage: {
+                used_chars: 0,
+                used_words: 0,
+                allocated_chars: 4000,
+                allocated_words: 500
+              }
+            });
+          } else if (data) {
+            set({ 
+              usage: {
+                used_chars: data.used_chars || 0,
+                used_words: data.used_words || 0,
+                allocated_chars: data.allocated_chars || 4000,
+                allocated_words: data.allocated_words || 500
+              }
+            });
+          }
+        } catch (error) {
+          console.error("Error in fetchUsage:", error);
+          // Set default values as fallback
           set({ 
             usage: {
-              used_chars: data.used_chars,
-              used_words: data.used_words,
-              allocated_chars: data.allocated_chars,
-              allocated_words: data.allocated_words
+              used_chars: 0,
+              used_words: 0,
+              allocated_chars: 4000,
+              allocated_words: 500
             }
           });
         }

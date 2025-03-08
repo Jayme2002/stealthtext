@@ -55,8 +55,22 @@ function App() {
   useEffect(() => {
     if (user) {
       const store = useSubscriptionStore.getState();
-      store.fetchSubscription();
-      store.fetchUsage(user.id);
+      
+      // First initialize the user's usage metrics
+      const initializeUsage = async () => {
+        try {
+          // Call the RPC function to ensure metrics exist
+          await supabase.rpc('initialize_new_user_usage', { user_uuid: user.id });
+          
+          // Then fetch subscription and usage data
+          await store.fetchSubscription();
+          await store.fetchUsage(user.id);
+        } catch (error) {
+          console.error("Error initializing user:", error);
+        }
+      };
+      
+      initializeUsage();
     } else {
       setSubscription(null);
     }
