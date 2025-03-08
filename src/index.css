@@ -52,3 +52,60 @@ textarea:focus {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+/* Mobile-specific overrides */
+@media (max-width: 768px) {
+  /* Ensure page content doesn't overflow horizontally */
+  body {
+    overflow-x: hidden;
+    height: 100%;
+    position: relative;
+  }
+  
+  /* Bottom padding to ensure content isn't hidden behind mobile nav */
+  .min-h-screen {
+    padding-bottom: 80px !important;
+    min-height: calc(100vh - 64px) !important;
+  }
+  
+  /* Set font size to prevent zooming on input focus in iOS */
+  input, textarea, select, button {
+    font-size: 16px;
+  }
+  
+  /* Fix mobile page sizing */
+  html, body, #root {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    overflow-x: hidden;
+  }
+  
+  /* Force proper rendering of pages extending to bottom */
+  #root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+  
+  /* Bottom padding for all pages to accommodate navigation */
+  main, div[class^="page-"], div[style*="pageContainer"] {
+    padding-bottom: 80px !important;
+  }
+  
+  /* Footer spacing fixes for mobile */
+  footer.footer {
+    margin-bottom: 64px !important;
+  }
+}
+
+/* Animation for loading spinner */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}

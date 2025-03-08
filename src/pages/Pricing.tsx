@@ -7,6 +7,8 @@ import { useSubscriptionStore } from '../store/subscriptionStore';
 import { Navbar } from '../components/Navbar';
 import { Sidebar } from '../components/Sidebar';
 import { LandingHeader } from '../components/LandingHeader';
+import { useUIStore } from '../store/uiStore';
+import MobilePricing from './MobilePricing';
 
 export const Pricing = () => {
   const navigate = useNavigate();
@@ -14,6 +16,12 @@ export const Pricing = () => {
   const subscription = useSubscriptionStore((state) => state.subscription);
   const [isLoading, setIsLoading] = React.useState<string | null>(null);
   const [error, setError] = React.useState<string | null>(null);
+  const isMobileView = useUIStore(state => state.isMobileView);
+
+  // If on mobile view and user is logged in, render mobile pricing
+  if (isMobileView && user) {
+    return <MobilePricing />;
+  }
 
   const handleSubscribe = async (priceId: string) => {
     if (!user) {

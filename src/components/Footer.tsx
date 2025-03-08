@@ -6,16 +6,23 @@ import { useSidebar } from './Sidebar';
 import { useUIStore } from '../store/uiStore';
 
 const Footer: React.FC = () => {
-  const { width, isMobile } = useSidebar();
+  const { width } = useSidebar();
   const darkMode = useUIStore((state) => state.darkMode);
+  const isMobileView = useUIStore((state) => state.isMobileView);
+  
+  // Calculate sidebar offset for non-mobile views
+  const sidebarOffset = isMobileView ? 0 : width;
   
   return (
-    <footer className={`footer ${darkMode ? 'dark' : ''}`} style={{ marginLeft: isMobile ? '0' : width }}>
+    <footer 
+      className={`footer ${darkMode ? 'dark' : ''}`} 
+      style={{ marginLeft: sidebarOffset }}
+    >
       <div className="container">
         <div className="footer-section">
           <div className="footer-logo">
             <img 
-              src="icons/noun-ninja.svg"
+              src="/icons/noun-ninja.svg"
               className={`w-6 h-6 ${darkMode ? 'invert' : ''}`}
               alt="StealthText Logo"
             />
@@ -104,9 +111,6 @@ const Footer: React.FC = () => {
           </ul>
         </div>
       </div>
-      
-      {/* Add extra padding at the bottom on mobile to account for the navigation bar */}
-      {isMobile && <div className="h-16"></div>}
     </footer>
   );
 };

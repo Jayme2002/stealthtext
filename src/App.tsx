@@ -29,6 +29,7 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const darkMode = useUIStore(state => state.darkMode);
   const setDarkMode = useUIStore(state => state.setDarkMode);
+  const { isMobileView, setMobileView } = useUIStore();
 
   // Initialize dark mode on app startup
   useEffect(() => {
@@ -38,6 +39,23 @@ function App() {
       document.documentElement.classList.remove('dark');
     }
   }, [darkMode]);
+
+  // Check for mobile view on mount and window resize
+  useEffect(() => {
+    const checkMobileView = () => {
+      const isMobile = window.innerWidth < 768;
+      setMobileView(isMobile);
+    };
+
+    // Initial check
+    checkMobileView();
+
+    // Add resize listener
+    window.addEventListener('resize', checkMobileView);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkMobileView);
+  }, [setMobileView]);
 
   useEffect(() => {
     const initializeAuth = async () => {

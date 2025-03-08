@@ -7,6 +7,8 @@ import { useSubscriptionStore } from '../store/subscriptionStore';
 import { Navbar } from '../components/Navbar';
 import { useAuthStore } from '../store/authStore';
 import { format, addMonths } from 'date-fns';
+import { useUIStore } from '../store/uiStore';
+import MobileHumanizer from './MobileHumanizer';
 
 interface HumanizedResult {
   text: string;
@@ -21,6 +23,12 @@ const Humanizer = () => {
   const usage = useSubscriptionStore((state) => state.usage);
   const user = useAuthStore((state) => state.user);
   const { width, isMobile } = useSidebar();
+  const isMobileView = useUIStore(state => state.isMobileView);
+  
+  // If on mobile view, render the mobile-specific version
+  if (isMobileView) {
+    return <MobileHumanizer />;
+  }
   
   useEffect(() => {
     fetchSubscription();
@@ -310,18 +318,16 @@ const Humanizer = () => {
       )}
 
       <div className="flex-1">
-        {!isMobile && (
-          <div className="fixed top-0 right-0 left-0 bg-white dark:bg-dark-800 border-b border-gray-200 dark:border-dark-700 z-10">
-            <div className="w-full px-4 sm:px-6 lg:px-8">
-              <div className="flex justify-end h-16 items-center w-full">
-                <Navbar />
-              </div>
+        <div className="fixed top-0 right-0 left-0 bg-white dark:bg-dark-800 border-b border-gray-200 dark:border-dark-700 z-10">
+          <div className="w-full px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-end h-16 items-center w-full">
+              <Navbar />
             </div>
           </div>
-        )}
+        </div>
 
         <div 
-          className={`${isMobile ? 'pt-4' : 'pt-16'} min-h-screen`} 
+          className="pt-16" 
           style={{ marginLeft: isMobile ? '0' : width }}
         >
           <div className="max-w-[1656px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6 pb-20">

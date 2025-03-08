@@ -7,12 +7,20 @@ import { Navbar } from '../components/Navbar';
 import { supabase } from '../lib/supabase';
 import { PLANS } from '../lib/stripe';
 import { Link } from 'react-router-dom';
+import { useUIStore } from '../store/uiStore';
+import MobileAccount from './MobileAccount';
 
 export const Account = () => {
   const subscription = useSubscriptionStore((state) => state.subscription);
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const { width } = useSidebar();
+  const isMobileView = useUIStore((state) => state.isMobileView);
+
+  // If on mobile view, render the mobile-specific version
+  if (isMobileView) {
+    return <MobileAccount />;
+  }
 
   const handleManageSubscription = async () => {
     try {
@@ -132,8 +140,8 @@ export const Account = () => {
           </div>
         </div>
 
-        <div className="pt-16" style={{ marginLeft: width }}>
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="pt-16" style={{ marginLeft: isMobileView ? '0' : width }}>
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20">
             <div className="mb-8">
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Account Settings</h1>
               <p className="mt-1 text-gray-600 dark:text-gray-300">Manage your subscription and account preferences</p>

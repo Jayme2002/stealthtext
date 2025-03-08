@@ -4,9 +4,18 @@ import { Navbar } from '../components/Navbar';
 import { Brain, Zap, Shield, Clock, Sparkles, Crown, Star, User } from 'lucide-react';
 import { useSubscriptionStore } from '../store/subscriptionStore';
 import { Link } from 'react-router-dom';
+import { useUIStore } from '../store/uiStore';
+import MobileDashboard from './MobileDashboard';
 
 const Dashboard = () => {
   const { width, isMobile } = useSidebar();
+  const isMobileView = useUIStore(state => state.isMobileView);
+  
+  // If on mobile view, render the mobile-specific dashboard
+  if (isMobileView) {
+    return <MobileDashboard />;
+  }
+
   const subscription = useSubscriptionStore((state) => state.subscription);
   const usage = useSubscriptionStore((state) => state.usage);
 
@@ -65,30 +74,26 @@ const Dashboard = () => {
     }
   ];
 
+  // Regular desktop dashboard
   return (
     <div className="min-h-screen flex bg-gray-50 dark:bg-dark-800">
       <Sidebar />
 
       <div className="flex-1">
-        {!isMobile && (
-          <div className="fixed top-0 right-0 left-0 bg-white dark:bg-dark-800 border-b border-gray-200 dark:border-dark-700 z-10">
-            <div className="w-full px-4 sm:px-6 lg:px-8">
-              <div className="flex justify-end h-16 items-center w-full">
-                <Navbar />
-              </div>
+        <div className="fixed top-0 right-0 left-0 bg-white dark:bg-dark-800 border-b border-gray-200 dark:border-dark-700 z-10">
+          <div className="w-full px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-end h-16 items-center w-full">
+              <Navbar />
             </div>
           </div>
-        )}
+        </div>
 
-        <div 
-          className={`${isMobile ? 'pt-4' : 'pt-16'}`} 
-          style={{ marginLeft: isMobile ? '0' : width }}
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8 pb-20 w-full overflow-x-hidden">
+        <div className="pt-16" style={{ marginLeft: width }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20 w-full">
             {/* Welcome Section */}
             <div className="bg-white dark:bg-dark-700 rounded-xl shadow-sm overflow-hidden mb-6">
-              <div className="p-4 md:p-6">
-                <h1 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              <div className="p-6">
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
                   Welcome to StealthText
                 </h1>
                 <p className="text-gray-600 dark:text-gray-300 mb-6">
@@ -106,7 +111,7 @@ const Dashboard = () => {
 
             {/* Usage Stats */}
             <div className="bg-white dark:bg-dark-700 rounded-xl shadow-sm overflow-hidden mb-6">
-              <div className="p-4 md:p-6">
+              <div className="p-6">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Usage Statistics</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="bg-gray-50 dark:bg-dark-600 rounded-lg p-4">
@@ -149,7 +154,7 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
               {features.map((feature, index) => (
                 <div key={index} className="bg-white dark:bg-dark-700 rounded-xl shadow-sm overflow-hidden">
-                  <div className="p-4 md:p-5">
+                  <div className="p-5">
                     <div className="flex items-center mb-3">
                       {feature.icon}
                       <h3 className="ml-3 text-base font-medium text-gray-900 dark:text-white">
