@@ -68,7 +68,7 @@ export const Sidebar = () => {
             </div>
             <button 
               onClick={() => setSidebarCollapsed(true)}
-              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-dark-700 dark:text-white"
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-dark-700 dark:text-white transition-colors duration-200"
             >
               <X className="w-5 h-5" />
             </button>
@@ -79,11 +79,11 @@ export const Sidebar = () => {
               <NavLink
                 to="/dashboard"
                 className={({ isActive }) =>
-                  `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100 dark:bg-dark-700' : 'hover:bg-gray-50 dark:hover:bg-dark-700'} dark:text-white`
+                  `flex items-center px-3 py-2.5 rounded-lg transition-all duration-200 ${isActive ? 'bg-gray-100 dark:bg-dark-700 font-medium text-purple-600 dark:text-purple-400' : 'hover:bg-gray-50 dark:hover:bg-dark-700 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'}`
                 }
                 onClick={() => setSidebarCollapsed(true)}
               >
-                <LayoutDashboard className="w-6 h-6 flex-shrink-0" />
+                <LayoutDashboard className="w-5 h-5 flex-shrink-0" />
                 <span className="ml-3">Dashboard</span>
               </NavLink>
             </div>
@@ -96,11 +96,11 @@ export const Sidebar = () => {
                 <NavLink
                   to="/humanizer"
                   className={({ isActive }) =>
-                    `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100 dark:bg-dark-700' : 'hover:bg-gray-50 dark:hover:bg-dark-700'} dark:text-white`
+                    `flex items-center px-3 py-2.5 rounded-lg transition-all duration-200 ${isActive ? 'bg-gray-100 dark:bg-dark-700 font-medium text-purple-600 dark:text-purple-400' : 'hover:bg-gray-50 dark:hover:bg-dark-700 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'}`
                   }
                   onClick={() => setSidebarCollapsed(true)}
                 >
-                  <Brain className="w-6 h-6 flex-shrink-0" />
+                  <Brain className="w-5 h-5 flex-shrink-0" />
                   <span className="ml-3">Humanizer</span>
                 </NavLink>
               </div>
@@ -114,21 +114,21 @@ export const Sidebar = () => {
                 <NavLink
                   to="/account"
                   className={({ isActive }) =>
-                    `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100 dark:bg-dark-700' : 'hover:bg-gray-50 dark:hover:bg-dark-700'} dark:text-white`
+                    `flex items-center px-3 py-2.5 rounded-lg transition-all duration-200 ${isActive ? 'bg-gray-100 dark:bg-dark-700 font-medium text-purple-600 dark:text-purple-400' : 'hover:bg-gray-50 dark:hover:bg-dark-700 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'}`
                   }
                   onClick={() => setSidebarCollapsed(true)}
                 >
-                  <User className="w-6 h-6 flex-shrink-0" />
+                  <User className="w-5 h-5 flex-shrink-0" />
                   <span className="ml-3">Account</span>
                 </NavLink>
                 <NavLink
                   to="/pricing"
                   className={({ isActive }) =>
-                    `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100 dark:bg-dark-700' : 'hover:bg-gray-50 dark:hover:bg-dark-700'} dark:text-white`
+                    `flex items-center px-3 py-2.5 rounded-lg transition-all duration-200 ${isActive ? 'bg-gray-100 dark:bg-dark-700 font-medium text-purple-600 dark:text-purple-400' : 'hover:bg-gray-50 dark:hover:bg-dark-700 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'}`
                   }
                   onClick={() => setSidebarCollapsed(true)}
                 >
-                  <CreditCard className="w-6 h-6 flex-shrink-0" />
+                  <CreditCard className="w-5 h-5 flex-shrink-0" />
                   <span className="ml-3">Pricing</span>
                 </NavLink>
               </div>
@@ -151,7 +151,7 @@ export const Sidebar = () => {
             sidebarCollapsed 
               ? 'right-0 translate-x-1/2' 
               : 'right-2'
-          } z-50 p-1.5 bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-700 rounded-full shadow-sm hover:bg-gray-50 dark:hover:bg-dark-700 dark:text-white`}
+          } z-50 p-1.5 bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-700 rounded-full shadow-sm hover:bg-gray-50 dark:hover:bg-dark-700 dark:text-white transition-colors duration-200`}
           aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {sidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
@@ -170,18 +170,22 @@ export const Sidebar = () => {
           </div>
         </div>
         
-        <nav className="flex-1 px-3">
+        <nav className="flex-1 px-3 overflow-y-auto">
           {/* Dashboard group */}
           <div className="space-y-1">
             <NavLink
               to="/dashboard"
               className={({ isActive }) =>
-                `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100 dark:bg-dark-700' : 'hover:bg-gray-50 dark:hover:bg-dark-700'} dark:text-white`
+                `flex items-center px-3 py-2.5 rounded-lg transition-all duration-200 ${
+                  isActive 
+                    ? 'bg-gray-100 dark:bg-dark-700 text-purple-600 dark:text-purple-400 font-medium' 
+                    : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-dark-700'
+                }`
               }
               onClick={() => isMobileView && setSidebarCollapsed(true)}
             >
-              <LayoutDashboard className="w-6 h-6 flex-shrink-0" />
-              <span className={`ml-3 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>
+              <LayoutDashboard className={`flex-shrink-0 ${sidebarCollapsed ? 'w-5 h-5 mx-auto' : 'w-5 h-5'}`} />
+              <span className={`ml-3 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100 w-auto block'}`}>
                 Dashboard
               </span>
             </NavLink>
@@ -189,19 +193,23 @@ export const Sidebar = () => {
 
           {/* Features group */}
           <div className="mt-6">
-            <div className={`text-xs font-semibold text-gray-400 dark:text-gray-500 px-3 mb-2 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>
-              Features
+            <div className={`text-xs font-semibold text-gray-400 dark:text-gray-500 px-3 mb-2 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'text-center' : ''}`}>
+              {sidebarCollapsed ? '•••' : 'Features'}
             </div>
             <div className="space-y-1">
               <NavLink
                 to="/humanizer"
                 className={({ isActive }) =>
-                  `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100 dark:bg-dark-700' : 'hover:bg-gray-50 dark:hover:bg-dark-700'} dark:text-white`
+                  `flex items-center px-3 py-2.5 rounded-lg transition-all duration-200 ${
+                    isActive 
+                      ? 'bg-gray-100 dark:bg-dark-700 text-purple-600 dark:text-purple-400 font-medium' 
+                      : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-dark-700'
+                  }`
                 }
                 onClick={() => isMobileView && setSidebarCollapsed(true)}
               >
-                <Brain className="w-6 h-6 flex-shrink-0" />
-                <span className={`ml-3 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>
+                <Brain className={`flex-shrink-0 ${sidebarCollapsed ? 'w-5 h-5 mx-auto' : 'w-5 h-5'}`} />
+                <span className={`ml-3 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100 w-auto block'}`}>
                   Humanizer
                 </span>
               </NavLink>
@@ -210,31 +218,39 @@ export const Sidebar = () => {
 
           {/* Settings group */}
           <div className="mt-6">
-            <div className={`text-xs font-semibold text-gray-400 dark:text-gray-500 px-3 mb-2 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>
-              Settings
+            <div className={`text-xs font-semibold text-gray-400 dark:text-gray-500 px-3 mb-2 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'text-center' : ''}`}>
+              {sidebarCollapsed ? '•••' : 'Settings'}
             </div>
             <div className="space-y-1">
               <NavLink
                 to="/account"
                 className={({ isActive }) =>
-                  `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100 dark:bg-dark-700' : 'hover:bg-gray-50 dark:hover:bg-dark-700'} dark:text-white`
+                  `flex items-center px-3 py-2.5 rounded-lg transition-all duration-200 ${
+                    isActive 
+                      ? 'bg-gray-100 dark:bg-dark-700 text-purple-600 dark:text-purple-400 font-medium' 
+                      : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-dark-700'
+                  }`
                 }
                 onClick={() => isMobileView && setSidebarCollapsed(true)}
               >
-                <User className="w-6 h-6 flex-shrink-0" />
-                <span className={`ml-3 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>
+                <User className={`flex-shrink-0 ${sidebarCollapsed ? 'w-5 h-5 mx-auto' : 'w-5 h-5'}`} />
+                <span className={`ml-3 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100 w-auto block'}`}>
                   Account
                 </span>
               </NavLink>
               <NavLink
                 to="/pricing"
                 className={({ isActive }) =>
-                  `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100 dark:bg-dark-700' : 'hover:bg-gray-50 dark:hover:bg-dark-700'} dark:text-white`
+                  `flex items-center px-3 py-2.5 rounded-lg transition-all duration-200 ${
+                    isActive 
+                      ? 'bg-gray-100 dark:bg-dark-700 text-purple-600 dark:text-purple-400 font-medium' 
+                      : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-dark-700'
+                  }`
                 }
                 onClick={() => isMobileView && setSidebarCollapsed(true)}
               >
-                <CreditCard className="w-6 h-6 flex-shrink-0" />
-                <span className={`ml-3 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>
+                <CreditCard className={`flex-shrink-0 ${sidebarCollapsed ? 'w-5 h-5 mx-auto' : 'w-5 h-5'}`} />
+                <span className={`ml-3 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100 w-auto block'}`}>
                   Pricing
                 </span>
               </NavLink>
