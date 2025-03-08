@@ -25,27 +25,80 @@ export const Navbar: React.FC<{ pageTitle?: string }> = ({ pageTitle }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const isFreePlan = !subscription || subscription.plan === 'free';
-  const PlanIcon = isFreePlan ? User : 
-                  subscription?.plan === 'premium' ? Crown :
-                  subscription?.plan === 'premium+' ? Star : Zap;
+  const getUsagePercentage = () => {
+    if (!usage) return 0;
+    return Math.min(Math.round((usage.used_words / usage.allocated_words) * 100), 100);
+  };
 
-  const getPlanColor = () => {
-    if (isFreePlan) return 'bg-gray-100 text-gray-700';
-    switch (subscription?.plan) {
-      case 'premium': return 'bg-gradient-to-r from-purple-500 to-pink-500 text-white';
-      case 'premium+': return 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white';
-      case 'pro': return 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white';
-      default: return 'bg-gray-100 text-gray-700';
+  const getPlanStyles = () => {
+    if (!subscription || subscription.plan === 'free') {
+      return {
+        containerClass: "bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-200 text-gray-700",
+        iconColor: "text-gray-500",
+        progressBarClass: "bg-gradient-to-r from-gray-400 to-gray-500",
+        textColor: "text-gray-700",
+        dividerColor: "bg-gray-300"
+      };
+    }
+    
+    switch (subscription.plan.toLowerCase()) {
+      case 'premium':
+        return {
+          containerClass: "bg-gradient-to-r from-purple-500 to-pink-500 text-white",
+          iconColor: "text-white",
+          progressBarClass: "bg-white/90",
+          textColor: "text-white",
+          dividerColor: "bg-white/30"
+        };
+      case 'premium+':
+        return {
+          containerClass: "bg-gradient-to-r from-yellow-400 to-orange-500 text-white",
+          iconColor: "text-white",
+          progressBarClass: "bg-white/90",
+          textColor: "text-white",
+          dividerColor: "bg-white/30"
+        };
+      case 'pro':
+        return {
+          containerClass: "bg-gradient-to-r from-blue-500 to-indigo-500 text-white",
+          iconColor: "text-white",
+          progressBarClass: "bg-white/90",
+          textColor: "text-white",
+          dividerColor: "bg-white/30"
+        };
+      default:
+        return {
+          containerClass: "bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-200 text-gray-700",
+          iconColor: "text-gray-500",
+          progressBarClass: "bg-gradient-to-r from-gray-400 to-gray-500",
+          textColor: "text-gray-700",
+          dividerColor: "bg-gray-300"
+        };
     }
   };
 
-  const getUsagePercentage = () => {
-    if (!usage) return 0;
-    return Math.round((usage.used_words / usage.allocated_words) * 100);
+  const getPlanIcon = () => {
+    if (!subscription || subscription.plan === 'free') {
+      return <User className={`w-4 h-4 ${styles.iconColor}`} />;
+    }
+    
+    switch (subscription.plan.toLowerCase()) {
+      case 'premium':
+        return <Crown className={`w-4 h-4 ${styles.iconColor}`} />;
+      case 'premium+':
+        return <Star className={`w-4 h-4 ${styles.iconColor}`} />;
+      case 'pro':
+        return <Zap className={`w-4 h-4 ${styles.iconColor}`} />;
+      default:
+        return <User className={`w-4 h-4 ${styles.iconColor}`} />;
+    }
   };
 
   const usagePercentage = getUsagePercentage();
+  const styles = getPlanStyles();
+  const PlanIcon = getPlanIcon;
+  
+  const isFreePlan = !subscription || subscription.plan === 'free';
 
   const navControls = !user ? (
     <div className="flex items-center gap-3">
@@ -64,21 +117,24 @@ export const Navbar: React.FC<{ pageTitle?: string }> = ({ pageTitle }) => {
     </div>
   ) : (
     <div className="flex items-center gap-4">
-      <div className={`flex items-center gap-2 px-3 py-2 rounded-lg ${getPlanColor()} shadow-sm`}>
-        <PlanIcon className="w-4 h-4" />
-        <span className="text-sm font-medium">
-          {subscription ? getPlanName(subscription.plan) : 'Free'}
+      <div className={`flex items-center gap-2 px-3 py-2 rounded-lg ${styles.containerClass} shadow-sm transition-all duration-300`}>
+        {PlanIcon()}
+        <span className={`text-sm font-medium ${styles.textColor}`}>
+          {subscription ? 
+            (subscription.plan === 'free' ? 'Free Plan' : getPlanName(subscription.plan)) : 
+            'Free Plan'}
         </span>
-        {!isFreePlan && (
+        
+        {usage && (
           <>
-            <div className="h-4 w-px bg-white/30 mx-2" />
+            <div className={`h-4 w-px ${styles.dividerColor} mx-2`} />
             <div className="flex items-center gap-1.5">
-              <div className="text-xs font-medium">
-                {usage?.used_words || 0}/{usage?.allocated_words || PLANS.free.monthly_words}
+              <div className={`text-xs font-medium ${styles.textColor}`}>
+                {usage.used_words || 0}/{usage.allocated_words || PLANS.free.monthly_words}
               </div>
               <div className="w-16 h-1.5 bg-black/10 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-white/90 rounded-full transition-all duration-300"
+                  className={`h-full ${styles.progressBarClass} rounded-full transition-all duration-300`}
                   style={{ width: `${usagePercentage}%` }}
                 />
               </div>
@@ -90,7 +146,7 @@ export const Navbar: React.FC<{ pageTitle?: string }> = ({ pageTitle }) => {
       {isFreePlan && (
         <Link
           to="/pricing"
-          className="px-3 py-1.5 text-xs font-medium text-white bg-black rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-1.5"
+          className="px-3 py-1.5 text-xs font-medium text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg hover:from-purple-600 hover:to-pink-600 shadow-sm transition-all duration-300 flex items-center gap-1.5"
         >
           <Crown className="w-3.5 h-3.5" />
           Upgrade
