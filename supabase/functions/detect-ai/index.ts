@@ -21,18 +21,20 @@ serve(async (req) => {
       )
     }
 
-    // Get API key from environment variables
-    const apiKey = Deno.env.get('HUMANIZED_AI_API_KEY')
-    if (!apiKey) {
-      console.error('HUMANIZED_AI_API_KEY environment variable is not set')
-      return new Response(
-        JSON.stringify({ error: 'API key not configured' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+    // Extract the actual key if it already includes "Api-Key "
+    let apiKey = Deno.env.get('HUMANIZED_AI_API_KEY') || '';
+    if (apiKey.startsWith('Api-Key ')) {
+      apiKey = apiKey.substring(8); // Remove the "Api-Key " prefix
     }
+
+    // Now construct the header correctly
+    const authHeader = `Api-Key ${apiKey}`;
 
     const url = 'https://www.the-ghost-ai-api.com/detection/ai-v2/'
     const payload = { text }
+
+    // Explicitly log the exact auth header format
+    console.log(`EXACT AUTH HEADER FORMAT: "Authorization": "Api-Key ${apiKey.substring(0, 5)}...${apiKey.substring(apiKey.length - 3)}"`);
 
     // Make the API request with the correct authentication format
     try {
@@ -40,14 +42,24 @@ serve(async (req) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Api-Key ${apiKey}`
+          "Authorization": authHeader
         },
         body: JSON.stringify(payload)
       })
       
-      const json = await response.json()
+      const responseText = await response.text()
+      console.log('Raw response:', responseText)
+      
+      let json;
+      try {
+        json = JSON.parse(responseText)
+      } catch (e) {
+        console.error('Failed to parse response as JSON:', e)
+        throw new Error('Invalid JSON response')
+      }
+      
       if (!response.ok) {
-        console.error('AI detection API error:', json.error)
+        console.error('AI detection API error:', json)
         throw new Error(json.error || 'AI detection API error')
       }
       

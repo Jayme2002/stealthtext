@@ -105,10 +105,20 @@ export async function detectAI(text: string): Promise<AIDetectionResult | null> 
       body: JSON.stringify({ text })
     });
     
-    const json = await response.json();
+    const responseText = await response.text(); // Get raw response text first
+    console.error('Full API response:', responseText);
+    
+    let json;
+    try {
+      json = JSON.parse(responseText);
+    } catch (e) {
+      console.error('Failed to parse response as JSON:', e);
+      throw new Error('Invalid JSON response from API');
+    }
+    
     if (!response.ok) {
-      console.error('AI detection API error:', json.error);
-      return null;
+      console.error('AI detection API error details:', json);
+      throw new Error(json.error || 'AI detection API error');
     }
     
     return json.result as AIDetectionResult;

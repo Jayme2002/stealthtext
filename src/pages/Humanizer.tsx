@@ -59,11 +59,16 @@ const Humanizer = () => {
   }, [text]);
 
   const handleHumanize = async () => {
-    if (!text.trim() || !user) return;
+    if (!user) return;
+    
+    // Determine which text to process - use humanizedResult.text if re-humanizing
+    const textToProcess = humanizedResult ? humanizedResult.text : text.trim();
+    
+    if (!textToProcess) return;
     setError(null);
 
-    const charCount = text.length;
-    const wordCount = text.split(/\s+/).filter(Boolean).length;
+    const charCount = textToProcess.length;
+    const wordCount = textToProcess.split(/\s+/).filter(Boolean).length;
     
     // Check if we have usage data
     if (!usage) {
@@ -105,7 +110,7 @@ const Humanizer = () => {
 
     setIsHumanizing(true);
     try {
-      const humanizedText = await humanizeText(text, intensity);
+      const humanizedText = await humanizeText(textToProcess, intensity);
       const aiScore = await checkForAI(humanizedText);
       setHumanizedResult({ text: humanizedText, aiScore });
       useSubscriptionStore.getState().fetchUsage(user.id);
