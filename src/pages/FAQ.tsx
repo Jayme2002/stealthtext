@@ -37,14 +37,14 @@ export const FAQ = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-dark-800">
       <LandingHeader />
       
       <main className="pt-24 pb-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900">Frequently Asked Questions</h1>
-            <p className="mt-4 text-lg text-gray-600">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Frequently Asked Questions</h1>
+            <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
               Everything you need to know about StealthText
             </p>
           </div>
@@ -53,17 +53,17 @@ export const FAQ = () => {
             {faqs.map((faq, index) => (
               <div
                 key={index}
-                className="bg-white rounded-xl border border-gray-200 overflow-hidden transition-all duration-200 hover:shadow-sm"
+                className="bg-white dark:bg-dark-700 rounded-xl border border-gray-200 dark:border-dark-600 overflow-hidden transition-all duration-200 hover:shadow-sm"
               >
                 <button
                   onClick={() => setOpenSection(openSection === index ? null : index)}
                   className="w-full px-6 py-4 text-left flex items-center justify-between"
                 >
-                  <span className="text-lg font-medium text-gray-900">{faq.question}</span>
+                  <span className="text-lg font-medium text-gray-900 dark:text-white">{faq.question}</span>
                   {openSection === index ? (
-                    <ChevronUp className="w-5 h-5 text-gray-500" />
+                    <ChevronUp className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                   ) : (
-                    <ChevronDown className="w-5 h-5 text-gray-500" />
+                    <ChevronDown className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                   )}
                 </button>
                 
@@ -72,7 +72,7 @@ export const FAQ = () => {
                     openSection === index ? 'pb-4 max-h-96' : 'max-h-0 overflow-hidden'
                   }`}
                 >
-                  <p className="text-gray-600">{faq.answer}</p>
+                  <p className="text-gray-600 dark:text-gray-300">{faq.answer}</p>
                 </div>
               </div>
             ))}

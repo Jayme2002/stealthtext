@@ -44,31 +44,31 @@ export const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50">
+    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50 dark:bg-gray-900">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
           <Link to="/" className="flex items-center gap-2">
             <img 
               src="/icons/noun-ninja.svg" 
-              className="w-8 h-8"
+              className="w-8 h-8 dark:invert"
               alt="StealthText Logo"
             />
-            <span className="font-bold text-2xl">StealthText</span>
+            <span className="font-bold text-2xl dark:text-white">StealthText</span>
           </Link>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
           Create your account
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
+        <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
           Already have an account?{' '}
-          <Link to="/login" className="font-medium text-black hover:text-gray-800">
+          <Link to="/login" className="font-medium text-black dark:text-white hover:text-gray-800 dark:hover:text-gray-300">
             Sign in
           </Link>
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-sm sm:rounded-xl sm:px-10 border border-gray-200">
+        <div className="bg-white dark:bg-gray-800 py-8 px-4 shadow-sm sm:rounded-xl sm:px-10 border border-gray-200 dark:border-gray-700">
           {/* Feature Highlights */}
           <div className="mb-8 p-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg text-white">
             <div className="flex items-center gap-2 mb-3">
@@ -93,13 +93,13 @@ export const Signup = () => {
 
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+              <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-300 px-4 py-3 rounded-lg text-sm">
                 {error}
               </div>
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Email address
               </label>
               <div className="mt-1 relative">
@@ -111,14 +111,14 @@ export const Signup = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 block w-full appearance-none rounded-lg border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-purple-500 focus:outline-none focus:ring-purple-500 sm:text-sm"
+                  className="pl-10 block w-full appearance-none rounded-lg border border-gray-300 dark:border-gray-600 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-purple-500 focus:outline-none focus:ring-purple-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 sm:text-sm"
                 />
                 <Mail className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
               </div>
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Password
               </label>
               <div className="mt-1 relative">
@@ -130,12 +130,12 @@ export const Signup = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 block w-full appearance-none rounded-lg border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-purple-500 focus:outline-none focus:ring-purple-500 sm:text-sm"
+                  className="pl-10 block w-full appearance-none rounded-lg border border-gray-300 dark:border-gray-600 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-purple-500 focus:outline-none focus:ring-purple-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 sm:text-sm"
                 />
                 <Lock className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
@@ -156,7 +156,7 @@ export const Signup = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="flex w-full justify-center items-center rounded-lg border border-transparent bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+                className="flex w-full justify-center items-center rounded-lg border border-transparent bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
               >
                 {isLoading ? (
                   <>
@@ -172,21 +172,21 @@ export const Signup = () => {
               </button>
             </div>
 
-            <p className="text-xs text-center text-gray-500">
+            <p className="text-xs text-center text-gray-500 dark:text-gray-400">
               By signing up, you agree to our{' '}
-              <Link to="/terms" className="text-black hover:text-gray-800">Terms of Service</Link>
+              <Link to="/terms" className="text-black dark:text-white hover:text-gray-800 dark:hover:text-gray-300">Terms of Service</Link>
               {' '}and{' '}
-              <Link to="/privacy" className="text-black hover:text-gray-800">Privacy Policy</Link>
+              <Link to="/privacy" className="text-black dark:text-white hover:text-gray-800 dark:hover:text-gray-300">Privacy Policy</Link>
             </p>
           </form>
 
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
+                <div className="w-full border-t border-gray-300 dark:border-gray-600" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="bg-white px-2 text-gray-500">Or continue with</span>
+                <span className="bg-white dark:bg-gray-800 px-2 text-gray-500 dark:text-gray-400">Or continue with</span>
               </div>
             </div>
 
@@ -195,7 +195,7 @@ export const Signup = () => {
                 type="button"
                 onClick={handleGoogleSignIn}
                 disabled={isGoogleLoading}
-                className="flex w-full justify-center items-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex w-full justify-center items-center gap-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isGoogleLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />

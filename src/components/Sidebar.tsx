@@ -53,22 +53,22 @@ export const Sidebar = () => {
         />
         
         <div 
-          className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${
+          className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-dark-800 shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${
             sidebarCollapsed ? '-translate-x-full' : 'translate-x-0'
           }`}
         >
-          <div className="flex justify-between items-center p-4 border-b">
+          <div className="flex justify-between items-center p-4 border-b dark:border-dark-700">
             <div className="flex items-center">
               <img 
                 src="/icons/noun-ninja.svg"
-                className="w-8 h-8"
+                className="w-8 h-8 dark:invert"
                 alt="StealthText Logo"
               />
-              <span className="ml-3 font-medium">StealthText</span>
+              <span className="ml-3 font-medium dark:text-white">StealthText</span>
             </div>
             <button 
               onClick={() => setSidebarCollapsed(true)}
-              className="p-2 rounded-full hover:bg-gray-100"
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-dark-700 dark:text-white"
             >
               <X className="w-5 h-5" />
             </button>
@@ -79,7 +79,7 @@ export const Sidebar = () => {
               <NavLink
                 to="/dashboard"
                 className={({ isActive }) =>
-                  `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100' : 'hover:bg-gray-50'}`
+                  `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100 dark:bg-dark-700' : 'hover:bg-gray-50 dark:hover:bg-dark-700'} dark:text-white`
                 }
                 onClick={() => setSidebarCollapsed(true)}
               >
@@ -89,14 +89,14 @@ export const Sidebar = () => {
             </div>
 
             <div className="mt-6">
-              <div className="text-xs font-semibold text-gray-400 px-3 mb-2">
+              <div className="text-xs font-semibold text-gray-400 dark:text-gray-500 px-3 mb-2">
                 Features
               </div>
               <div className="space-y-1">
                 <NavLink
                   to="/humanizer"
                   className={({ isActive }) =>
-                    `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100' : 'hover:bg-gray-50'}`
+                    `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100 dark:bg-dark-700' : 'hover:bg-gray-50 dark:hover:bg-dark-700'} dark:text-white`
                   }
                   onClick={() => setSidebarCollapsed(true)}
                 >
@@ -107,14 +107,14 @@ export const Sidebar = () => {
             </div>
 
             <div className="mt-6">
-              <div className="text-xs font-semibold text-gray-400 px-3 mb-2">
+              <div className="text-xs font-semibold text-gray-400 dark:text-gray-500 px-3 mb-2">
                 Settings
               </div>
               <div className="space-y-1">
                 <NavLink
                   to="/account"
                   className={({ isActive }) =>
-                    `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100' : 'hover:bg-gray-50'}`
+                    `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100 dark:bg-dark-700' : 'hover:bg-gray-50 dark:hover:bg-dark-700'} dark:text-white`
                   }
                   onClick={() => setSidebarCollapsed(true)}
                 >
@@ -124,7 +124,7 @@ export const Sidebar = () => {
                 <NavLink
                   to="/pricing"
                   className={({ isActive }) =>
-                    `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100' : 'hover:bg-gray-50'}`
+                    `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100 dark:bg-dark-700' : 'hover:bg-gray-50 dark:hover:bg-dark-700'} dark:text-white`
                   }
                   onClick={() => setSidebarCollapsed(true)}
                 >
@@ -143,7 +143,7 @@ export const Sidebar = () => {
   return (
     <SidebarContext.Provider value={{ collapsed: sidebarCollapsed, width, isMobile: isMobileView }}>
       <div 
-        className={`fixed top-0 left-0 h-screen flex flex-col transition-all duration-300 ease-in-out bg-white border-r border-gray-200 z-40 ${sidebarCollapsed ? 'w-20' : 'w-64'}`}
+        className={`fixed top-0 left-0 h-screen flex flex-col transition-all duration-300 ease-in-out bg-white dark:bg-dark-800 border-r border-gray-200 dark:border-dark-700 z-40 ${sidebarCollapsed ? 'w-20' : 'w-64'}`}
       >
         <button 
           onClick={toggleSidebar}
@@ -151,7 +151,7 @@ export const Sidebar = () => {
             sidebarCollapsed 
               ? 'right-0 translate-x-1/2' 
               : 'right-2'
-          } z-50 p-1.5 bg-white border border-gray-200 rounded-full shadow-sm hover:bg-gray-50`}
+          } z-50 p-1.5 bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-700 rounded-full shadow-sm hover:bg-gray-50 dark:hover:bg-dark-700 dark:text-white`}
           aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {sidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
@@ -161,10 +161,10 @@ export const Sidebar = () => {
           <div className="flex items-center px-3 py-2.5">
             <img 
               src="/icons/noun-ninja.svg"
-              className="w-8 h-8 flex-shrink-0 transition-all"
+              className="w-8 h-8 flex-shrink-0 transition-all dark:invert"
               alt="StealthText Logo"
             />
-            <span className={`ml-3 font-medium whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>
+            <span className={`ml-3 font-medium whitespace-nowrap transition-all duration-300 dark:text-white ${sidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>
               StealthText
             </span>
           </div>
@@ -176,7 +176,7 @@ export const Sidebar = () => {
             <NavLink
               to="/dashboard"
               className={({ isActive }) =>
-                `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100' : 'hover:bg-gray-50'}`
+                `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100 dark:bg-dark-700' : 'hover:bg-gray-50 dark:hover:bg-dark-700'} dark:text-white`
               }
               onClick={() => isMobileView && setSidebarCollapsed(true)}
             >
@@ -189,14 +189,14 @@ export const Sidebar = () => {
 
           {/* Features group */}
           <div className="mt-6">
-            <div className={`text-xs font-semibold text-gray-400 px-3 mb-2 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>
+            <div className={`text-xs font-semibold text-gray-400 dark:text-gray-500 px-3 mb-2 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>
               Features
             </div>
             <div className="space-y-1">
               <NavLink
                 to="/humanizer"
                 className={({ isActive }) =>
-                  `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100' : 'hover:bg-gray-50'}`
+                  `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100 dark:bg-dark-700' : 'hover:bg-gray-50 dark:hover:bg-dark-700'} dark:text-white`
                 }
                 onClick={() => isMobileView && setSidebarCollapsed(true)}
               >
@@ -210,14 +210,14 @@ export const Sidebar = () => {
 
           {/* Settings group */}
           <div className="mt-6">
-            <div className={`text-xs font-semibold text-gray-400 px-3 mb-2 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>
+            <div className={`text-xs font-semibold text-gray-400 dark:text-gray-500 px-3 mb-2 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>
               Settings
             </div>
             <div className="space-y-1">
               <NavLink
                 to="/account"
                 className={({ isActive }) =>
-                  `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100' : 'hover:bg-gray-50'}`
+                  `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100 dark:bg-dark-700' : 'hover:bg-gray-50 dark:hover:bg-dark-700'} dark:text-white`
                 }
                 onClick={() => isMobileView && setSidebarCollapsed(true)}
               >
@@ -229,7 +229,7 @@ export const Sidebar = () => {
               <NavLink
                 to="/pricing"
                 className={({ isActive }) =>
-                  `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100' : 'hover:bg-gray-50'}`
+                  `flex items-center px-3 py-2.5 rounded-lg transition-colors ${isActive ? 'bg-gray-100 dark:bg-dark-700' : 'hover:bg-gray-50 dark:hover:bg-dark-700'} dark:text-white`
                 }
                 onClick={() => isMobileView && setSidebarCollapsed(true)}
               >

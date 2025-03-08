@@ -132,15 +132,15 @@ const Humanizer = () => {
       case 'LOW':
         return intensity === 'LOW' 
           ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white'
-          : 'bg-gray-100 text-gray-700 hover:bg-gray-200';
+          : 'bg-gray-100 dark:bg-dark-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-dark-600';
       case 'MEDIUM':
         return intensity === 'MEDIUM'
           ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
-          : 'bg-gray-100 text-gray-700 hover:bg-gray-200';
+          : 'bg-gray-100 dark:bg-dark-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-dark-600';
       case 'HIGH':
         return intensity === 'HIGH'
           ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white'
-          : 'bg-gray-100 text-gray-700 hover:bg-gray-200';
+          : 'bg-gray-100 dark:bg-dark-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-dark-600';
     }
   };
 
@@ -160,26 +160,26 @@ const Humanizer = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="min-h-screen flex bg-gray-50 dark:bg-dark-800">
       <Sidebar />
       
       {/* Single Request Word Limit Modal */}
       {showWordLimitModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative">
+          <div className="bg-white dark:bg-dark-700 rounded-xl shadow-lg max-w-md w-full p-6 relative">
             <button 
               onClick={() => setShowWordLimitModal(false)}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+              className="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
             >
               <X className="w-5 h-5" />
             </button>
             
             <div className="text-center mb-5">
-              <div className="mx-auto bg-red-100 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-                <AlertCircle className="w-6 h-6 text-red-500" />
+              <div className="mx-auto bg-red-100 dark:bg-red-900/50 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                <AlertCircle className="w-6 h-6 text-red-500 dark:text-red-400" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Word Limit Exceeded</h3>
-              <p className="text-sm text-gray-600 mb-4">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Word Limit Exceeded</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
                 You've exceeded the word limit for a single request. Your current plan allows 
                 <span className="font-semibold"> {usage?.max_request_words || 250} words </span> 
                 per request, but you're trying to process 
@@ -188,13 +188,13 @@ const Humanizer = () => {
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <button
                   onClick={() => setShowWordLimitModal(false)}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-dark-600 rounded-lg hover:bg-gray-200 dark:hover:bg-dark-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:focus:ring-offset-dark-800"
                 >
                   Reduce Text
                 </button>
                 <button
                   onClick={handleUpgrade}
-                  className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                  className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-offset-dark-800"
                 >
                   Upgrade Plan
                 </button>
@@ -207,33 +207,33 @@ const Humanizer = () => {
       {/* Updated Monthly Word Limit Modal */}
       {showMonthlyLimitModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative">
+          <div className="bg-white dark:bg-dark-700 rounded-xl shadow-lg max-w-md w-full p-6 relative">
             <button 
               onClick={() => setShowMonthlyLimitModal(false)}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+              className="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
             >
               <X className="w-5 h-5" />
             </button>
             
             <div className="text-center mb-5">
-              <div className="mx-auto bg-amber-100 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-                <AlertCircle className="w-6 h-6 text-amber-500" />
+              <div className="mx-auto bg-amber-100 dark:bg-amber-900/50 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                <AlertCircle className="w-6 h-6 text-amber-500 dark:text-amber-400" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Monthly Word Limit Reached</h3>
-              <p className="text-sm text-gray-600 mb-4">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Monthly Word Limit Reached</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
                 You've used all {usage?.allocated_words || 500} words in your monthly allocation.
                 Your usage will reset on <span className="font-semibold">{getNextResetDate()}</span>.
               </p>
               
               {/* Progress bar showing usage */}
-              <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+              <div className="w-full bg-gray-200 dark:bg-dark-600 rounded-full h-2.5 mb-4">
                 <div 
                   className="bg-gradient-to-r from-amber-500 to-red-500 h-2.5 rounded-full" 
                   style={{ width: '100%' }}
                 ></div>
               </div>
               
-              <div className="flex justify-between text-xs text-gray-500 mb-5">
+              <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-5">
                 <span>Used: {usage?.used_words || 0}</span>
                 <span>Total: {usage?.allocated_words || 500}</span>
               </div>
@@ -241,13 +241,13 @@ const Humanizer = () => {
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <button
                   onClick={() => setShowMonthlyLimitModal(false)}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-dark-600 rounded-lg hover:bg-gray-200 dark:hover:bg-dark-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:focus:ring-offset-dark-800"
                 >
                   Close
                 </button>
                 <button
                   onClick={handleUpgrade}
-                  className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                  className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-offset-dark-800"
                 >
                   Upgrade Plan
                 </button>
@@ -260,32 +260,32 @@ const Humanizer = () => {
       {/* New Not Enough Words Left Modal */}
       {showNotEnoughWordsModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative">
+          <div className="bg-white dark:bg-dark-700 rounded-xl shadow-lg max-w-md w-full p-6 relative">
             <button 
               onClick={() => setShowNotEnoughWordsModal(false)}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+              className="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
             >
               <X className="w-5 h-5" />
             </button>
             
             <div className="text-center mb-5">
-              <div className="mx-auto bg-blue-100 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-                <AlertCircle className="w-6 h-6 text-blue-500" />
+              <div className="mx-auto bg-blue-100 dark:bg-blue-900/50 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                <AlertCircle className="w-6 h-6 text-blue-500 dark:text-blue-400" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Not Enough Words Remaining</h3>
-              <p className="text-sm text-gray-600 mb-4">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Not Enough Words Remaining</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
                 You're trying to process <span className="font-semibold">{currentWordCount} words</span>, but you only have <span className="font-semibold">{wordsRemaining} words</span> remaining in your monthly allocation.
               </p>
               
               {/* Progress bar showing usage */}
-              <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+              <div className="w-full bg-gray-200 dark:bg-dark-600 rounded-full h-2.5 mb-4">
                 <div 
                   className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2.5 rounded-full" 
                   style={{ width: `${Math.min(((usage?.used_words || 0) / (usage?.allocated_words || 1)) * 100, 100)}%` }}
                 ></div>
               </div>
               
-              <div className="flex justify-between text-xs text-gray-500 mb-5">
+              <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-5">
                 <span>Used: {usage?.used_words || 0}</span>
                 <span>Total: {usage?.allocated_words || 500}</span>
               </div>
@@ -293,13 +293,13 @@ const Humanizer = () => {
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <button
                   onClick={() => setShowNotEnoughWordsModal(false)}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-dark-600 rounded-lg hover:bg-gray-200 dark:hover:bg-dark-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:focus:ring-offset-dark-800"
                 >
                   Reduce Text
                 </button>
                 <button
                   onClick={handleUpgrade}
-                  className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                  className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 dark:focus:ring-offset-dark-800"
                 >
                   Upgrade Plan
                 </button>
@@ -311,7 +311,7 @@ const Humanizer = () => {
 
       <div className="flex-1">
         {!isMobile && (
-          <div className="fixed top-0 right-0 left-0 bg-white border-b border-gray-200 z-10">
+          <div className="fixed top-0 right-0 left-0 bg-white dark:bg-dark-800 border-b border-gray-200 dark:border-dark-700 z-10">
             <div className="w-full px-4 sm:px-6 lg:px-8">
               <div className="flex justify-end h-16 items-center w-full">
                 <Navbar />
@@ -332,26 +332,26 @@ const Humanizer = () => {
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900">AI Text Humanizer</h1>
-                  <p className="mt-0.5 text-sm md:text-base text-gray-600">Transform AI-generated content into natural, human-like text.</p>
+                  <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">AI Text Humanizer</h1>
+                  <p className="mt-0.5 text-sm md:text-base text-gray-600 dark:text-gray-300">Transform AI-generated content into natural, human-like text.</p>
                 </div>
               </div>
             </div>
 
             {error && (
-              <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-3 flex items-start">
-                <AlertCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
+              <div className="mb-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-3 flex items-start">
+                <AlertCircle className="w-5 h-5 text-red-500 dark:text-red-400 mt-0.5 flex-shrink-0" />
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-red-800">Error</h3>
-                  <p className="text-sm text-red-700 mt-1">{error}</p>
+                  <h3 className="text-sm font-medium text-red-800 dark:text-red-300">Error</h3>
+                  <p className="text-sm text-red-700 dark:text-red-400 mt-1">{error}</p>
                 </div>
               </div>
             )}
 
             {/* Intensity Selector - More compact */}
-            <div className="mb-4 bg-white rounded-xl shadow-sm p-3 md:p-4 border border-gray-200">
+            <div className="mb-4 bg-white dark:bg-dark-700 rounded-xl shadow-sm p-3 md:p-4 border border-gray-200 dark:border-dark-600">
               <div className="flex flex-wrap md:flex-nowrap items-center gap-2 md:gap-4">
-                <div className="flex items-center text-gray-700">
+                <div className="flex items-center text-gray-700 dark:text-gray-300">
                   <Sliders className="w-4 h-4 mr-1 md:mr-2" />
                   <span className="text-sm md:text-base font-medium">Humanization Intensity</span>
                 </div>
@@ -366,7 +366,7 @@ const Humanizer = () => {
                     </button>
                   ))}
                 </div>
-                <div className="w-full md:w-auto md:ml-2 text-xs md:text-sm text-gray-500 mt-2 md:mt-0">
+                <div className="w-full md:w-auto md:ml-2 text-xs md:text-sm text-gray-500 dark:text-gray-400 mt-2 md:mt-0">
                   {intensity === 'LOW' && 'Subtle changes while maintaining original style'}
                   {intensity === 'MEDIUM' && 'Balanced humanization with moderate adjustments'}
                   {intensity === 'HIGH' && 'Maximum humanization with significant rewrites'}
@@ -376,16 +376,16 @@ const Humanizer = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Input Box - Reduced height */}
-              <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+              <div className="bg-white dark:bg-dark-700 rounded-xl shadow-sm overflow-hidden border border-gray-200 dark:border-dark-600">
                 <div className="p-3 md:p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center text-gray-700">
+                    <div className="flex items-center text-gray-700 dark:text-gray-300">
                       <div className="p-1 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-lg">
                         <Bot className="w-4 h-4 text-white" />
                       </div>
                       <span className="font-medium ml-2 text-sm md:text-base">AI Text</span>
                     </div>
-                    <div className="text-xs md:text-sm text-gray-500">
+                    <div className="text-xs md:text-sm text-gray-500 dark:text-gray-400">
                       {text.length} characters | {text.split(/\s+/).filter(Boolean).length} words
                     </div>
                   </div>
@@ -393,12 +393,12 @@ const Humanizer = () => {
                     <textarea
                       value={text}
                       onChange={(e) => setText(e.target.value)}
-                      className="w-full h-[180px] sm:h-[220px] md:h-[250px] lg:h-[300px] xl:h-[400px] p-3 pr-10 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white"
+                      className="w-full h-[180px] sm:h-[220px] md:h-[250px] lg:h-[300px] xl:h-[400px] p-3 pr-10 border border-gray-200 dark:border-dark-600 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-dark-700 dark:text-white"
                       placeholder="Paste your AI-generated text here..."
                     />
                     <button
                       onClick={() => copyToClipboard(text)}
-                      className="absolute top-2 right-2 p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                      className="absolute top-2 right-2 p-1.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-600 rounded-lg transition-colors"
                       title="Copy to clipboard"
                     >
                       {showCopyTooltip ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
@@ -408,7 +408,7 @@ const Humanizer = () => {
                   <div className="mt-3 flex items-center justify-between">
                     <button
                       onClick={() => setText('')}
-                      className="text-xs md:text-sm text-gray-600 hover:text-gray-900"
+                      className="text-xs md:text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
                     >
                       Clear text
                     </button>
@@ -434,10 +434,10 @@ const Humanizer = () => {
               </div>
 
               {/* Output Box - Reduced height */}
-              <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+              <div className="bg-white dark:bg-dark-700 rounded-xl shadow-sm overflow-hidden border border-gray-200 dark:border-dark-600">
                 <div className="p-3 md:p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center text-gray-700">
+                    <div className="flex items-center text-gray-700 dark:text-gray-300">
                       <div className="p-1 bg-gradient-to-br from-green-500 to-emerald-400 rounded-lg">
                         <User className="w-4 h-4 text-white" />
                       </div>
@@ -445,8 +445,8 @@ const Humanizer = () => {
                     </div>
                     {humanizedResult && (
                       <div className="flex items-center">
-                        <FileText className="w-3 h-3 md:w-4 md:h-4 mr-1.5 text-gray-500" />
-                        <span className="text-xs md:text-sm text-gray-500">
+                        <FileText className="w-3 h-3 md:w-4 md:h-4 mr-1.5 text-gray-500 dark:text-gray-400" />
+                        <span className="text-xs md:text-sm text-gray-500 dark:text-gray-400">
                           {humanizedResult.text.length} chars | {humanizedResult.text.split(/\s+/).filter(Boolean).length} words
                         </span>
                       </div>
@@ -456,13 +456,13 @@ const Humanizer = () => {
                     <textarea
                       value={humanizedResult?.text || ''}
                       readOnly
-                      className="w-full h-[180px] sm:h-[220px] md:h-[250px] lg:h-[300px] xl:h-[400px] p-3 pr-10 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-50"
+                      className="w-full h-[180px] sm:h-[220px] md:h-[250px] lg:h-[300px] xl:h-[400px] p-3 pr-10 border border-gray-200 dark:border-dark-600 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-50 dark:bg-dark-600 dark:text-white"
                       placeholder="Humanized text will appear here..."
                     />
                     {humanizedResult && (
                       <button
                         onClick={() => copyToClipboard(humanizedResult.text)}
-                        className="absolute top-2 right-2 p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                        className="absolute top-2 right-2 p-1.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-600 rounded-lg transition-colors"
                         title="Copy to clipboard"
                       >
                         {showCopyTooltip ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
@@ -473,7 +473,7 @@ const Humanizer = () => {
                   <div className="mt-3 flex items-center justify-between">
                     {humanizedResult && (
                       <div className="flex items-center">
-                        <span className="text-xs md:text-sm text-gray-600 mr-2">AI Detection Score:</span>
+                        <span className="text-xs md:text-sm text-gray-600 dark:text-gray-300 mr-2">AI Detection Score:</span>
                         <span className={`text-xs md:text-sm font-medium ${getScoreColor(humanizedResult.aiScore)}`}>
                           {humanizedResult.aiScore}%
                         </span>

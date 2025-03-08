@@ -42,7 +42,7 @@ export const Home = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-dark-800">
       <Helmet>
         <title>StealthText - Undetectable AI Content</title>
         <meta name="description" content="Transform AI-generated content into natural, human-like text that bypasses AI detection with our advanced humanization technology." />
@@ -81,11 +81,11 @@ export const Home = () => {
         <div className="relative pt-16 sm:pt-20 overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-gray-900 mb-3 sm:mb-4">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-3 sm:mb-4">
                 Make Your AI Content
                 <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent"> Undetectable</span>
               </h1>
-              <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-4 sm:mb-6 max-w-2xl mx-auto">
+              <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-4 sm:mb-6 max-w-2xl mx-auto">
                 Transform AI-generated content into natural, human-like text that bypasses AI detection with our advanced humanization technology.
               </p>
               <div className="flex items-center justify-center gap-3 sm:gap-4 mb-6 sm:mb-8">
@@ -98,7 +98,7 @@ export const Home = () => {
                 </Link>
                 <Link
                   to="/pricing"
-                  className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                  className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-dark-700 rounded-lg hover:bg-gray-200 dark:hover:bg-dark-600 transition-colors"
                 >
                   View Pricing
                   <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
@@ -109,16 +109,16 @@ export const Home = () => {
             {/* Editor Preview */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 mb-10 sm:mb-14">
               {/* Input Box */}
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+              <div className="bg-white dark:bg-dark-700 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-dark-600">
                 <div className="p-4 sm:p-6">
                   <div className="flex items-center justify-between mb-2 sm:mb-3">
-                    <div className="flex items-center text-gray-700">
+                    <div className="flex items-center text-gray-700 dark:text-gray-300">
                       <div className="p-1.5 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-lg">
                         <Sparkles className="w-4 h-4 text-white" />
                       </div>
                       <span className="font-medium ml-2">Original Text</span>
                     </div>
-                    <div className="text-xs sm:text-sm text-gray-500">
+                    <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                       {text.length} characters | {text.split(/\s+/).filter(Boolean).length} words
                     </div>
                   </div>
@@ -126,12 +126,12 @@ export const Home = () => {
                     <textarea
                       value={text}
                       onChange={(e) => setText(e.target.value)}
-                      className="w-full h-[200px] sm:h-[250px] md:h-[300px] p-3 sm:p-4 pr-10 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white"
+                      className="w-full h-[200px] sm:h-[250px] md:h-[300px] p-3 sm:p-4 pr-10 border border-gray-200 dark:border-dark-600 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-dark-700 dark:text-white"
                       placeholder="Paste your AI-generated text here..."
                     />
                     <button
                       onClick={() => copyToClipboard(text)}
-                      className="absolute top-3 sm:top-4 right-3 sm:right-4 p-1.5 sm:p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                      className="absolute top-3 sm:top-4 right-3 sm:right-4 p-1.5 sm:p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-600 rounded-lg transition-colors"
                       title="Copy to clipboard"
                     >
                       {showCopyTooltip ? <Check className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" /> : <Copy className="w-4 h-4 sm:w-5 sm:h-5" />}
@@ -141,10 +141,10 @@ export const Home = () => {
               </div>
 
               {/* Output Preview */}
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+              <div className="bg-white dark:bg-dark-700 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-dark-600">
                 <div className="p-4 sm:p-6">
                   <div className="flex items-center justify-between mb-2 sm:mb-3">
-                    <div className="flex items-center text-gray-700">
+                    <div className="flex items-center text-gray-700 dark:text-gray-300">
                       <div className="p-1.5 bg-gradient-to-br from-green-500 to-emerald-400 rounded-lg">
                         <Sparkles className="w-4 h-4 text-white" />
                       </div>
@@ -154,7 +154,7 @@ export const Home = () => {
                   <div className="relative">
                     <textarea
                       readOnly
-                      className="w-full h-[200px] sm:h-[250px] md:h-[300px] p-3 sm:p-4 pr-10 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-50"
+                      className="w-full h-[200px] sm:h-[250px] md:h-[300px] p-3 sm:p-4 pr-10 border border-gray-200 dark:border-dark-600 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-50 dark:bg-dark-600 dark:text-gray-300"
                       placeholder="Sign up to see your humanized text here..."
                     />
                   </div>
@@ -174,14 +174,14 @@ export const Home = () => {
             {/* Features Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-10 sm:mb-14">
               {features.map((feature, index) => (
-                <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+                <div key={index} className="bg-white dark:bg-dark-700 rounded-xl shadow-sm border border-gray-200 dark:border-dark-600 p-4 sm:p-6">
                   <div className="flex items-center mb-3 sm:mb-4">
                     {feature.icon}
-                    <h3 className="ml-3 text-base sm:text-lg font-medium text-gray-900">
+                    <h3 className="ml-3 text-base sm:text-lg font-medium text-gray-900 dark:text-white">
                       {feature.title}
                     </h3>
                   </div>
-                  <p className="text-sm sm:text-base text-gray-600">
+                  <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
                     {feature.description}
                   </p>
                 </div>
@@ -190,10 +190,10 @@ export const Home = () => {
 
             {/* CTA Section */}
             <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
                 Ready to humanize your content?
               </h2>
-              <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8">
+              <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 mb-6 sm:mb-8">
                 Join thousands of content creators who trust StealthText for their content needs.
               </p>
               <Link

@@ -20,12 +20,24 @@ import Footer from './components/Footer';
 import MobileNav from './components/MobileNav';
 import { EmailVerification } from './pages/EmailVerification';
 import { UpdatePassword } from './pages/UpdatePassword';
+import { useUIStore } from './store/uiStore';
 
 function App() {
   const setUser = useAuthStore((state) => state.setUser);
   const user = useAuthStore((state) => state.user);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const darkMode = useUIStore(state => state.darkMode);
+  const setDarkMode = useUIStore(state => state.setDarkMode);
+
+  // Initialize dark mode on app startup
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -98,18 +110,18 @@ function App() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      <div className="min-h-screen flex items-center justify-center dark:bg-dark-800">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center dark:bg-dark-800 dark:text-white">
         <div className="text-center p-8 max-w-md">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Setup Required</h2>
-          <p className="text-gray-600 mb-6">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Setup Required</h2>
+          <p className="text-gray-600 dark:text-gray-300 mb-6">
             Please click the "Connect to Supabase" button in the top right to set up your Supabase project.
           </p>
         </div>
@@ -120,7 +132,7 @@ function App() {
   return (
     <HelmetProvider>
       <BrowserRouter>
-        <div className="min-h-screen flex flex-col">
+        <div className={`min-h-screen flex flex-col ${darkMode ? 'dark' : ''}`}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />

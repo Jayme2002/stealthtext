@@ -3,18 +3,20 @@ import './Footer.css';
 import { Link } from 'react-router-dom';
 import { MessageSquare, Book, Shield, Sparkles, HelpCircle } from 'lucide-react';
 import { useSidebar } from './Sidebar';
+import { useUIStore } from '../store/uiStore';
 
 const Footer: React.FC = () => {
   const { width, isMobile } = useSidebar();
+  const darkMode = useUIStore((state) => state.darkMode);
   
   return (
-    <footer className="footer" style={{ marginLeft: isMobile ? '0' : width }}>
+    <footer className={`footer ${darkMode ? 'dark' : ''}`} style={{ marginLeft: isMobile ? '0' : width }}>
       <div className="container">
         <div className="footer-section">
           <div className="footer-logo">
             <img 
               src="icons/noun-ninja.svg"
-              className="w-6 h-6"
+              className={`w-6 h-6 ${darkMode ? 'invert' : ''}`}
               alt="StealthText Logo"
             />
             <span>StealthText</span>

@@ -12,7 +12,7 @@ const Dashboard = () => {
 
   const getPlanGradient = () => {
     if (!subscription || subscription.plan === 'free') {
-      return 'bg-gray-100 text-gray-900';
+      return 'bg-gray-100 text-gray-900 dark:bg-dark-700 dark:text-gray-100';
     }
     switch (subscription.plan) {
       case 'premium':
@@ -22,13 +22,13 @@ const Dashboard = () => {
       case 'pro':
         return 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white';
       default:
-        return 'bg-gray-100 text-gray-900';
+        return 'bg-gray-100 text-gray-900 dark:bg-dark-700 dark:text-gray-100';
     }
   };
 
   const getPlanIcon = () => {
     if (!subscription || subscription.plan === 'free') {
-      return <User className="w-5 h-5 text-gray-500" />;
+      return <User className="w-5 h-5 text-gray-500 dark:text-gray-400" />;
     }
     switch (subscription.plan) {
       case 'premium':
@@ -38,7 +38,7 @@ const Dashboard = () => {
       case 'pro':
         return <Zap className="w-5 h-5 text-white" />;
       default:
-        return <User className="w-5 h-5 text-gray-500" />;
+        return <User className="w-5 h-5 text-gray-500 dark:text-gray-400" />;
     }
   };
 
@@ -66,12 +66,12 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="min-h-screen flex bg-gray-50 dark:bg-dark-800">
       <Sidebar />
 
       <div className="flex-1">
         {!isMobile && (
-          <div className="fixed top-0 right-0 left-0 bg-white border-b border-gray-200 z-10">
+          <div className="fixed top-0 right-0 left-0 bg-white dark:bg-dark-800 border-b border-gray-200 dark:border-dark-700 z-10">
             <div className="w-full px-4 sm:px-6 lg:px-8">
               <div className="flex justify-end h-16 items-center w-full">
                 <Navbar />
@@ -86,12 +86,12 @@ const Dashboard = () => {
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8 pb-20 w-full overflow-x-hidden">
             {/* Welcome Section */}
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+            <div className="bg-white dark:bg-dark-700 rounded-xl shadow-sm overflow-hidden mb-6">
               <div className="p-4 md:p-6">
-                <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
+                <h1 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-2">
                   Welcome to StealthText
                 </h1>
-                <p className="text-gray-600 mb-6">
+                <p className="text-gray-600 dark:text-gray-300 mb-6">
                   Transform your AI-generated content into natural, human-like text that bypasses AI detection.
                 </p>
                 <Link
@@ -105,16 +105,16 @@ const Dashboard = () => {
             </div>
 
             {/* Usage Stats */}
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+            <div className="bg-white dark:bg-dark-700 rounded-xl shadow-sm overflow-hidden mb-6">
               <div className="p-4 md:p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Usage Statistics</h2>
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Usage Statistics</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="text-sm text-gray-500">Words Used</p>
-                    <p className="text-2xl font-bold text-gray-900">
+                  <div className="bg-gray-50 dark:bg-dark-600 rounded-lg p-4">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Words Used</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
                       {usage?.used_words || 0} / {usage?.allocated_words || 0}
                     </p>
-                    <div className="mt-2 bg-gray-200 rounded-full h-2">
+                    <div className="mt-2 bg-gray-200 dark:bg-dark-500 rounded-full h-2">
                       <div 
                         className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full h-2 transition-all duration-300" 
                         style={{ 
@@ -134,7 +134,7 @@ const Dashboard = () => {
                     {subscription?.plan === 'free' && (
                       <Link
                         to="/pricing"
-                        className="text-sm bg-black text-white px-3 py-1 rounded-lg mt-2 inline-flex items-center gap-1.5 hover:bg-gray-800 transition-colors"
+                        className="text-sm bg-black dark:bg-white dark:text-dark-800 text-white px-3 py-1 rounded-lg mt-2 inline-flex items-center gap-1.5 hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
                       >
                         <Crown className="w-3.5 h-3.5" />
                         Upgrade Now
@@ -148,15 +148,15 @@ const Dashboard = () => {
             {/* Features Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
               {features.map((feature, index) => (
-                <div key={index} className="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div key={index} className="bg-white dark:bg-dark-700 rounded-xl shadow-sm overflow-hidden">
                   <div className="p-4 md:p-5">
                     <div className="flex items-center mb-3">
                       {feature.icon}
-                      <h3 className="ml-3 text-base font-medium text-gray-900">
+                      <h3 className="ml-3 text-base font-medium text-gray-900 dark:text-white">
                         {feature.title}
                       </h3>
                     </div>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
                       {feature.description}
                     </p>
                   </div>

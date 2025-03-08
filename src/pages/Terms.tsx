@@ -4,24 +4,24 @@ import { Shield } from 'lucide-react';
 
 export const Terms = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
       <LandingHeader />
       
       <main className="pt-24 pb-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <div className="flex justify-center mb-4">
-              <div className="p-3 bg-purple-100 rounded-lg">
-                <Shield className="w-8 h-8 text-purple-500" />
+              <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-lg">
+                <Shield className="w-8 h-8 text-purple-500 dark:text-purple-400" />
               </div>
             </div>
-            <h1 className="text-4xl font-bold text-gray-900">Terms & Conditions</h1>
-            <p className="mt-4 text-lg text-gray-600">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Terms & Conditions</h1>
+            <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
               Last updated: February 10, 2025
             </p>
           </div>
 
-          <div className="prose prose-lg max-w-none">
+          <div className="prose prose-lg dark:prose-invert max-w-none">
             <h2>1. Acceptance of Terms</h2>
             <p>
               By accessing and using StealthText ("the Service"), you agree to be bound by these Terms and Conditions. If you disagree with any part of these terms, you may not access the Service.

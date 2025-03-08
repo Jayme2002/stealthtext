@@ -3,9 +3,24 @@
 @tailwind utilities;
 
 body {
-  @apply antialiased text-gray-900;
+  @apply antialiased text-gray-900 dark:text-gray-100 dark:bg-dark-800;
 }
 
 textarea:focus {
   outline: none;
+}
+
+/* Dark mode transition smoothing */
+.dark, body, * {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 200ms;
+  transition-timing-function: ease-out;
+}
+
+.dark ::selection {
+  @apply bg-purple-500 text-white;
+}
+
+::selection {
+  @apply bg-purple-100 text-purple-800;
 }
