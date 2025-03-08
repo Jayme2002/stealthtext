@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Brain, User, LayoutDashboard, CreditCard, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { Brain, User, LayoutDashboard, CreditCard, ChevronLeft, ChevronRight, X, Shield } from 'lucide-react';
 import { useUIStore } from '../store/uiStore';
 
 export const SidebarContext = createContext<{
@@ -102,6 +102,17 @@ export const Sidebar = () => {
                 >
                   <Brain className="w-5 h-5 flex-shrink-0" />
                   <span className="ml-3">Humanizer</span>
+                </NavLink>
+                
+                <NavLink
+                  to="/aidetection"
+                  className={({ isActive }) =>
+                    `flex items-center px-3 py-2.5 rounded-lg transition-all duration-200 ${isActive ? 'bg-gray-100 dark:bg-dark-700 font-medium text-purple-600 dark:text-purple-400' : 'hover:bg-gray-50 dark:hover:bg-dark-700 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'}`
+                  }
+                  onClick={() => setSidebarCollapsed(true)}
+                >
+                  <Shield className="w-5 h-5 flex-shrink-0" />
+                  <span className="ml-3">AI Detection</span>
                 </NavLink>
               </div>
             </div>
@@ -213,6 +224,23 @@ export const Sidebar = () => {
                   Humanizer
                 </span>
               </NavLink>
+              
+              <NavLink
+                to="/aidetection"
+                className={({ isActive }) =>
+                  `flex items-center px-3 py-2.5 rounded-lg transition-all duration-200 ${
+                    isActive 
+                      ? 'bg-gray-100 dark:bg-dark-700 text-purple-600 dark:text-purple-400 font-medium' 
+                      : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-dark-700'
+                  }`
+                }
+                onClick={() => isMobileView && setSidebarCollapsed(true)}
+              >
+                <Shield className={`${sidebarCollapsed ? 'mx-auto' : ''}`} />
+                <span className={`ml-3 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100 w-auto block'}`}>
+                  AI Detection
+                </span>
+              </NavLink>
             </div>
           </div>
 
@@ -238,6 +266,7 @@ export const Sidebar = () => {
                   Account
                 </span>
               </NavLink>
+              
               <NavLink
                 to="/pricing"
                 className={({ isActive }) =>

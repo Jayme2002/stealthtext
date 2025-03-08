@@ -16,6 +16,7 @@ import { Terms } from './pages/Terms';
 import { Privacy } from './pages/Privacy';
 import { useSubscriptionStore } from './store/subscriptionStore';
 import Humanizer from './pages/Humanizer';
+import AIDetection from './pages/AIDetection';
 import Footer from './components/Footer';
 import MobileNav from './components/MobileNav';
 import { EmailVerification } from './pages/EmailVerification';
@@ -159,6 +160,7 @@ function App() {
             <Route path="/reset-password" element={!user ? <ResetPassword /> : <Navigate to="/dashboard" />} />
             <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
             <Route path="/humanizer" element={user ? <Humanizer /> : <Navigate to="/login" />} />
+            <Route path="/aidetection" element={user ? <AIDetection /> : <Navigate to="/login" />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/account" element={user ? <Account /> : <Navigate to="/login" />} />
             <Route path="/faq" element={<FAQ />} />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Brain, User, LayoutDashboard, Menu, Sun, Moon } from 'lucide-react';
+import { Brain, User, LayoutDashboard, Shield, Sun, Moon } from 'lucide-react';
 import { useUIStore } from '../store/uiStore';
 
 const MobileNav: React.FC = () => {
@@ -63,24 +63,24 @@ const MobileNav: React.FC = () => {
         <span style={{ fontSize: '12px', marginTop: '4px' }}>Humanizer</span>
       </NavLink>
       
-      <button
-        onClick={toggleSidebar}
-        style={{
+      <NavLink
+        to="/aidetection"
+        style={({ isActive }) => ({
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           width: '20%',
           height: '100%',
-          background: 'none',
-          border: 'none',
-          color: darkMode ? '#9ca3af' : '#6b7280',
-          padding: 0
-        }}
+          color: isActive 
+            ? '#8b5cf6' // purple for active
+            : darkMode ? '#9ca3af' : '#6b7280',
+          textDecoration: 'none'
+        })}
       >
-        <Menu size={20} />
-        <span style={{ fontSize: '12px', marginTop: '4px' }}>Menu</span>
-      </button>
+        <Shield size={20} />
+        <span style={{ fontSize: '12px', marginTop: '4px' }}>AI Detection</span>
+      </NavLink>
       
       <NavLink
         to="/account"
