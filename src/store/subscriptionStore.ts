@@ -19,6 +19,7 @@ interface UsageMetrics {
   allocated_chars: number;
   allocated_words: number;
   max_request_words: number;
+  last_reset: string;
 }
 
 interface SubscriptionState {
@@ -75,7 +76,7 @@ export const useSubscriptionStore = create<SubscriptionState>()(
           // Then fetch the metrics (which should now exist)
           const { data, error } = await supabase
             .from('usage_metrics')
-            .select('used_chars, used_words, allocated_chars, allocated_words, max_request_words')
+            .select('used_chars, used_words, allocated_chars, allocated_words, max_request_words, last_reset')
             .eq('user_id', userId)
             .single();
 
@@ -88,7 +89,8 @@ export const useSubscriptionStore = create<SubscriptionState>()(
                 used_words: 0,
                 allocated_chars: 4000,
                 allocated_words: 500,
-                max_request_words: 250
+                max_request_words: 250,
+                last_reset: ''
               }
             });
           } else if (data) {
@@ -98,7 +100,8 @@ export const useSubscriptionStore = create<SubscriptionState>()(
                 used_words: data.used_words || 0,
                 allocated_chars: data.allocated_chars || 4000,
                 allocated_words: data.allocated_words || 500,
-                max_request_words: data.max_request_words || 250
+                max_request_words: data.max_request_words || 250,
+                last_reset: data.last_reset
               }
             });
           }
@@ -111,7 +114,8 @@ export const useSubscriptionStore = create<SubscriptionState>()(
               used_words: 0,
               allocated_chars: 4000,
               allocated_words: 500,
-              max_request_words: 250
+              max_request_words: 250,
+              last_reset: ''
             }
           });
         }

@@ -6,6 +6,7 @@ import { humanizeText, checkForAI, HumanizerIntensity } from '../lib/openai';
 import { useSubscriptionStore } from '../store/subscriptionStore';
 import { Navbar } from '../components/Navbar';
 import { useAuthStore } from '../store/authStore';
+import { format, addMonths } from 'date-fns';
 
 interface HumanizedResult {
   text: string;
@@ -39,7 +40,9 @@ const Humanizer = () => {
   const [intensity, setIntensity] = useState<HumanizerIntensity>('HIGH');
   const [showWordLimitModal, setShowWordLimitModal] = useState(false);
   const [showMonthlyLimitModal, setShowMonthlyLimitModal] = useState(false);
+  const [showNotEnoughWordsModal, setShowNotEnoughWordsModal] = useState(false);
   const [currentWordCount, setCurrentWordCount] = useState(0);
+  const [wordsRemaining, setWordsRemaining] = useState(0);
 
   // Calculate word count when text changes
   useEffect(() => {
@@ -54,12 +57,32 @@ const Humanizer = () => {
     const charCount = text.length;
     const wordCount = text.split(/\s+/).filter(Boolean).length;
     
-    // Check if word count exceeds max request limit
-    if (usage && usage.max_request_words && wordCount > usage.max_request_words) {
+    // Check if we have usage data
+    if (!usage) {
+      return; // Can't proceed without knowing usage limits
+    }
+    
+    // Check if word count exceeds max request limit (per-request limit)
+    if (usage.max_request_words && wordCount > usage.max_request_words) {
       setShowWordLimitModal(true);
       return;
     }
     
+    // Check if user has enough words left for this request
+    const remainingWords = usage.allocated_words - usage.used_words;
+    setWordsRemaining(remainingWords);
+    
+    if (remainingWords <= 0) {
+      // User has no words left (reached monthly limit)
+      setShowMonthlyLimitModal(true);
+      return;
+    } else if (wordCount > remainingWords) {
+      // User has some words left, but not enough for this request
+      setShowNotEnoughWordsModal(true);
+      return;
+    }
+    
+    // If we get here, user has enough words for this request
     const { canProceed, error } = await useSubscriptionStore.getState().checkUsage(
       user.id, 
       charCount,
@@ -67,6 +90,7 @@ const Humanizer = () => {
     );
     
     if (!canProceed) {
+      // This is a fallback in case our frontend calculation was wrong
       setShowMonthlyLimitModal(true);
       return;
     }
@@ -88,6 +112,7 @@ const Humanizer = () => {
     navigate('/pricing');
     setShowWordLimitModal(false);
     setShowMonthlyLimitModal(false);
+    setShowNotEnoughWordsModal(false);
   };
 
   const copyToClipboard = (textToCopy: string) => {
@@ -116,6 +141,21 @@ const Humanizer = () => {
         return intensity === 'HIGH'
           ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white'
           : 'bg-gray-100 text-gray-700 hover:bg-gray-200';
+    }
+  };
+
+  // Function to calculate and format the next reset date
+  const getNextResetDate = () => {
+    if (!usage?.last_reset) return 'your next billing cycle';
+    
+    try {
+      // Parse the last_reset timestamp and add one month
+      const lastReset = new Date(usage.last_reset);
+      const nextReset = addMonths(lastReset, 1);
+      return format(nextReset, 'MMMM d, yyyy'); // e.g., "August 15, 2023"
+    } catch (err) {
+      console.error('Error calculating next reset date:', err);
+      return 'your next billing cycle';
     }
   };
 
@@ -164,7 +204,7 @@ const Humanizer = () => {
         </div>
       )}
 
-      {/* Monthly Word Limit Modal - New */}
+      {/* Updated Monthly Word Limit Modal */}
       {showMonthlyLimitModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative">
@@ -181,8 +221,8 @@ const Humanizer = () => {
               </div>
               <h3 className="text-lg font-medium text-gray-900 mb-2">Monthly Word Limit Reached</h3>
               <p className="text-sm text-gray-600 mb-4">
-                You've used all your words for this month ({usage?.allocated_words || 500} words).
-                Your usage resets on the 1st of next month, or you can upgrade your plan to get more words immediately.
+                You've used all {usage?.allocated_words || 500} words in your monthly allocation.
+                Your usage will reset on <span className="font-semibold">{getNextResetDate()}</span>.
               </p>
               
               {/* Progress bar showing usage */}
@@ -204,6 +244,58 @@ const Humanizer = () => {
                   className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                 >
                   Close
+                </button>
+                <button
+                  onClick={handleUpgrade}
+                  className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                >
+                  Upgrade Plan
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* New Not Enough Words Left Modal */}
+      {showNotEnoughWordsModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative">
+            <button 
+              onClick={() => setShowNotEnoughWordsModal(false)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            
+            <div className="text-center mb-5">
+              <div className="mx-auto bg-blue-100 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                <AlertCircle className="w-6 h-6 text-blue-500" />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Not Enough Words Remaining</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                You're trying to process <span className="font-semibold">{currentWordCount} words</span>, but you only have <span className="font-semibold">{wordsRemaining} words</span> remaining in your monthly allocation.
+              </p>
+              
+              {/* Progress bar showing usage */}
+              <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                <div 
+                  className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2.5 rounded-full" 
+                  style={{ width: `${Math.min(((usage?.used_words || 0) / (usage?.allocated_words || 1)) * 100, 100)}%` }}
+                ></div>
+              </div>
+              
+              <div className="flex justify-between text-xs text-gray-500 mb-5">
+                <span>Used: {usage?.used_words || 0}</span>
+                <span>Total: {usage?.allocated_words || 500}</span>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <button
+                  onClick={() => setShowNotEnoughWordsModal(false)}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                >
+                  Reduce Text
                 </button>
                 <button
                   onClick={handleUpgrade}
