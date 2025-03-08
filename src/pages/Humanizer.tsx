@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Sidebar, useSidebar } from '../components/Sidebar';
-import { Copy, Loader2, Check, AlertCircle, Sparkles, FileText, Bot, User, Sliders } from 'lucide-react';
+import { Copy, Loader2, Check, AlertCircle, Sparkles, FileText, Bot, User, Sliders, X } from 'lucide-react';
 import { humanizeText, checkForAI, HumanizerIntensity } from '../lib/openai';
 import { useSubscriptionStore } from '../store/subscriptionStore';
 import { Navbar } from '../components/Navbar';
@@ -14,8 +14,10 @@ interface HumanizedResult {
 
 const Humanizer = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const fetchSubscription = useSubscriptionStore((state) => state.fetchSubscription);
   const subscription = useSubscriptionStore((state) => state.subscription);
+  const usage = useSubscriptionStore((state) => state.usage);
   const user = useAuthStore((state) => state.user);
   const { width, isMobile } = useSidebar();
   
@@ -35,6 +37,15 @@ const Humanizer = () => {
   const [showCopyTooltip, setShowCopyTooltip] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [intensity, setIntensity] = useState<HumanizerIntensity>('HIGH');
+  const [showWordLimitModal, setShowWordLimitModal] = useState(false);
+  const [showMonthlyLimitModal, setShowMonthlyLimitModal] = useState(false);
+  const [currentWordCount, setCurrentWordCount] = useState(0);
+
+  // Calculate word count when text changes
+  useEffect(() => {
+    const wordCount = text.trim() ? text.split(/\s+/).filter(Boolean).length : 0;
+    setCurrentWordCount(wordCount);
+  }, [text]);
 
   const handleHumanize = async () => {
     if (!text.trim() || !user) return;
@@ -43,14 +54,20 @@ const Humanizer = () => {
     const charCount = text.length;
     const wordCount = text.split(/\s+/).filter(Boolean).length;
     
+    // Check if word count exceeds max request limit
+    if (usage && usage.max_request_words && wordCount > usage.max_request_words) {
+      setShowWordLimitModal(true);
+      return;
+    }
+    
     const { canProceed, error } = await useSubscriptionStore.getState().checkUsage(
       user.id, 
       charCount,
       wordCount
     );
     
-    if (error || !canProceed) {
-      setError('Monthly limit exceeded. Please upgrade your plan to continue.');
+    if (!canProceed) {
+      setShowMonthlyLimitModal(true);
       return;
     }
 
@@ -65,6 +82,12 @@ const Humanizer = () => {
     } finally {
       setIsHumanizing(false);
     }
+  };
+
+  const handleUpgrade = () => {
+    navigate('/pricing');
+    setShowWordLimitModal(false);
+    setShowMonthlyLimitModal(false);
   };
 
   const copyToClipboard = (textToCopy: string) => {
@@ -100,6 +123,100 @@ const Humanizer = () => {
     <div className="min-h-screen flex bg-gray-50">
       <Sidebar />
       
+      {/* Single Request Word Limit Modal */}
+      {showWordLimitModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative">
+            <button 
+              onClick={() => setShowWordLimitModal(false)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            
+            <div className="text-center mb-5">
+              <div className="mx-auto bg-red-100 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                <AlertCircle className="w-6 h-6 text-red-500" />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Word Limit Exceeded</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                You've exceeded the word limit for a single request. Your current plan allows 
+                <span className="font-semibold"> {usage?.max_request_words || 250} words </span> 
+                per request, but you're trying to process 
+                <span className="font-semibold"> {currentWordCount} words</span>.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <button
+                  onClick={() => setShowWordLimitModal(false)}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                >
+                  Reduce Text
+                </button>
+                <button
+                  onClick={handleUpgrade}
+                  className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                >
+                  Upgrade Plan
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Monthly Word Limit Modal - New */}
+      {showMonthlyLimitModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative">
+            <button 
+              onClick={() => setShowMonthlyLimitModal(false)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            
+            <div className="text-center mb-5">
+              <div className="mx-auto bg-amber-100 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                <AlertCircle className="w-6 h-6 text-amber-500" />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Monthly Word Limit Reached</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                You've used all your words for this month ({usage?.allocated_words || 500} words).
+                Your usage resets on the 1st of next month, or you can upgrade your plan to get more words immediately.
+              </p>
+              
+              {/* Progress bar showing usage */}
+              <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                <div 
+                  className="bg-gradient-to-r from-amber-500 to-red-500 h-2.5 rounded-full" 
+                  style={{ width: '100%' }}
+                ></div>
+              </div>
+              
+              <div className="flex justify-between text-xs text-gray-500 mb-5">
+                <span>Used: {usage?.used_words || 0}</span>
+                <span>Total: {usage?.allocated_words || 500}</span>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <button
+                  onClick={() => setShowMonthlyLimitModal(false)}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={handleUpgrade}
+                  className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                >
+                  Upgrade Plan
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex-1">
         {!isMobile && (
           <div className="fixed top-0 right-0 left-0 bg-white border-b border-gray-200 z-10">
