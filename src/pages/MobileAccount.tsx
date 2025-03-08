@@ -1,15 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { CreditCard, Loader2, Crown, Star, Zap, User, Clock } from 'lucide-react';
+import { CreditCard, Loader2, Crown, Star, Zap, User, Clock, LogOut } from 'lucide-react';
 import { useSubscriptionStore } from '../store/subscriptionStore';
 import { getPlanName } from '../utils/subscriptionPlanMapping';
 import { supabase } from '../lib/supabase';
 import { PLANS } from '../lib/stripe';
+import { useAuthStore } from '../store/authStore';
 
 const MobileAccount: React.FC = () => {
   const subscription = useSubscriptionStore((state) => state.subscription);
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const signOut = useAuthStore((state) => state.signOut);
 
   // Set CSS variables for styling
   React.useEffect(() => {
@@ -89,6 +91,15 @@ const MobileAccount: React.FC = () => {
       setError(error instanceof Error ? error.message : 'Failed to open subscription management');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error('Logout error:', error);
+      setError(error instanceof Error ? error.message : 'Failed to log out');
     }
   };
 
@@ -239,6 +250,22 @@ const MobileAccount: React.FC = () => {
       border: 'none',
       cursor: 'pointer'
     }),
+    logoutButton: {
+      display: 'inline-flex' as 'inline-flex',
+      alignItems: 'center',
+      gap: '8px',
+      width: '100%',
+      justifyContent: 'center',
+      padding: '10px 16px',
+      borderRadius: '8px',
+      fontSize: '0.875rem',
+      fontWeight: '500',
+      backgroundColor: 'rgba(239, 68, 68, 0.1)',
+      color: '#ef4444',
+      border: 'none',
+      cursor: 'pointer',
+      marginTop: '16px'
+    },
     billingInfo: {
       display: 'flex' as 'flex',
       alignItems: 'center',
@@ -352,6 +379,22 @@ const MobileAccount: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Logout Section */}
+      <div style={styles.card}>
+        <div style={styles.cardHeader}>
+          <h2 style={styles.cardTitle}>Account</h2>
+        </div>
+        <div style={styles.cardContent}>
+          <button
+            onClick={handleLogout}
+            style={styles.logoutButton}
+          >
+            <LogOut size={16} />
+            Log out
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

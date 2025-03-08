@@ -42,7 +42,7 @@ export const Home = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white dark:bg-dark-800">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-dark-800">
       <Helmet>
         <title>StealthText - Undetectable AI Content</title>
         <meta name="description" content="Transform AI-generated content into natural, human-like text that bypasses AI detection with our advanced humanization technology." />
@@ -76,9 +76,9 @@ export const Home = () => {
       
       <LandingHeader />
       
-      <main>
+      <main className="flex-grow overflow-auto">
         {/* Hero Section */}
-        <div className="relative pt-16 sm:pt-20 overflow-hidden">
+        <div className="pt-24 pb-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-3 sm:mb-4">
@@ -88,17 +88,17 @@ export const Home = () => {
               <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-4 sm:mb-6 max-w-2xl mx-auto">
                 Transform AI-generated content into natural, human-like text that bypasses AI detection with our advanced humanization technology.
               </p>
-              <div className="flex items-center justify-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-6 sm:mb-8">
                 <Link
                   to="/signup"
-                  className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg hover:from-purple-600 hover:to-pink-600 shadow-sm transition-all duration-300"
+                  className="w-full sm:w-auto inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg hover:from-purple-600 hover:to-pink-600 shadow-sm transition-all duration-300"
                 >
                   <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                   Try For Free
                 </Link>
                 <Link
                   to="/pricing"
-                  className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-dark-700 rounded-lg hover:bg-gray-200 dark:hover:bg-dark-600 transition-colors"
+                  className="w-full sm:w-auto inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-dark-700 rounded-lg hover:bg-gray-200 dark:hover:bg-dark-600 transition-colors"
                 >
                   View Pricing
                   <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />

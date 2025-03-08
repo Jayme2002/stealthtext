@@ -16,7 +16,10 @@ const Footer: React.FC = () => {
   return (
     <footer 
       className={`footer ${darkMode ? 'dark' : ''}`} 
-      style={{ marginLeft: sidebarOffset }}
+      style={{ 
+        marginLeft: sidebarOffset,
+        width: 'auto'
+      }}
     >
       <div className="container">
         <div className="footer-section">
