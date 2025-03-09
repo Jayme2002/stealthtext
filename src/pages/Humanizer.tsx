@@ -61,10 +61,72 @@ const Humanizer = () => {
   const handleHumanize = async () => {
     if (!user) return;
     
-    // Determine which text to process - use humanizedResult.text if re-humanizing
-    const textToProcess = humanizedResult ? humanizedResult.text : text.trim();
+    // Always use the text from the input box
+    const textToProcess = text.trim();
     
     if (!textToProcess) return;
+    setError(null);
+
+    const charCount = textToProcess.length;
+    const wordCount = textToProcess.split(/\s+/).filter(Boolean).length;
+    
+    // Check if we have usage data
+    if (!usage) {
+      return; // Can't proceed without knowing usage limits
+    }
+    
+    // Check if word count exceeds max request limit (per-request limit)
+    if (usage.max_request_words && wordCount > usage.max_request_words) {
+      setShowWordLimitModal(true);
+      return;
+    }
+    
+    // Check if user has enough words left for this request
+    const remainingWords = usage.allocated_words - usage.used_words;
+    setWordsRemaining(remainingWords);
+    
+    if (remainingWords <= 0) {
+      // User has no words left (reached monthly limit)
+      setShowMonthlyLimitModal(true);
+      return;
+    } else if (wordCount > remainingWords) {
+      // User has some words left, but not enough for this request
+      setShowNotEnoughWordsModal(true);
+      return;
+    }
+    
+    // If we get here, user has enough words for this request
+    const { canProceed, error } = await useSubscriptionStore.getState().checkUsage(
+      user.id, 
+      charCount,
+      wordCount
+    );
+    
+    if (!canProceed) {
+      // This is a fallback in case our frontend calculation was wrong
+      setShowMonthlyLimitModal(true);
+      return;
+    }
+
+    setIsHumanizing(true);
+    try {
+      const humanizedText = await humanizeText(textToProcess, intensity);
+      const aiScore = await checkForAI(humanizedText);
+      setHumanizedResult({ text: humanizedText, aiScore });
+      useSubscriptionStore.getState().fetchUsage(user.id);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to humanize text. Please try again.');
+    } finally {
+      setIsHumanizing(false);
+    }
+  };
+
+  const handleReHumanize = async () => {
+    if (!user || !humanizedResult) return;
+    
+    // Always use the text from the output box
+    const textToProcess = humanizedResult.text;
+    
     setError(null);
 
     const charCount = textToProcess.length;
@@ -492,7 +554,7 @@ const Humanizer = () => {
                     )}
                     {humanizedResult && (
                       <button
-                        onClick={handleHumanize}
+                        onClick={handleReHumanize}
                         disabled={isHumanizing}
                         className="px-4 py-1.5 text-xs md:text-sm font-medium text-white bg-gradient-to-r from-green-500 to-emerald-400 rounded-lg hover:from-green-600 hover:to-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-sm"
                       >
