@@ -28,6 +28,10 @@ export const Sidebar = () => {
       if (isMobile && !sidebarCollapsed) {
         setSidebarCollapsed(true);
       }
+      // Only auto-expand on initial load or when transitioning from mobile to desktop
+      else if (!isMobile && sidebarCollapsed && !window.sessionStorage.getItem('sidebar-manually-collapsed')) {
+        setSidebarCollapsed(false);
+      }
     };
 
     // Initial check
@@ -39,6 +43,18 @@ export const Sidebar = () => {
     // Cleanup
     return () => window.removeEventListener('resize', checkMobileView);
   }, [setSidebarCollapsed, setMobileView, sidebarCollapsed]);
+
+  // Need to modify the toggle function to track manual collapses
+  const handleToggleSidebar = () => {
+    if (!sidebarCollapsed) {
+      // User is manually collapsing the sidebar
+      window.sessionStorage.setItem('sidebar-manually-collapsed', 'true');
+    } else {
+      // User is manually expanding the sidebar
+      window.sessionStorage.removeItem('sidebar-manually-collapsed');
+    }
+    toggleSidebar();
+  };
 
   // If mobile view, don't render the sidebar at all
   if (isMobileView) {
@@ -161,7 +177,7 @@ export const Sidebar = () => {
         }}
       >
         <button 
-          onClick={toggleSidebar}
+          onClick={handleToggleSidebar}
           className="absolute top-4 right-0 translate-x-1/2 z-50 p-1.5 bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-700 rounded-full shadow-sm hover:bg-gray-50 dark:hover:bg-dark-700 dark:text-white"
         >
           {sidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
