@@ -154,16 +154,15 @@ export const Sidebar = () => {
   return (
     <SidebarContext.Provider value={{ collapsed: sidebarCollapsed, width, isMobile: isMobileView }}>
       <div 
-        className={`fixed top-0 left-0 h-screen flex flex-col transition-all duration-300 ease-in-out bg-white dark:bg-dark-800 border-r border-gray-200 dark:border-dark-700 z-40 ${sidebarCollapsed ? 'w-20' : 'w-64'}`}
+        className="fixed top-0 left-0 h-screen bg-white dark:bg-dark-800 border-r border-gray-200 dark:border-dark-700 z-40"
+        style={{ 
+          width: sidebarCollapsed ? '5rem' : '16rem',
+          transition: 'width 0.3s ease-in-out'
+        }}
       >
         <button 
           onClick={toggleSidebar}
-          className={`absolute top-4 transition-all duration-300 ease-in-out ${
-            sidebarCollapsed 
-              ? 'right-0 translate-x-1/2' 
-              : 'right-2'
-          } z-50 p-1.5 bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-700 rounded-full shadow-sm hover:bg-gray-50 dark:hover:bg-dark-700 dark:text-white transition-colors duration-200`}
-          aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          className="absolute top-4 right-0 translate-x-1/2 z-50 p-1.5 bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-700 rounded-full shadow-sm hover:bg-gray-50 dark:hover:bg-dark-700 dark:text-white"
         >
           {sidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
         </button>
@@ -172,116 +171,177 @@ export const Sidebar = () => {
           <div className="flex items-center px-3 py-2.5">
             <img 
               src="/icons/noun-ninja.svg"
-              className="w-8 h-8 flex-shrink-0 transition-all dark:invert"
+              className="w-8 h-8 dark:invert"
               alt="StealthText Logo"
             />
-            <span className={`ml-3 font-medium whitespace-nowrap transition-all duration-300 dark:text-white ${sidebarCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>
-              StealthText
-            </span>
+            <div style={{ width: '9rem', overflow: 'hidden' }}>
+              <span 
+                className="ml-3 font-medium whitespace-nowrap dark:text-white"
+                style={{ 
+                  opacity: sidebarCollapsed ? 0 : 1,
+                  transition: 'opacity 0.3s ease-in-out'
+                }}
+              >
+                StealthText
+              </span>
+            </div>
           </div>
         </div>
         
         <nav className="flex-1 px-3 overflow-y-auto">
-          {/* Dashboard group */}
+          {/* Dashboard */}
           <div className="space-y-1">
             <NavLink
               to="/dashboard"
               className={({ isActive }) =>
-                `flex items-center px-3 py-2.5 rounded-lg transition-all duration-200 ${
+                `flex items-center px-3 py-2.5 rounded-lg ${
                   isActive 
                     ? 'bg-gray-100 dark:bg-dark-700 text-purple-600 dark:text-purple-400 font-medium' 
                     : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-dark-700'
                 }`
               }
-              onClick={() => isMobileView && setSidebarCollapsed(true)}
             >
-              <LayoutDashboard className={`${sidebarCollapsed ? 'mx-auto' : ''}`} />
-              <span className={`ml-3 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100 w-auto block'}`}>
-                Dashboard
-              </span>
+              <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center">
+                <LayoutDashboard className="w-6 h-6" />
+              </div>
+              <div style={{ width: '9rem', overflow: 'hidden' }}>
+                <span 
+                  className="ml-3 whitespace-nowrap"
+                  style={{ 
+                    opacity: sidebarCollapsed ? 0 : 1,
+                    transition: 'opacity 0.3s ease-in-out'
+                  }}
+                >
+                  Dashboard
+                </span>
+              </div>
             </NavLink>
           </div>
 
-          {/* Features group */}
+          {/* Features */}
           <div className="mt-6">
-            <div className={`text-xs font-semibold text-gray-400 dark:text-gray-500 px-3 mb-2 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 h-0 overflow-hidden' : ''}`}>
+            <div style={{ 
+              height: '1rem', 
+              opacity: sidebarCollapsed ? 0 : 1,
+              transition: 'opacity 0.3s ease-in-out'
+            }} className="text-xs font-semibold text-gray-400 dark:text-gray-500 px-3 mb-2">
               Features
             </div>
             <div className="space-y-1">
               <NavLink
                 to="/humanizer"
                 className={({ isActive }) =>
-                  `flex items-center px-3 py-2.5 rounded-lg transition-all duration-200 ${
+                  `flex items-center px-3 py-2.5 rounded-lg ${
                     isActive 
                       ? 'bg-gray-100 dark:bg-dark-700 text-purple-600 dark:text-purple-400 font-medium' 
                       : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-dark-700'
                   }`
                 }
-                onClick={() => isMobileView && setSidebarCollapsed(true)}
               >
-                <Brain className={`${sidebarCollapsed ? 'mx-auto' : ''}`} />
-                <span className={`ml-3 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100 w-auto block'}`}>
-                  Humanizer
-                </span>
+                <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center">
+                  <Brain className="w-6 h-6" />
+                </div>
+                <div style={{ width: '9rem', overflow: 'hidden' }}>
+                  <span 
+                    className="ml-3 whitespace-nowrap"
+                    style={{ 
+                      opacity: sidebarCollapsed ? 0 : 1,
+                      transition: 'opacity 0.3s ease-in-out'
+                    }}
+                  >
+                    Humanizer
+                  </span>
+                </div>
               </NavLink>
               
               <NavLink
                 to="/aidetection"
                 className={({ isActive }) =>
-                  `flex items-center px-3 py-2.5 rounded-lg transition-all duration-200 ${
+                  `flex items-center px-3 py-2.5 rounded-lg ${
                     isActive 
                       ? 'bg-gray-100 dark:bg-dark-700 text-purple-600 dark:text-purple-400 font-medium' 
                       : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-dark-700'
                   }`
                 }
-                onClick={() => isMobileView && setSidebarCollapsed(true)}
               >
-                <Shield className={`${sidebarCollapsed ? 'mx-auto' : ''}`} />
-                <span className={`ml-3 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100 w-auto block'}`}>
-                  AI Detection
-                </span>
+                <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center">
+                  <Shield className="w-6 h-6" />
+                </div>
+                <div style={{ width: '9rem', overflow: 'hidden' }}>
+                  <span 
+                    className="ml-3 whitespace-nowrap"
+                    style={{ 
+                      opacity: sidebarCollapsed ? 0 : 1,
+                      transition: 'opacity 0.3s ease-in-out'
+                    }}
+                  >
+                    AI Detection
+                  </span>
+                </div>
               </NavLink>
             </div>
           </div>
 
-          {/* Settings group */}
+          {/* Settings */}
           <div className="mt-6">
-            <div className={`text-xs font-semibold text-gray-400 dark:text-gray-500 px-3 mb-2 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 h-0 overflow-hidden' : ''}`}>
+            <div style={{ 
+              height: '1rem', 
+              opacity: sidebarCollapsed ? 0 : 1,
+              transition: 'opacity 0.3s ease-in-out'
+            }} className="text-xs font-semibold text-gray-400 dark:text-gray-500 px-3 mb-2">
               Settings
             </div>
             <div className="space-y-1">
               <NavLink
                 to="/account"
                 className={({ isActive }) =>
-                  `flex items-center px-3 py-2.5 rounded-lg transition-all duration-200 ${
+                  `flex items-center px-3 py-2.5 rounded-lg ${
                     isActive 
                       ? 'bg-gray-100 dark:bg-dark-700 text-purple-600 dark:text-purple-400 font-medium' 
                       : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-dark-700'
                   }`
                 }
-                onClick={() => isMobileView && setSidebarCollapsed(true)}
               >
-                <User className={`${sidebarCollapsed ? 'mx-auto' : ''}`} />
-                <span className={`ml-3 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100 w-auto block'}`}>
-                  Account
-                </span>
+                <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center">
+                  <User className="w-6 h-6" />
+                </div>
+                <div style={{ width: '9rem', overflow: 'hidden' }}>
+                  <span 
+                    className="ml-3 whitespace-nowrap"
+                    style={{ 
+                      opacity: sidebarCollapsed ? 0 : 1,
+                      transition: 'opacity 0.3s ease-in-out'
+                    }}
+                  >
+                    Account
+                  </span>
+                </div>
               </NavLink>
               
               <NavLink
                 to="/pricing"
                 className={({ isActive }) =>
-                  `flex items-center px-3 py-2.5 rounded-lg transition-all duration-200 ${
+                  `flex items-center px-3 py-2.5 rounded-lg ${
                     isActive 
                       ? 'bg-gray-100 dark:bg-dark-700 text-purple-600 dark:text-purple-400 font-medium' 
                       : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-dark-700'
                   }`
                 }
-                onClick={() => isMobileView && setSidebarCollapsed(true)}
               >
-                <CreditCard className={`${sidebarCollapsed ? 'mx-auto' : ''}`} />
-                <span className={`ml-3 whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100 w-auto block'}`}>
-                  Pricing
-                </span>
+                <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center">
+                  <CreditCard className="w-6 h-6" />
+                </div>
+                <div style={{ width: '9rem', overflow: 'hidden' }}>
+                  <span 
+                    className="ml-3 whitespace-nowrap"
+                    style={{ 
+                      opacity: sidebarCollapsed ? 0 : 1,
+                      transition: 'opacity 0.3s ease-in-out'
+                    }}
+                  >
+                    Pricing
+                  </span>
+                </div>
               </NavLink>
             </div>
           </div>
