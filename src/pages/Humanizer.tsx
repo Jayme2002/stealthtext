@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Sidebar, useSidebar } from '../components/Sidebar';
 import { Copy, Loader2, Check, AlertCircle, Sparkles, FileText, Bot, User, Sliders, X } from 'lucide-react';
-import { humanizeText, checkForAI, HumanizerIntensity } from '../lib/openai';
+import { humanizeText, HumanizerIntensity } from '../lib/openai';
 import { useSubscriptionStore } from '../store/subscriptionStore';
 import { Navbar } from '../components/Navbar';
 import { useAuthStore } from '../store/authStore';
@@ -12,7 +12,6 @@ import MobileHumanizer from './MobileHumanizer';
 
 interface HumanizedResult {
   text: string;
-  aiScore: number;
 }
 
 const Humanizer = () => {
@@ -111,8 +110,7 @@ const Humanizer = () => {
     setIsHumanizing(true);
     try {
       const humanizedText = await humanizeText(textToProcess, intensity);
-      const aiScore = await checkForAI(humanizedText);
-      setHumanizedResult({ text: humanizedText, aiScore });
+      setHumanizedResult({ text: humanizedText });
       useSubscriptionStore.getState().fetchUsage(user.id);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to humanize text. Please try again.');
@@ -173,8 +171,7 @@ const Humanizer = () => {
     setIsHumanizing(true);
     try {
       const humanizedText = await humanizeText(textToProcess, intensity);
-      const aiScore = await checkForAI(humanizedText);
-      setHumanizedResult({ text: humanizedText, aiScore });
+      setHumanizedResult({ text: humanizedText });
       useSubscriptionStore.getState().fetchUsage(user.id);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to humanize text. Please try again.');
@@ -194,12 +191,6 @@ const Humanizer = () => {
     navigator.clipboard.writeText(textToCopy);
     setShowCopyTooltip(true);
     setTimeout(() => setShowCopyTooltip(false), 2000);
-  };
-
-  const getScoreColor = (score: number) => {
-    if (score <= 20) return 'text-green-500';
-    if (score <= 45) return 'text-yellow-500';
-    return 'text-red-500';
   };
 
   const getIntensityGradient = (level: HumanizerIntensity) => {
@@ -545,12 +536,7 @@ const Humanizer = () => {
                   
                   <div className="mt-3 flex items-center justify-between">
                     {humanizedResult && (
-                      <div className="flex items-center">
-                        <span className="text-xs md:text-sm text-gray-600 dark:text-gray-300 mr-2">AI Detection Score:</span>
-                        <span className={`text-xs md:text-sm font-medium ${getScoreColor(humanizedResult.aiScore)}`}>
-                          {humanizedResult.aiScore}%
-                        </span>
-                      </div>
+                      <div></div>
                     )}
                     {humanizedResult && (
                       <button

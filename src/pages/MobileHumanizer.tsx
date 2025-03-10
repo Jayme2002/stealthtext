@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Copy, Loader2, Check, AlertCircle, Sparkles, FileText, Bot, User, Sliders, X } from 'lucide-react';
-import { humanizeText, checkForAI, HumanizerIntensity } from '../lib/openai';
+import { humanizeText, HumanizerIntensity } from '../lib/openai';
 import { useSubscriptionStore } from '../store/subscriptionStore';
 import { useAuthStore } from '../store/authStore';
 import { format, addMonths } from 'date-fns';
 
 interface HumanizedResult {
   text: string;
-  aiScore: number;
 }
 
 const MobileHumanizer: React.FC = () => {
@@ -97,8 +96,7 @@ const MobileHumanizer: React.FC = () => {
     setIsHumanizing(true);
     try {
       const humanizedText = await humanizeText(text, intensity);
-      const aiScore = await checkForAI(humanizedText);
-      setHumanizedResult({ text: humanizedText, aiScore });
+      setHumanizedResult({ text: humanizedText });
       useSubscriptionStore.getState().fetchUsage(user.id);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to humanize text. Please try again.');
@@ -556,12 +554,7 @@ const MobileHumanizer: React.FC = () => {
         </div>
         <div style={styles.actionBar}>
           {humanizedResult && (
-            <div style={styles.scoreDisplay}>
-              <span>AI Detection Score:</span>
-              <span style={styles.scoreValue(humanizedResult.aiScore)}>
-                {humanizedResult.aiScore}%
-              </span>
-            </div>
+            <div></div>
           )}
           {humanizedResult && (
             <button
