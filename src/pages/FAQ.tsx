@@ -7,8 +7,8 @@ export const FAQ = () => {
 
   const faqs = [
     {
-      question: "What is StealthText?",
-      answer: "StealthText is an advanced AI text humanization tool that helps transform AI-generated content into natural, human-like text that can bypass AI detection systems and optimize for SEO while maintaining the original meaning and context."
+      question: "What is NinjaText?",
+      answer: "NinjaText is an advanced AI text humanization tool that helps transform AI-generated content into natural, human-like text that can bypass AI detection systems and optimize for SEO while maintaining the original meaning and context."
     },
     {
       question: "How does the word limit work?",
@@ -16,7 +16,7 @@ export const FAQ = () => {
     },
     {
       question: "How accurate is the AI detection bypass?",
-      answer: "StealthText uses advanced algorithms to achieve high bypass rates. While no solution is 100% guaranteed, our system consistently achieves low AI detection scores across major detection platforms."
+      answer: "NinjaText uses advanced algorithms to achieve high bypass rates. While no solution is 100% guaranteed, our system consistently achieves low AI detection scores across major detection platforms."
     },
     {
       question: "Can I cancel my subscription anytime?",
@@ -28,7 +28,7 @@ export const FAQ = () => {
     },
     {
       question: "Do you offer refunds?",
-      answer: "We offer refunds if you accidentally accidentally re-subscribe to a plan and have not used the service. Please contact us at contactstealthtext@gmail.com to request a refund."
+      answer: "We offer refunds if you accidentally accidentally re-subscribe to a plan and have not used the service. Please contact us at contactninjatext@gmail.com to request a refund."
     },
     {
       question: "How do I get started?",
@@ -45,7 +45,7 @@ export const FAQ = () => {
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Frequently Asked Questions</h1>
             <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
-              Everything you need to know about StealthText
+              Everything you need to know about NinjaText
             </p>
           </div>
 

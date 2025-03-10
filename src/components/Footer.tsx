@@ -27,9 +27,9 @@ const Footer: React.FC = () => {
             <img 
               src="/icons/noun-ninja.svg"
               className={`w-6 h-6 ${darkMode ? 'invert' : ''}`}
-              alt="StealthText Logo"
+              alt="NinjaText Logo"
             />
-            <span>StealthText</span>
+            <span>NinjaText</span>
           </div>
           <p className="footer-description">
             Transform AI-generated content into natural, human-like text that bypasses AI detection.
@@ -107,8 +107,8 @@ const Footer: React.FC = () => {
               </Link>
             </li>
             <li>
-              <a href="mailto:support@stealthtext.ai">
-                support@stealthtext.ai
+              <a href="mailto:support@ninjatext.ai">
+                support@ninjatext.ai
               </a>
             </li>
           </ul>

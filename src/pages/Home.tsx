@@ -44,7 +44,7 @@ export const Home = () => {
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-dark-800">
       <Helmet>
-        <title>StealthText - Undetectable AI Content</title>
+        <title>NinjaText - Undetectable AI Content</title>
         <meta name="description" content="Transform AI-generated content into natural, human-like text that bypasses AI detection with our advanced humanization technology." />
         
         {/* Favicon/icon for search results */}
@@ -53,8 +53,8 @@ export const Home = () => {
         {/* Open Graph tags for social sharing */}
         <meta property="og:title" content="Stealth Text - Undetectable AI Text Humanizer" />
         <meta property="og:description" content="Transform AI-generated content into natural, human-like text that bypasses AI detection with our advanced humanization technology." />
-        <meta property="og:image" content="https://stealthtext.com/icons/noun-ninja.svg" />
-        <meta property="og:url" content="https://stealthtext.com" />
+        <meta property="og:image" content="https://ninjatext.com/icons/noun-ninja.svg" />
+        <meta property="og:url" content="https://ninjatext.com" />
         
         {/* Structured data for rich search results */}
         <script type="application/ld+json">
@@ -63,11 +63,11 @@ export const Home = () => {
             "@type": "WebApplication",
             "name": "Stealth Text",
             "description": "Transform AI-generated content into natural, human-like text that bypasses AI detection with our advanced humanization technology.",
-            "image": "https://stealthtext.com/icons/noun-ninja.svg",
+            "image": "https://ninjatext.com/icons/noun-ninja.svg",
             "offers": {
               "@type": "Offer",
               "category": "Pricing Plans",
-              "url": "https://stealthtext.com/pricing",
+              "url": "https://ninjatext.com/pricing",
               "priceCurrency": "USD"
             }
           })}
@@ -194,7 +194,7 @@ export const Home = () => {
                 Ready to humanize your content?
               </h2>
               <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 mb-6 sm:mb-8">
-                Join thousands of content creators who trust StealthText for their content needs.
+                Join thousands of content creators who trust NinjaText for their content needs.
               </p>
               <Link
                 to="/signup"

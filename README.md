@@ -1,4 +1,4 @@
-# StealthText
+# NinjaText
 
 A secure text processing application with Stripe subscription integration.
 
@@ -16,7 +16,7 @@ VITE_SUPABASE_ANON_KEY=[your-anon-key]
 VITE_STRIPE_PUBLISHABLE_KEY=[your-publishable-key]
 VITE_STRIPE_SECRET_KEY=[your-secret-key]
 VITE_SUPABASE_SERVICE_ROLE_KEY=[your-service-role-key]
-VITE_APP_URL=https://www.stealthtext.com
+VITE_APP_URL=https://www.ninjatext.com
 VITE_STRIPE_WEBHOOK_SECRET=[your-webhook-secret]
 VITE_OPENAI_API_KEY=[your-openai-key]
 VITE_HUMANIZED_AI_API_KEY=[your-humanized-ai-key]
@@ -28,7 +28,7 @@ Make sure to set these variables both in your main deployment and in your "Previ
 
 1. Log into your Stripe dashboard
 2. Go to Developers > Webhooks
-3. Update your webhook endpoint to point to: `https://www.stealthtext.com/api-serverless/stripe-webhook`
+3. Update your webhook endpoint to point to: `https://www.ninjatext.com/api-serverless/stripe-webhook`
 4. Make sure the following events are enabled:
    - `checkout.session.completed`
    - `customer.subscription.created`

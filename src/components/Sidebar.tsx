@@ -78,9 +78,9 @@ export const Sidebar = () => {
               <img 
                 src="/icons/noun-ninja.svg"
                 className="w-8 h-8 dark:invert"
-                alt="StealthText Logo"
+                alt="NinjaText Logo"
               />
-              <span className="ml-3 font-medium dark:text-white">StealthText</span>
+              <span className="ml-3 font-medium text-xl dark:text-white">NinjaText</span>
             </div>
             <button 
               onClick={() => setSidebarCollapsed(true)}
@@ -198,17 +198,17 @@ export const Sidebar = () => {
             <img 
               src="/icons/noun-ninja.svg"
               className="w-8 h-8 dark:invert"
-              alt="StealthText Logo"
+              alt="NinjaText Logo"
             />
             <div style={{ width: '9rem', overflow: 'hidden' }}>
               <span 
-                className="ml-3 font-medium whitespace-nowrap dark:text-white"
+                className="ml-3 font-medium text-xl whitespace-nowrap dark:text-white"
                 style={{ 
                   opacity: sidebarCollapsed ? 0 : 1,
                   transition: 'opacity 0.3s ease-in-out'
                 }}
               >
-                StealthText
+                NinjaText
               </span>
             </div>
           </div>

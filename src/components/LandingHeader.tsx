@@ -16,9 +16,9 @@ export const LandingHeader = () => {
             <img 
               src="/icons/noun-ninja.svg"
               className={`w-8 h-8 ${darkMode ? 'invert' : ''}`}
-              alt="StealthText Logo"
+              alt="NinjaText Logo"
             />
-            <span className="font-bold text-xl dark:text-white">StealthText</span>
+            <span className="font-bold text-xl dark:text-white">NinjaText</span>
           </Link>
 
           {/* Navigation */}

@@ -49,9 +49,9 @@ export const Login = () => {
             <img 
               src="/icons/noun-ninja.svg" 
               className="w-8 h-8 dark:invert"
-              alt="StealthText Logo"
+              alt="NinjaText Logo"
             />
-            <span className="font-bold text-2xl dark:text-white">StealthText</span>
+            <span className="font-bold text-2xl dark:text-white">NinjaText</span>
           </Link>
         </div>
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900 dark:text-white">

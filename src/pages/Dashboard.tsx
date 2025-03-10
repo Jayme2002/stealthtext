@@ -94,7 +94,7 @@ const Dashboard = () => {
             <div className="bg-white dark:bg-dark-700 rounded-xl shadow-sm overflow-hidden mb-6">
               <div className="p-6">
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                  Welcome to StealthText
+                  Welcome to NinjaText
                 </h1>
                 <p className="text-gray-600 dark:text-gray-300 mb-6">
                   Transform your AI-generated content into natural, human-like text that bypasses AI detection.

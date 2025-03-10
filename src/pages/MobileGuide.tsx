@@ -119,7 +119,7 @@ const MobileGuide: React.FC = () => {
         </div>
         <div>
           <h1 style={styles.title}>User Guide</h1>
-          <p style={styles.subtitle}>Learn how to get the most out of StealthText</p>
+          <p style={styles.subtitle}>Learn how to get the most out of NinjaText</p>
         </div>
       </div>
 
@@ -130,7 +130,7 @@ const MobileGuide: React.FC = () => {
           Getting Started
         </h2>
         <p style={styles.itemText}>
-          StealthText helps you transform AI-generated content into natural, human-like text. Here's how to get started:
+          NinjaText helps you transform AI-generated content into natural, human-like text. Here's how to get started:
         </p>
         <ol style={{ ...styles.list, listStyleType: 'decimal', paddingLeft: '20px' }}>
           <li style={{ ...styles.itemText, marginBottom: '8px' }}>Navigate to the Humanizer page</li>

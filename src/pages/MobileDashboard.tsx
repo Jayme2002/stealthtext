@@ -165,7 +165,7 @@ const MobileDashboard: React.FC = () => {
     <div style={mobileStyles.pageContainer}>
       {/* Welcome Section */}
       <div style={mobileStyles.card}>
-        <h1 style={mobileStyles.heading}>Welcome to StealthText</h1>
+        <h1 style={mobileStyles.heading}>Welcome to NinjaText</h1>
         <p style={mobileStyles.paragraph}>
           Transform your AI-generated content into natural, human-like text that bypasses AI detection.
         </p>

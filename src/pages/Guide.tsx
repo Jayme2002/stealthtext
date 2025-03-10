@@ -35,7 +35,7 @@ export const Guide = () => {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">User Guide</h1>
-                <p className="mt-1 text-gray-600 dark:text-gray-300">Learn how to get the most out of StealthText</p>
+                <p className="mt-1 text-gray-600 dark:text-gray-300">Learn how to get the most out of NinjaText</p>
               </div>
             </div>
 
@@ -47,7 +47,7 @@ export const Guide = () => {
               </h2>
               <div className="prose dark:prose-invert max-w-none">
                 <p>
-                  StealthText helps you transform AI-generated content into natural, human-like text. Here's how to get started:
+                  NinjaText helps you transform AI-generated content into natural, human-like text. Here's how to get started:
                 </p>
                 <ol className="list-decimal pl-4 space-y-2 mt-4">
                   <li>Navigate to the Humanizer page</li>
