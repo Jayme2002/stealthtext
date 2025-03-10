@@ -161,7 +161,7 @@ export default async function handler(req: Request) {
         console.log('[API] Found subscription with customer ID:', subscription.stripe_customer_id);
 
         // Create Stripe portal session with hardcoded production URL
-        const appUrl = 'https://www.stealthtext.com';
+        const appUrl = 'https://www.ninjatext.app';
         
         try {
           console.log('[API] Creating Stripe portal session for customer:', subscription.stripe_customer_id);
