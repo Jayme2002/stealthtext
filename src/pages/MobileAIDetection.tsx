@@ -43,6 +43,7 @@ const MobileAIDetection: React.FC = () => {
     if (!text.trim() || !user) return;
     setError(null);
 
+    const charCount = text.length;
     const wordCount = text.split(/\s+/).filter(Boolean).length;
     
     // Check if we have usage data
@@ -55,15 +56,38 @@ const MobileAIDetection: React.FC = () => {
       setShowWordLimitModal(true);
       return;
     }
+    
+    // Check if user has enough words left for this request
+    const remainingWords = usage.allocated_words - usage.used_words;
+    
+    if (remainingWords <= 0) {
+      setError("You've reached your monthly word limit. Please upgrade your plan or wait until your allocation resets.");
+      return;
+    } else if (wordCount > remainingWords) {
+      setError(`Not enough words remaining. You're trying to analyze ${wordCount} words but only have ${remainingWords} words left in your allocation.`);
+      return;
+    }
+    
+    // If we get here, user has enough words for this request
+    const { canProceed, error } = await useSubscriptionStore.getState().checkUsage(
+      user.id, 
+      charCount,
+      wordCount
+    );
+    
+    if (!canProceed) {
+      // This is a fallback in case our frontend calculation was wrong
+      setError("You've reached your usage limit. Please upgrade your plan or wait until your allocation resets.");
+      return;
+    }
 
     setIsAnalyzing(true);
     try {
       const result = await detectAI(text);
       if (result) {
         setDetectionResult(result);
-        if (user && useSubscriptionStore.getState().fetchUsage) {
-          useSubscriptionStore.getState().fetchUsage(user.id);
-        }
+        // Update usage data
+        useSubscriptionStore.getState().fetchUsage(user.id);
       } else {
         setError('Failed to analyze text. Please try again.');
       }
