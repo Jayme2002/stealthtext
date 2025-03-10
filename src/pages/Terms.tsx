@@ -17,59 +17,87 @@ export const Terms = () => {
             </div>
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Terms & Conditions</h1>
             <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
-              Last updated: February 10, 2025
+              Last updated: March 9, 2025
             </p>
           </div>
 
           <div className="prose prose-lg dark:prose-invert max-w-none">
-            <h2>1. Acceptance of Terms</h2>
             <p>
-              By accessing and using StealthText ("the Service"), you agree to be bound by these Terms and Conditions. If you disagree with any part of these terms, you may not access the Service.
+              Welcome to NinjaText! These terms and conditions outline the rules and regulations for the use of our software and website, located at https://ninjatext.app
+            </p>
+            <p>
+              By accessing this website and using our services, we assume you accept these terms and conditions in full. If you do not agree with any part of these terms, you are prohibited from using the services.
             </p>
 
-            <h2>2. Description of Service</h2>
+            <h2>1. Introduction</h2>
             <p>
-              StealthText provides AI text humanization services. The Service processes AI-generated content to make it more natural and human-like while maintaining the original meaning.
+              NinjaText, operated by [Your Company Name] ("Company," "we," "us," "our"), is registered in Victoria, British Columbia, Canada. The term "Services" refers to all the functionalities provided by NinjaText through its website and any related services.
             </p>
 
-            <h2>3. User Accounts</h2>
+            <h2>2. User Eligibility</h2>
             <p>
-              To access certain features of the Service, you must register for an account. You agree to provide accurate information and maintain the security of your account credentials.
+              The Services are intended for individuals who are at least 18 years old. By using our Services, you represent that you meet this age requirement.
             </p>
 
-            <h2>4. Subscription and Payments</h2>
+            <h2>3. Modifications to Terms</h2>
             <p>
-              Paid subscriptions are billed in advance on a monthly basis. You may cancel your subscription at any time, but no refunds will be provided for partial months of service.
+              We reserve the right to change, modify, or revise these terms at any time. The date of the latest revision will be indicated at the top of this page. Continued use of the Services following any changes indicates acceptance of the new terms.
             </p>
 
-            <h2>5. Usage Restrictions</h2>
+            <h2>4. Intellectual Property</h2>
             <p>
-              You agree not to use the Service for any unlawful purposes or to violate any rights of third parties, including intellectual property rights.
+              All intellectual property rights in the Services, including our software, website design, graphics, and other materials, are owned by or licensed to us. You are granted a limited, non-exclusive, non-transferable, revocable license to access the Services for personal, non-commercial use only.
             </p>
 
-            <h2>6. Content Ownership</h2>
+            <h2>5. User Responsibilities and Conduct</h2>
             <p>
-              You retain all rights to your content. By using the Service, you grant us a license to process and modify your content solely for the purpose of providing the Service.
+              You agree not to use the Services for any unlawful purpose and to comply with all applicable regulations. You may not engage in activities that could harm the Services' integrity or security, mislead us or other users, or engage in any form of data mining or extraction. You may not use the service to aid in any kind of academic integrity violation. The service is to be used for personal use only. You may not create multiple accounts to bypass the service's features.
             </p>
 
-            <h2>7. Privacy</h2>
+            <h2>6. User Content</h2>
             <p>
-              Your use of the Service is also governed by our Privacy Policy. Please review our Privacy Policy to understand our practices.
+              By submitting any content (feedback, suggestions, ideas) to us, you grant NinjaText a worldwide, non-exclusive, royalty-free license to use, reproduce, and distribute such content. You are responsible for content shared via the Services and assume liability for any resulting damage or loss.
             </p>
 
-            <h2>8. Limitation of Liability</h2>
+            <h2>7. Privacy Policy</h2>
             <p>
-              The Service is provided "as is" without warranties of any kind. We shall not be liable for any indirect, incidental, special, consequential, or punitive damages.
+              We are committed to protecting your privacy. Please refer to our Privacy Policy at [https://ninjatext.app/privacy] for information on how we collect, use, and disclose personal data.
             </p>
 
-            <h2>9. Changes to Terms</h2>
+            <h2>8. Registration</h2>
             <p>
-              We reserve the right to modify these terms at any time. We will notify users of any material changes via email or through the Service.
+              You may be required to create an account to use certain features of the Services. It is your responsibility to maintain the confidentiality of your account details. NinjaText reserves the right to terminate or suspend access to your account in cases of violations of these terms or at its our own discretion.
             </p>
 
-            <h2>10. Contact Information</h2>
+            <h2>9. Payment and Fees</h2>
             <p>
-              For questions about these Terms, please contact us at support@stealthtext.ai.
+              Users who subscribe to our paid services agree to provide accurate payment details and pay all fees associated with the Services. Pricing and billing information are available on the website, and payment is processed in the currency specified on our platform.
+            </p>
+
+            <h2>10. Subscription and Cancellation</h2>
+            <p>
+              Subscriptions will renew automatically unless canceled. You may cancel your subscription via your account settings. There are no refunds of any kind. Changes in subscription fees will be communicated in advance in accordance with applicable law.
+            </p>
+
+            <h2>11. Disclaimers and Limitation of Liability</h2>
+            <p>
+              The Services are provided "as is," with no warranties of any kind. NinjaText does not guarantee the accuracy, completeness, or availability of the Services and will not be liable for any damages arising from use or inability to use the Services. NinjaText is not liable for any security breaches or data leaks. The service is not liable for any unlawful use of the service. The service is not liable for any technical outtages that may last indifinitely. The service is not liable for any harm caused by hacking or data leaks.
+            </p>
+
+            <h2>12. Dispute Resolution</h2>
+            <p>
+              Any disputes arising under these terms shall be governed by the laws of the Province of British Columbia, Canada. Parties agree to resolve disputes through binding arbitration or as otherwise provided by law.
+            </p>
+
+            <h2>13. Contact Us</h2>
+            <p>
+              For any questions, complaints, or further information, please contact us at:
+            </p>
+            <p>
+              - Email: support@ninjatext.app
+            </p>
+            <p>
+              By using NinjaText, you acknowledge that you have read, understood, and agree to the terms and conditions outlined in this document.
             </p>
           </div>
         </div>
