@@ -16,7 +16,7 @@ export const Contact = () => {
           <div className="flex flex-col items-center justify-center py-8 px-4 bg-gray-50 dark:bg-dark-700 rounded-lg shadow-sm">
             <Mail className="w-10 h-10 text-purple-500 mb-4" />
             <p className="text-xl text-center text-gray-800 dark:text-gray-200 font-medium">
-              Please email <a href="mailto:contactstealthtext@gmail.com" className="text-purple-600 dark:text-purple-400 hover:underline">contactstealthtext@gmail.com</a> for any inquiries.
+              Please email <a href="mailto:contactninjatext@gmail.com" className="text-purple-600 dark:text-purple-400 hover:underline">contactstealthtext@gmail.com</a> for any inquiries.
             </p>
           </div>
         </div>

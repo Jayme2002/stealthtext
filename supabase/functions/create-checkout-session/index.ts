@@ -171,7 +171,7 @@ const handler = async (req: Request) => {
     console.log('Edge: Creating checkout session');
     
     // Hardcode the production URL to ensure proper redirects
-    const appUrl = 'https://www.ninjatext.com';
+    const appUrl = 'https://www.ninjatext.app';
     console.log(`Edge: Using hardcoded production URL for redirects: ${appUrl}`);
     
     const session = await stripe.checkout.sessions.create({

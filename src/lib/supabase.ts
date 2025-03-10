@@ -63,7 +63,7 @@ export const supabase = createClient(formattedUrl, supabaseAnonKey, {
   },
   global: {
     headers: {
-      'X-Client-Info': 'stealth-writer',
+      'X-Client-Info': 'ninja-text',
       apikey: supabaseAnonKey
     }
   }

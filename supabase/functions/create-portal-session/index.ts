@@ -42,13 +42,13 @@ function cleanUrl(url: string): string {
 // CORS headers to allow cross-origin requests
 function getCorsHeaders(request: Request) {
   // Get the origin from the request
-  const origin = request.headers.get('origin') || 'https://www.ninjatext.com';
+  const origin = request.headers.get('origin') || 'https://www.ninjatext.app';
   
   // Only allow your specific domain(s)
-  const allowedOrigins = ['https://www.ninjatext.com', 'https://ninjatext.com'];
+  const allowedOrigins = ['https://www.ninjatext.app', 'https://ninjatext.app'];
   
   // Use the actual origin if it's in the allowed list, otherwise use your primary domain
-  const allowedOrigin = allowedOrigins.includes(origin) ? origin : 'https://www.ninjatext.com';
+  const allowedOrigin = allowedOrigins.includes(origin) ? origin : 'https://www.ninjatext.app';
   
   return {
     'Access-Control-Allow-Origin': allowedOrigin,
@@ -152,7 +152,7 @@ const handler = async (req: Request) => {
 
     // Create Stripe portal session
     // Hardcode the production URL to ensure proper redirects
-    const appUrl = 'https://www.ninjatext.com';
+    const appUrl = 'https://www.ninjatext.app';
     console.log(`Edge: Using hardcoded production URL for redirects: ${appUrl}`);
     
     const session = await stripe.billingPortal.sessions.create({

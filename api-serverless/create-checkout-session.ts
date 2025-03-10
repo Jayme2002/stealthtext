@@ -52,7 +52,7 @@ console.log('[API] Using Supabase URL:', formattedUrl);
 const supabase = createClient(formattedUrl, supabaseKey, {
   global: {
     headers: {
-      'X-Client-Info': 'stealth-writer'
+      'X-Client-Info': 'ninja-text'
     }
   }
 });
