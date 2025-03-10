@@ -44,32 +44,59 @@ export const Home = () => {
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-dark-800">
       <Helmet>
-        <title>NinjaText - Undetectable AI Content</title>
-        <meta name="description" content="Transform AI-generated content into natural, human-like text that bypasses AI detection with our advanced humanization technology." />
+        <title>NinjaText - Undetectable AI Content Humanizer</title>
+        <meta name="description" content="Transform AI-generated content into natural, human-like text that bypasses AI detection." />
+        
+        {/* Keywords and additional SEO meta tags */}
+        <meta name="keywords" content="ninjatext, ninja text, ai text humanizer, ai content detector bypass, undetectable ai content, ai writing tool" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://ninjatext.app" />
         
         {/* Favicon/icon for search results */}
         <link rel="icon" href="/icons/noun-ninja.svg" />
         
         {/* Open Graph tags for social sharing */}
-        <meta property="og:title" content="Stealth Text - Undetectable AI Text Humanizer" />
-        <meta property="og:description" content="Transform AI-generated content into natural, human-like text that bypasses AI detection with our advanced humanization technology." />
-        <meta property="og:image" content="https://ninjatext.com/icons/noun-ninja.svg" />
-        <meta property="og:url" content="https://ninjatext.com" />
+        <meta property="og:title" content="NinjaText - Undetectable AI Content Humanizer" />
+        <meta property="og:description" content="Transform AI-generated content into natural, human-like text that bypasses AI detection." />
+        <meta property="og:image" content="https://ninjatext.app/icons/noun-ninja.svg" />
+        <meta property="og:url" content="https://ninjatext.app" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="NinjaText" />
+        
+        {/* Twitter Card tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="NinjaText - Undetectable AI Content Humanizer" />
+        <meta name="twitter:description" content="Transform AI-generated content into natural, human-like text that bypasses AI detection. NinjaText (Ninja Text) is your trusted AI content humanizer." />
+        <meta name="twitter:image" content="https://ninjatext.app/icons/noun-ninja.svg" />
         
         {/* Structured data for rich search results */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebApplication",
-            "name": "Stealth Text",
-            "description": "Transform AI-generated content into natural, human-like text that bypasses AI detection with our advanced humanization technology.",
-            "image": "https://ninjatext.com/icons/noun-ninja.svg",
+            "name": "NinjaText",
+            "alternateName": ["Ninja Text", "NinjaText App"],
+            "description": "Transform AI-generated content into natural, human-like text that bypasses AI detection. NinjaText (Ninja Text) is your trusted AI content humanizer.",
+            "image": "https://ninjatext.app/icons/noun-ninja.svg",
+            "url": "https://ninjatext.app",
+            "applicationCategory": "Utility",
             "offers": {
               "@type": "Offer",
               "category": "Pricing Plans",
-              "url": "https://ninjatext.com/pricing",
+              "url": "https://ninjatext.app/pricing",
               "priceCurrency": "USD"
-            }
+            },
+            "creator": {
+              "@type": "Organization",
+              "name": "NinjaText",
+              "url": "https://ninjatext.app",
+              "sameAs": [
+                "https://ninjatext.app",
+                "https://twitter.com/ninjatext",
+                "https://www.linkedin.com/company/ninjatext"
+              ]
+            },
+            "keywords": ["ninjatext", "ninja text", "ai text humanizer", "ai content detector bypass", "undetectable ai content", "ai writing tool"]
           })}
         </script>
       </Helmet>

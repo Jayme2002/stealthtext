@@ -12,12 +12,15 @@ interface UIState {
   setDarkMode: (enabled: boolean) => void;
 }
 
+// Initialize dark mode on store creation
+document.documentElement.classList.add('dark');
+
 export const useUIStore = create<UIState>()(
   persist(
     (set) => ({
       sidebarCollapsed: false,
       isMobileView: false,
-      darkMode: false,
+      darkMode: true,
       toggleSidebar: () => set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
       setSidebarCollapsed: (collapsed) => set({ sidebarCollapsed: collapsed }),
       setMobileView: (isMobile) => set({ isMobileView: isMobile }),

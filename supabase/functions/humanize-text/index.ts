@@ -54,7 +54,7 @@ serve(async (req) => {
     }
 
     // Correct API endpoint for Humanizer.ai from the documentation
-    const url = 'https://www.the-ghost-ai-api.com/transformations/humanize-v2/'
+    const url = 'https://www.the-ghost-ai-com/transformations/humanize-v2/'
     const payload = {
       text,
       humanizerIntensity: intensity,

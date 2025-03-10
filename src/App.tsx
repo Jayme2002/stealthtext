@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { HelmetProvider } from 'react-helmet-async';
+import { HelmetProvider, Helmet } from 'react-helmet-async';
 import { useAuthStore } from './store/authStore';
 import { supabase } from './lib/supabase';
 import { Home } from './pages/Home';
@@ -153,6 +153,10 @@ function App() {
     <HelmetProvider>
       <BrowserRouter>
         <div className={`min-h-screen flex flex-col ${darkMode ? 'dark' : ''}`}>
+          <Helmet>
+            <link rel="icon" href="/icons/noun-ninja.svg" />
+            <meta name="theme-color" content={darkMode ? '#202123' : '#ffffff'} />
+          </Helmet>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
