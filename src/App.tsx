@@ -15,6 +15,7 @@ import { Contact } from './pages/Contact';
 import { Terms } from './pages/Terms';
 import { Privacy } from './pages/Privacy';
 import { useSubscriptionStore } from './store/subscriptionStore';
+import { Guide } from './pages/Guide';
 import Humanizer from './pages/Humanizer';
 import AIDetection from './pages/AIDetection';
 import Footer from './components/Footer';
@@ -162,6 +163,7 @@ function App() {
             <Route path="/humanizer" element={user ? <Humanizer /> : <Navigate to="/login" />} />
             <Route path="/aidetection" element={user ? <AIDetection /> : <Navigate to="/login" />} />
             <Route path="/pricing" element={<Pricing />} />
+            <Route path="/guide" element={user ? <Guide /> : <Navigate to="/login" />} />
             <Route path="/account" element={user ? <Account /> : <Navigate to="/login" />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/contact" element={<Contact />} />

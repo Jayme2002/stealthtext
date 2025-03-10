@@ -1,12 +1,25 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Brain, User, LayoutDashboard, Shield, Sun, Moon } from 'lucide-react';
+import { Brain, User, LayoutDashboard, Shield, Sun, Moon, HelpCircle } from 'lucide-react';
 import { useUIStore } from '../store/uiStore';
+
+const updateCSSVariables = (isDark: boolean) => {
+  document.documentElement.style.setProperty('--bg-color', isDark ? '#202123' : '#f9fafb');
+  document.documentElement.style.setProperty('--card-bg', isDark ? '#2d2d30' : '#ffffff');
+  document.documentElement.style.setProperty('--text-primary', isDark ? '#ffffff' : '#111827');
+  document.documentElement.style.setProperty('--text-secondary', isDark ? '#9ca3af' : '#4b5563');
+  document.documentElement.style.setProperty('--border-color', isDark ? '#3f3f46' : '#e5e7eb');
+};
 
 const MobileNav: React.FC = () => {
   const { isMobileView, toggleSidebar, darkMode, toggleDarkMode } = useUIStore();
   
   if (!isMobileView) return null;
+
+  const handleDarkModeToggle = () => {
+    toggleDarkMode();
+    updateCSSVariables(!darkMode);
+  };
 
   return (
     <div 
@@ -79,7 +92,7 @@ const MobileNav: React.FC = () => {
         })}
       >
         <Shield size={20} />
-        <span style={{ fontSize: '12px', marginTop: '4px' }}>AI Detection</span>
+        <span style={{ fontSize: '12px', marginTop: '4px' }}>Detector</span>
       </NavLink>
       
       <NavLink
@@ -101,8 +114,27 @@ const MobileNav: React.FC = () => {
         <span style={{ fontSize: '12px', marginTop: '4px' }}>Account</span>
       </NavLink>
       
+      <NavLink
+        to="/guide"
+        style={({ isActive }) => ({
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '20%',
+          height: '100%',
+          color: isActive 
+            ? '#8b5cf6' // purple for active
+            : darkMode ? '#9ca3af' : '#6b7280',
+          textDecoration: 'none'
+        })}
+      >
+        <HelpCircle size={20} />
+        <span style={{ fontSize: '12px', marginTop: '4px' }}>Guide</span>
+      </NavLink>
+      
       <button
-        onClick={toggleDarkMode}
+        onClick={handleDarkModeToggle}
         style={{
           display: 'flex',
           flexDirection: 'column',

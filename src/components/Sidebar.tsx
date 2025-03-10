@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Brain, User, LayoutDashboard, CreditCard, ChevronLeft, ChevronRight, X, Shield } from 'lucide-react';
+import { Brain, User, LayoutDashboard, CreditCard, ChevronLeft, ChevronRight, X, Shield, HelpCircle } from 'lucide-react';
 import { useUIStore } from '../store/uiStore';
 
 export const SidebarContext = createContext<{
@@ -157,6 +157,16 @@ export const Sidebar = () => {
                 >
                   <CreditCard className="w-5 h-5 flex-shrink-0" />
                   <span className="ml-3">Pricing</span>
+                </NavLink>
+                <NavLink
+                  to="/guide"
+                  className={({ isActive }) =>
+                    `flex items-center px-3 py-2.5 rounded-lg transition-all duration-200 ${isActive ? 'bg-gray-100 dark:bg-dark-700 font-medium text-purple-600 dark:text-purple-400' : 'hover:bg-gray-50 dark:hover:bg-dark-700 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'}`
+                  }
+                  onClick={() => setSidebarCollapsed(true)}
+                >
+                  <HelpCircle className="w-5 h-5 flex-shrink-0" />
+                  <span className="ml-3">Guide</span>
                 </NavLink>
               </div>
             </div>
@@ -356,6 +366,31 @@ export const Sidebar = () => {
                     }}
                   >
                     Pricing
+                  </span>
+                </div>
+              </NavLink>
+              <NavLink
+                to="/guide"
+                className={({ isActive }) =>
+                  `flex items-center px-3 py-2.5 rounded-lg ${
+                    isActive 
+                      ? 'bg-gray-100 dark:bg-dark-700 text-purple-600 dark:text-purple-400 font-medium' 
+                      : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-dark-700'
+                  }`
+                }
+              >
+                <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center">
+                  <HelpCircle className="w-6 h-6" />
+                </div>
+                <div style={{ width: '9rem', overflow: 'hidden' }}>
+                  <span 
+                    className="ml-3 whitespace-nowrap"
+                    style={{ 
+                      opacity: sidebarCollapsed ? 0 : 1,
+                      transition: 'opacity 0.3s ease-in-out'
+                    }}
+                  >
+                    Guide
                   </span>
                 </div>
               </NavLink>
